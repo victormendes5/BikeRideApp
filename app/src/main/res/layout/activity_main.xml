@@ -10,12 +10,9 @@
     <ImageView
         android:id="@+id/logo"
         android:layout_width="match_parent"
-        android:layout_height="172dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_height="0dp"
         app:srcCompat="@drawable/bikeridelogohorizontal"
         android:background="@color/lightGray2"
-        android:layout_marginRight="5dp"
         android:layout_weight="1"
         android:padding="12dp"/>
 
@@ -31,17 +28,18 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
-            android:hint="Login"
+            android:hint="@string/main_editText_login"
             android:background="@color/lightGray1"
             android:padding="12dp"
             android:layout_margin="6dp"/>
 
         <EditText
             android:id="@+id/edtPassword"
+            android:inputType="textPassword"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
-            android:hint="Password"
+            android:hint="@string/main_editText_password"
             android:padding="12dp"
             android:background="@color/lightGray1"
             android:layout_margin="6dp"/>
@@ -54,29 +52,25 @@
         android:layout_marginRight="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/loginpasswordcontainer"
-        android:text="LOGIN"
+        android:text="@string/main_button_login"
+        android:textAllCaps="true"
         android:textStyle="bold"
         android:textColor="@color/colorTextIcons"
-        android:background="@color/colorAccent"
-        android:layout_centerInParent="true"/>
+        android:background="@color/colorAccent" />
 
     <TextView
         android:id="@+id/logindividertext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24px"
+        android:layout_marginTop="24dp"
         android:textStyle="bold"
         android:gravity="center"
-        android:text="- OR -"
-        android:layout_below="@id/btnLogin"/>
-
-
+        android:text="@string/main_textView_division"
+        android:textAllCaps="true" />
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/logindividertext"
         android:stretchColumns="*"
         android:padding="6dp">
 
@@ -85,27 +79,24 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="LOGIN WITH
-FACEBOOK"
+                android:text="@string/main_button_loginFacebook"
+                android:textAllCaps="true"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_margin="6dp"
                 android:textColor="@color/colorTextIcons"
-                android:background="@color/colorAccent"
-                android:layout_centerInParent="true"/>
+                android:background="@color/colorAccent" />
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="LOGIN WITH
-GOOGLE"
+                android:text="@string/main_button_loginGoogle"
                 android:textStyle="bold"
                 android:layout_margin="6dp"
-
+                android:textAllCaps="true"
                 android:gravity="center"
                 android:textColor="@color/colorTextIcons"
-                android:background="@color/colorAccent"
-                android:layout_centerInParent="true"/>
+                android:background="@color/colorAccent" />
 
         </TableRow>
 
@@ -114,27 +105,23 @@ GOOGLE"
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="SIGN UP"
+                android:text="@string/main_button_signUp"
+                android:textAllCaps="true"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_margin="6dp"
-
                 android:textColor="@color/colorTextIcons"
-                android:background="@color/colorAccent"
-                android:layout_centerInParent="true"/>
+                android:background="@color/colorAccent" />
 
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="I LOST MY LOGIN
-DATA"
+                android:layout_height="match_parent"
+                android:text="@string/main_button_lostData"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_margin="6dp"
-
                 android:textColor="@color/colorTextIcons"
-                android:background="@color/colorAccent"
-                android:layout_centerInParent="true"/>
+                android:background="@color/colorAccent" />
 
         </TableRow>
 
