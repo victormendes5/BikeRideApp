@@ -19,5 +19,6 @@
     <string name="avaliar_textView_deliveryTime">17 minutes</string>
     <string name="avaliar_textView_commentSugestion">Leave a comment about the delivery!</string>
     <string name="avaliar_editText_commentHint">Comment</string>
+    <string name="avaliar_button_sendAvaliation">Submit</string>
 
 </resources>

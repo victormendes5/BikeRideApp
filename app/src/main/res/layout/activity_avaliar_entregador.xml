@@ -20,7 +20,8 @@
         app:layout_constraintBottom_toTopOf="@+id/MyRating"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/deliveryDistance"
@@ -62,7 +63,7 @@
         style="@style/Widget.AppCompat.RatingBar.Indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="56dp"
@@ -81,7 +82,7 @@
         android:layout_marginBottom="24dp"
         android:layout_marginEnd="77dp"
         android:layout_marginStart="78dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/avaliar_textView_commentSugestion"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/commentInput"
@@ -93,11 +94,23 @@
         android:id="@+id/commentInput"
         android:layout_width="@dimen/avaliar_comentbox_width"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
         android:hint="@string/avaliar_editText_commentHint"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnSendAvaliation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/commentTxt" />
 
+    <Button
+        android:id="@+id/btnSendAvaliation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="@string/avaliar_button_sendAvaliation"
+        android:textColor="@color/colorTextIcons"
+        android:layout_marginVertical="@dimen/margin12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toEndOf="@id/commentInput"
+        app:layout_constraintStart_toStartOf="@id/commentInput"
+        app:layout_constraintTop_toBottomOf="@+id/commentInput" />
 </android.support.constraint.ConstraintLayout>
