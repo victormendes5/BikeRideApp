@@ -17,7 +17,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:src="@drawable/bikerpic"
-        app:layout_constraintBottom_toTopOf="@+id/MyRating"
+        app:layout_constraintBottom_toTopOf="@+id/myRating"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -31,7 +31,7 @@
         android:text="@string/avaliar_textView_deliveryDistance"
         app:layout_constraintBottom_toTopOf="@id/txtAvaliationSugestion"
         app:layout_constraintEnd_toStartOf="@id/deliveryTime"
-        app:layout_constraintStart_toStartOf="@+id/MyRating"
+        app:layout_constraintStart_toStartOf="@+id/myRating"
         app:layout_constraintTop_toBottomOf="@id/bikerpic"
         app:layout_constraintVertical_bias="0.32999998" />
 
@@ -43,7 +43,7 @@
         android:text="@string/avaliar_textView_deliveryTime"
         android:textAlignment="textEnd"
         app:layout_constraintBottom_toTopOf="@id/txtAvaliationSugestion"
-        app:layout_constraintEnd_toEndOf="@+id/MyRating"
+        app:layout_constraintEnd_toEndOf="@+id/myRating"
         app:layout_constraintStart_toEndOf="@id/deliveryDistance"
         app:layout_constraintTop_toBottomOf="@id/bikerpic"
         app:layout_constraintVertical_bias="0.32999998" />
@@ -53,13 +53,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Leave a avaliation!"
-        app:layout_constraintBottom_toTopOf="@id/MyRating"
-        app:layout_constraintEnd_toEndOf="@+id/MyRating"
-        app:layout_constraintStart_toStartOf="@+id/MyRating" />
+        android:text="@string/avaliar_textView_commentRecomendation"
+        app:layout_constraintBottom_toTopOf="@id/myRating"
+        app:layout_constraintEnd_toEndOf="@+id/myRating"
+        app:layout_constraintStart_toStartOf="@+id/myRating" />
 
     <RatingBar
-        android:id="@+id/MyRating"
+        android:id="@+id/myRating"
         style="@style/Widget.AppCompat.RatingBar.Indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
         app:layout_constraintBottom_toTopOf="@+id/commentInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/MyRating" />
+        app:layout_constraintTop_toBottomOf="@+id/myRating" />
 
     <EditText
         android:id="@+id/commentInput"
