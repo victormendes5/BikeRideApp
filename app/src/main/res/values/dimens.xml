@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="login_edtwidth">170dp</dimen>
+    <dimen name="avaliar_comentbox_width">295dp</dimen>
+    <dimen name="margin12">12dp</dimen>
 </resources>
