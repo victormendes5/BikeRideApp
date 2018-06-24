@@ -24,4 +24,8 @@
     <string name="avaliar_button_sendAvaliation">Submit</string>
     <string name="avaliar_textView_commentRecomendation">Leave a avaliation!</string>
 
+    <!-- Menu -->
+    <string name="drawer_open">Menu aberto</string>
+    <string name="drawer_close">Menu fechado</string>
+
 </resources>
