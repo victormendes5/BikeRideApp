@@ -29,5 +29,10 @@
     <!-- Menu -->
     <string name="drawer_open">Menu aberto</string>
     <string name="drawer_close">Menu fechado</string>
+    <string name="weight">Peso</string>
+    <string name="height">Altura</string>
+    <string name="width">Largura</string>
+    <string name="length">Comprimento</string>
+    <string name="calculate">Calcular</string>
 
 </resources>

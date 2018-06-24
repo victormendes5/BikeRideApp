@@ -11,6 +11,10 @@
 
     <item
         android:id="@+id/delivery_main"
-        android:title="Entrega"/>
+        android:title="Pedido"/>
+
+    <item
+        android:id="@+id/delivery_quotation"
+        android:title="Cotação"/>
 
 </menu>

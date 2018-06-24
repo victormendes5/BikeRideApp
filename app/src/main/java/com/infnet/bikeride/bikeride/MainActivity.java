@@ -63,6 +63,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intent = new Intent(this, DeliveryMainActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.delivery_quotation:
+                intent = new Intent(this, DeliveryQuotationPrice.class);
+                startActivity(intent);
+                break;
             default:
                 break;
         }
