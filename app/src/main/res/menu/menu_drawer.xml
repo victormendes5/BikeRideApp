@@ -3,10 +3,14 @@
 
     <item
         android:id="@+id/deliveryman_review"
-        android:title="A"/>
+        android:title="Entregador review"/>
 
     <item
         android:id="@+id/delivery_tracking"
-        android:title="B"/>
+        android:title="Entregador tracking"/>
+
+    <item
+        android:id="@+id/delivery_main"
+        android:title="Entrega"/>
 
 </menu>

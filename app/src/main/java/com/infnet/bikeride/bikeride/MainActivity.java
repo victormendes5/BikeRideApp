@@ -59,6 +59,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intent = new Intent(this, DeliveryTrackingActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.delivery_main:
+                intent = new Intent(this, DeliveryMainActivity.class);
+                startActivity(intent);
+                break;
             default:
                 break;
         }
