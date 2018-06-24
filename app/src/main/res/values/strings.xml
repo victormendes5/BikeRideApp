@@ -15,5 +15,7 @@
     <string name="acompEntrega_textView_deliverName">Luana Fortes</string>
     <string name="acompEntrega_textView_deliverCount">112 entregas</string>
     <string name="acompEntrega_button_cancelDelivery">Cancelar Entrega</string>
+    <string name="principal_EditText_endereco">Digite seu Indereço</string>
+    <string name="principal_button_pedirBike">Pedir Bike</string>
 
 </resources>
