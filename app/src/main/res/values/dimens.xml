@@ -5,4 +5,6 @@
     <dimen name="principal_editText_largura">200dp</dimen>
     <dimen name="principal_editText_altura">40dp</dimen>
     <dimen name="principal_button_largura">160dp</dimen>
+    <dimen name="avaliar_comentbox_width">295dp</dimen>
+    <dimen name="margin12">12dp</dimen>
 </resources>

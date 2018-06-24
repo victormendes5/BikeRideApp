@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.infnet.bikeride.bikeride.avaliar_entregador">
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/bikerpic"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/bikerpic"
+        app:layout_constraintBottom_toTopOf="@+id/myRating"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/deliveryDistance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/avaliar_textView_deliveryDistance"
+        app:layout_constraintBottom_toTopOf="@id/txtAvaliationSugestion"
+        app:layout_constraintEnd_toStartOf="@id/deliveryTime"
+        app:layout_constraintStart_toStartOf="@+id/myRating"
+        app:layout_constraintTop_toBottomOf="@id/bikerpic"
+        app:layout_constraintVertical_bias="0.32999998" />
+
+    <TextView
+        android:id="@+id/deliveryTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/avaliar_textView_deliveryTime"
+        android:textAlignment="textEnd"
+        app:layout_constraintBottom_toTopOf="@id/txtAvaliationSugestion"
+        app:layout_constraintEnd_toEndOf="@+id/myRating"
+        app:layout_constraintStart_toEndOf="@id/deliveryDistance"
+        app:layout_constraintTop_toBottomOf="@id/bikerpic"
+        app:layout_constraintVertical_bias="0.32999998" />
+
+    <TextView
+        android:id="@+id/txtAvaliationSugestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/avaliar_textView_commentRecomendation"
+        app:layout_constraintBottom_toTopOf="@id/myRating"
+        app:layout_constraintEnd_toEndOf="@+id/myRating"
+        app:layout_constraintStart_toStartOf="@+id/myRating" />
+
+    <RatingBar
+        android:id="@+id/myRating"
+        style="@style/Widget.AppCompat.RatingBar.Indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="56dp"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:stepSize="0.3"
+        app:layout_constraintBottom_toTopOf="@+id/commentTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bikerpic" />
+
+    <TextView
+        android:id="@+id/commentTxt"
+        android:layout_width="@dimen/avaliar_comentbox_width"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="77dp"
+        android:layout_marginStart="78dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/avaliar_textView_commentSugestion"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/commentInput"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myRating" />
+
+    <EditText
+        android:id="@+id/commentInput"
+        android:layout_width="@dimen/avaliar_comentbox_width"
+        android:layout_height="wrap_content"
+        android:hint="@string/avaliar_editText_commentHint"
+        app:layout_constraintBottom_toTopOf="@id/btnSendAvaliation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/commentTxt" />
+
+    <Button
+        android:id="@+id/btnSendAvaliation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="@string/avaliar_button_sendAvaliation"
+        android:textColor="@color/colorTextIcons"
+        android:layout_marginVertical="@dimen/margin12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toEndOf="@id/commentInput"
+        app:layout_constraintStart_toStartOf="@id/commentInput"
+        app:layout_constraintTop_toBottomOf="@+id/commentInput" />
+</android.support.constraint.ConstraintLayout>
