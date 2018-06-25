@@ -1,0 +1,38 @@
+<resources>
+    <!-- Nome das strings: layout_tag_função -->
+    <string name="app_name">Bike Ride</string>
+    <!-- Strings em Main -->
+    <string name="main_editText_login">Login</string>
+    <string name="main_editText_password">Password</string>
+    <string name="main_button_login">Login</string>
+    <string name="main_textView_division">- or -</string>
+    <string name="main_button_loginFacebook">Login with \n facebook</string>
+    <string name="main_button_loginGoogle">Login with \n google</string>
+    <string name="main_button_signUp">Sign up</string>
+    <string name="main_button_lostData">I lost my \n login data</string>
+
+    <!-- Strings em Acompanhamento de Entrega -->
+    <string name="acompEntrega_textView_deliverName">Luana Fortes</string>
+    <string name="acompEntrega_textView_deliverCount">112 entregas</string>
+    <string name="acompEntrega_button_cancelDelivery">Cancelar Entrega</string>
+    <string name="principal_EditText_endereco">Digite seu Indereço</string>
+    <string name="principal_button_pedirBike">Pedir Bike</string>
+
+    <!-- String em Avaliar Entrega -->
+    <string name="avaliar_textView_deliveryDistance">30km</string>
+    <string name="avaliar_textView_deliveryTime">17 minutes</string>
+    <string name="avaliar_textView_commentSugestion">Leave a comment about the delivery!</string>
+    <string name="avaliar_editText_commentHint">Comment</string>
+    <string name="avaliar_button_sendAvaliation">Submit</string>
+    <string name="avaliar_textView_commentRecomendation">Leave a avaliation!</string>
+
+    <!-- Menu -->
+    <string name="drawer_open">Menu aberto</string>
+    <string name="drawer_close">Menu fechado</string>
+    <string name="weight">Peso</string>
+    <string name="height">Altura</string>
+    <string name="width">Largura</string>
+    <string name="length">Comprimento</string>
+    <string name="calculate">Calcular</string>
+
+</resources>

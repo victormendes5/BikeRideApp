@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="login_edtwidth">170dp</dimen>
+    <dimen name="principal_margin_icons">20dp</dimen>
+    <dimen name="principal_editText_largura">200dp</dimen>
+    <dimen name="principal_editText_altura">40dp</dimen>
+    <dimen name="principal_button_largura">160dp</dimen>
+    <dimen name="avaliar_comentbox_width">295dp</dimen>
+    <dimen name="margin12">12dp</dimen>
+</resources>

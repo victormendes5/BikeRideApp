@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/deliveryman_review"
+        android:title="Entregador review"/>
+
+    <item
+        android:id="@+id/delivery_tracking"
+        android:title="Entregador tracking"/>
+
+    <item
+        android:id="@+id/delivery_main"
+        android:title="Pedido"/>
+
+    <item
+        android:id="@+id/delivery_quotation"
+        android:title="Cotação"/>
+
+</menu>
