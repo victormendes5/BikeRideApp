@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.infnet.bikeride.bikeride.activity_profile">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/customToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/AppToolbarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/AppToolbarTheme" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_photo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/user_photo"
+        app:layout_constraintEnd_toStartOf="@+id/textView2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/customToolbar" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="67dp"
+        android:text="@string/profile_txtView_rating"
+        android:textSize="35sp"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_photo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/profile_photo"
+        app:layout_constraintTop_toBottomOf="@+id/customToolbar"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ScrollView
+        android:layout_width="368dp"
+        android:layout_height="325dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/profile_cardView_edtName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/margin12">
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profile_txtView_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/profile_txtView_name"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/profile_txtView_userName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profile_txtView_userName"
+                        android:textSize="21sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_txtView_name" />
+
+                    <ImageView
+                        android:id="@+id/btn_editName"
+                        android:layout_width="@dimen/profile_editIcon_size"
+                        android:layout_height="@dimen/profile_editIcon_size"
+                        android:src="@drawable/ic_outline_edit_24px"
+                        android:layout_marginBottom="17dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="91dp"
+                        android:layout_marginTop="17dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/profile_txtView_userName"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
+                android:id="@+id/profile_cardView_edtNumber"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/margin12">
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profile_txtView_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/profile_txtView_number"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/profile_txtView_userNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profile_txtView_userNumber"
+                        android:textSize="21sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_txtView_number" />
+
+                    <ImageView
+                        android:id="@+id/btn_editNumber"
+                        android:layout_width="@dimen/profile_editIcon_size"
+                        android:layout_height="@dimen/profile_editIcon_size"
+                        android:src="@drawable/ic_outline_edit_24px"
+                        android:layout_marginBottom="17dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="91dp"
+                        android:layout_marginTop="17dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/profile_txtView_userNumber"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
+                android:id="@+id/profile_cardView_edtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/margin12">
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profile_txtView_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/profile_txtView_email"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/profile_txtView_userEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profile_txtView_userEmail"
+                        android:textSize="21sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_txtView_email" />
+
+                    <ImageView
+                        android:id="@+id/btn_editEmail"
+                        android:layout_width="@dimen/profile_editIcon_size"
+                        android:layout_height="@dimen/profile_editIcon_size"
+                        android:src="@drawable/ic_outline_edit_24px"
+                        android:layout_marginBottom="17dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="91dp"
+                        android:layout_marginTop="17dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/profile_txtView_userEmail"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
+                android:id="@+id/profile_cardView_edtPassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/margin12">
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profile_txtView_password"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/profile_txtView_password"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/profile_txtView_userPassword"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profile_txtView_userPassword"
+                        android:inputType="textPassword"
+                        android:textSize="21sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_txtView_password" />
+
+                    <ImageView
+                        android:id="@+id/btn_editPassword"
+                        android:layout_width="@dimen/profile_editIcon_size"
+                        android:layout_height="@dimen/profile_editIcon_size"
+                        android:src="@drawable/ic_outline_edit_24px"
+                        android:layout_marginBottom="17dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="91dp"
+                        android:layout_marginTop="17dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/profile_txtView_userPassword"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>
