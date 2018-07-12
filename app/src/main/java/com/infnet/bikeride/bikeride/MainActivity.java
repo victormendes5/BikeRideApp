@@ -8,8 +8,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -24,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.customToolbar);
         setSupportActionBar(toolbar);
         drawerLayout =  findViewById(R.id.main_drawer_layout);
+
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,
                 drawerLayout,
@@ -65,6 +69,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.delivery_quotation:
                 intent = new Intent(this, DeliveryQuotationPrice.class);
+                startActivity(intent);
+                break;
+            case R.id.profile:
+                intent = new Intent(this, ProfileActivity.class);
                 startActivity(intent);
                 break;
             default:

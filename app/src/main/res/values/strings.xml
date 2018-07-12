@@ -40,12 +40,14 @@
     <!-- Profile -->
     <string name="profile_txtView_rating">4,8 ★</string>
     <string name="profile_txtView_name">Name</string>
-    <string name="profile_txtView_userName">Mario Mushmorrun King</string>
+    <string name="profile_txtView_userName">Mario</string>
+    <string name="profile_txtView_userLastName">Mushmorrun King</string>
     <string name="profile_txtView_number">Number</string>
     <string name="profile_txtView_userNumber">202-555-0161</string>
     <string name="profile_txtView_email">E-mail</string>
     <string name="profile_txtView_userEmail">mario_princessboy@gmail.com</string>
     <string name="profile_txtView_password">Password</string>
     <string name="profile_txtView_userPassword">k!llB0ws4r</string>
+    <string name="profile_txtView_lastName">Sobrenome</string>
 
 </resources>

@@ -20,7 +20,7 @@
         <activity android:name=".DeliveryTrackingActivity" />
         <activity android:name=".DeliverymanReviewActivity" />
         <activity android:name=".DeliveryQuotationPrice" />
-        <activity android:name=".activity_profile"></activity>
+        <activity android:name=".ProfileActivity"></activity>
     </application>
 
 </manifest>
