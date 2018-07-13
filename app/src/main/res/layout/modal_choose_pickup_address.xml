@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:background="@color/transparentBlack70"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/packageInfoTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="Choose pickup address"
+        android:textColor="@color/colorTextIcons"
+        android:textSize="20dp" />
+
+    <ImageView
+        android:id="@+id/pickupAddressBackIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_back_black_24dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="3dp"/>
+
+    <ImageView
+        android:id="@+id/pickupAddressCloseIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_cancel_black_24dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="3dp"/>
+
+    <View
+        android:id="@+id/packageInfoTitleDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/packageInfoTitle"
+        android:layout_marginBottom="16dp"
+        android:background="@color/colorDivider" />
+
+    <EditText
+        android:id="@+id/receiverNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Type here the pickup address"
+        android:layout_below="@id/packageInfoTitleDivider"
+        android:background="@color/transparentWhite10"
+        android:gravity="center"
+        android:textColor="@color/colorDivider"
+        android:textColorHint="@color/colorDivider"
+        android:textSize="16dp"
+        android:padding="14dp"
+        android:layout_marginBottom="16dp"/>
+
+    <RelativeLayout
+        android:id="@+id/commonAddressesContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/receiverNameEditText"
+        android:background="@color/transparentWhite05"
+        android:padding="8dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/receiverHeaderEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="COMMON ADDRESSES"
+            android:textStyle="bold"
+            android:textColor="@color/colorTextIcons"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp"/>
+
+        <LinearLayout
+            android:id="@+id/commonAddressesList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/receiverHeaderEditText"
+            android:orientation="vertical"
+            android:layout_marginBottom="0dp">
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Rua Sen. Fraga 1001 - Manguinhos"
+                android:textColor="@color/colorDivider"
+                android:textColorHint="@color/colorDivider"
+                android:background="@color/transparentWhite05"
+
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Av. Gomes Freire 290 - Centro"
+                android:textColor="@color/colorDivider"
+                android:textColorHint="@color/colorDivider"
+                android:background="@color/transparentWhite05"
+
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp"/>
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/suggestedAddressesContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/commonAddressesContainer"
+        android:background="@color/transparentWhite05"
+        android:padding="8dp"
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:id="@+id/suggestedAddressesHeaderEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="SUGGESTED ADDRESSES"
+            android:textStyle="bold"
+            android:textColor="@color/colorTextIcons"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp"/>
+
+        <LinearLayout
+            android:id="@+id/suggestedAddressesList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/suggestedAddressesHeaderEditText"
+            android:orientation="vertical"
+            android:layout_marginBottom="0dp">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Av. Gomes Freire 290 - Centro"
+                android:textColor="@color/colorDivider"
+                android:textColorHint="@color/colorDivider"
+                android:background="@color/transparentWhite05"
+
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Alameda Santos, 201/507 - Jardins"
+                android:textColor="@color/colorDivider"
+                android:textColorHint="@color/colorDivider"
+                android:background="@color/transparentWhite05"
+
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_marginBottom="0dp"/>
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/confirmPickupAddrBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="CONFIRM ADDRESS"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorTextIcons"/>
+
+</RelativeLayout>
