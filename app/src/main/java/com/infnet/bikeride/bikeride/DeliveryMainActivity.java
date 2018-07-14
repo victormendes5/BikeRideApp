@@ -2,6 +2,7 @@ package com.infnet.bikeride.bikeride;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -11,32 +12,27 @@ public class DeliveryMainActivity extends AppCompatActivity {
 
     // ---> Modals
     private View mModalPackageInformation, mModalAddressInformation, mModalSearchingBiker,
-                 mModalChoosePickupAddress, mModalChooseDeliveryAddress, mModalRequestDetails;
+            mModalChoosePickupAddress, mModalChooseDeliveryAddress, mModalRequestDetails;
     private RelativeLayout mModalOverlay;
 
     // ---> Modals interaction
     private ImageView mPackageInfoCloseModals, mAddressesCloseModals, mAddressesBack,
-                      mBikerSearchWaitingWheel, mPickupAddressBackIcon, mPickupAddressCloseIcon,
-                      mDeliveryAddressBackIcon, mDeliveryAddressCloseIcon, mRequestDetailsBackIcon,
-                      mRequestDetailsCloseIcon;
+            mBikerSearchWaitingWheel, mPickupAddressBackIcon, mPickupAddressCloseIcon,
+            mDeliveryAddressBackIcon, mDeliveryAddressCloseIcon, mRequestDetailsBackIcon,
+            mRequestDetailsCloseIcon;
 
     // ---> Buttons
-    public Button mRequestBikerBtn, mEnterAddressBtn, mFindBikerBtn,
-                   mBikerSearchCancelBtn, mChoosePickupAddrBtn,
-                   mChooseDeliveryAddrBtn, mConfirmPickupAddrBtn,
-                   mConfirmDeliveryAddrBtn, mConfirmBikerRequestBtn;
+    public Button mRequestBikerBtn, mEnterAddressBtn, mFindBikerBtn, mBikerSearchCancelBtn,
+            mChoosePickupAddrBtn, mChooseDeliveryAddrBtn, mConfirmPickupAddrBtn,
+            mConfirmDeliveryAddrBtn, mConfirmBikerRequestBtn;
 
     // ---> Type selectors and backgrounds
-    private RelativeLayout mPackageTypeMailSlc, mPackageTypeBoxSlc,
-                           mPackageTypeUnusualSlc;
-    private View mPackageTypeMailSlc_bg, mPackageTypeBoxSlc_bg,
-                 mPackageTypeUnusualSlc_bg;
+    private RelativeLayout mPackageTypeMailSlc, mPackageTypeBoxSlc, mPackageTypeUnusualSlc;
+    private View mPackageTypeMailSlc_bg, mPackageTypeBoxSlc_bg, mPackageTypeUnusualSlc_bg;
 
     // ---> Size selectors and backgrounds
-    private RelativeLayout mPackageSizeSmallSlc, mPackageSizeMediumSlc,
-                           mPackageSizeLargeSlc;
-    private View mPackageSizeSmallSlc_bg, mPackageSizeMediumSlc_bg,
-                 mPackageSizeLargeSlc_bg;
+    private RelativeLayout mPackageSizeSmallSlc, mPackageSizeMediumSlc, mPackageSizeLargeSlc;
+    private View mPackageSizeSmallSlc_bg, mPackageSizeMediumSlc_bg, mPackageSizeLargeSlc_bg;
 
     // ---> Animations
     private BikeRideAnimations mAnimate = new BikeRideAnimations(200);
@@ -108,6 +104,15 @@ public class DeliveryMainActivity extends AppCompatActivity {
 
         // ---> Activate continuous animations
         mAnimate.rotate360Infinitely(mBikerSearchWaitingWheel, 2000);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mModalOverlay.getVisibility() == View.VISIBLE) {
+            exitModalState();
+        } else {
+            super.onBackPressed();
+        }
     }
 
 

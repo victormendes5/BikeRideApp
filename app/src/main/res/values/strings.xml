@@ -1,6 +1,7 @@
 <resources>
     <!-- Nome das strings: layout_tag_função -->
     <string name="app_name">Bike Ride</string>
+
     <!-- Strings em Main -->
     <string name="main_editText_login">Login</string>
     <string name="main_editText_password">Password</string>
@@ -34,5 +35,76 @@
     <string name="width">Largura</string>
     <string name="length">Comprimento</string>
     <string name="calculate">Calcular</string>
+
+    <!-- MODALS: Choose Delivery Address-->
+    <string name="modal_choose_delivery_address_title">Choose delivery address</string>
+    <string name="modal_choose_delivery_address_hint">Type here the pickup address</string>
+    <string name="modal_choose_delivery_common_addresses_title">COMMON ADDRESSES</string>
+    <string name="modal_choose_delivery_suggested_addresses_title">SUGGESTED ADDRESSES</string>
+    <string name="sample_address_1">Rua Sen. Fraga 1001 - Manguinhos</string>
+    <string name="sample_address_2">Av. Gomes Freire 290 - Centro</string>
+    <string name="sample_address_3">Alameda Santos, 201/507 - Jardins</string>
+    <string name="modal_choose_delivery_address_button_confirm_address">CONFIRM ADDRESS</string>
+
+    <!-- MODALS: Choose Pickup Address -->
+    <string name="modal_choose_pickup_address_title">Choose pickup address</string>
+    <string name="modal_choose_pickup_address_hint">Type here the pickup address</string>
+    <string name="modal_choose_pickup_common_addresses_title">COMMON ADDRESSES</string>
+    <string name="sample_address_4">Rua Sen. Fraga 1001 - Manguinhos</string>
+    <string name="sample_address_5">Av. Gomes Freire 290 - Centro</string>
+    <string name="modal_choose_pickup_suggested_addresses_title">SUGGESTED ADDRESSES</string>
+    <string name="sample_address_6">Alameda Santos, 201/507 - Jardins</string>
+
+    <!-- MODALS: Delivery Addresss -->
+    <string name="modal_delivery_addresses_title">Addresses</string>
+    <string name="modal_delivery_addresses_pickup_title">PICKUP</string>
+    <string name="modal_delivery_addresses_sender_hint">Type here the sender name</string>
+    <string name="modal_delivery_addresses_choose_pickup_address_button">PRESS TO CHOOSE PICKUP ADDRESS</string>
+    <string name="modal_delivery_addresses_delivery_title">DELIVERY</string>
+    <string name="modal_delivery_addresses_receiver_hint">Type here the receiver name</string>
+    <string name="modal_delivery_addresses_choose_delivery_address_buttons">PRESS TO CHOOSE DELIVERY ADDRESS</string>
+    <string name="modal_delivery_addresses_get_estimates_button">GET ESTIMATES</string>
+
+    <!-- MODALS: Package Information -->
+    <string name="modal_package_information_title">Package Information</string>
+    <string name="modal_package_information_type_title">TYPE</string>
+    <string name="modal_package_information_mail_title">MAIL</string>
+    <string name="modal_package_information_mail_description">Documents</string>
+    <string name="modal_package_information_box_title">BOX</string>
+    <string name="modal_package_information_box_description">Boxes, etc.</string>
+    <string name="modal_package_information_unusual_title">UNUSUAL</string>
+    <string name="modal_package_information_unusual_description">Unusual shape</string>
+    <string name="modal_package_information_size_title">SIZE</string>
+    <string name="modal_package_information_small_title">SMALL</string>
+    <string name="modal_package_information_small_description">Up to 15cm</string>
+    <string name="modal_package_information_medium_title">MEDIUM</string>
+    <string name="modal_package_information_medium_description">Up to 40cm</string>
+    <string name="modal_package_information_large_title">LARGE</string>
+    <string name="modal_package_information_large_description">Up to 70cm</string>
+    <string name="modal_package_information_enter_address_button">Enter pickup and delivery adresses</string>
+
+    <!-- MODALS: Request Details -->
+    <string name="modal_request_details_title">Request Details</string>
+    <string name="modal_request_details_estimates_title">ESTIMATES</string>
+    <string name="modal_request_details_pickup_title">PICKUP</string>
+    <string name="modal_request_details_pickup_distance">2.6 km</string>
+    <string name="modal_request_details_pickup_time">7 min.</string>
+    <string name="modal_request_details_delivery_title">DELIVERY</string>
+    <string name="modal_request_details_delivery_distance">3.2 km</string>
+    <string name="modal_request_details_delivery_time">10 min.</string>
+    <string name="modal_request_details_fee_title">FEE</string>
+    <string name="modal_request_details_fee_value">R$ 12,50</string>
+    <string name="modal_request_details_details_title">DETAILS</string>
+    <string name="modal_request_details_details_package_size_small">Small package</string>
+    <string name="modal_request_details_details_package_type_unusual">Odd shape</string>
+    <string name="sample_address_7">Av. Gomes Freire, no. 418 / apto. 301 - ...</string>
+    <string name="sample_address_8">Av. 20 de Abril, no. 48 / sl 2 - Centro</string>
+    <string name="modal_request_details_confirm_request_button">CONFIRM BIKER REQUEST</string>
+
+    <!-- MODALS: Searching biker -->
+    <string name="modal_searching_biker_title">Biker Search</string>
+    <string name="modal_searching_biker_caption">Finding biker ...</string>
+    <string name="modal_searching_biker_cancel_button">Cancel search</string>
+
 
 </resources>

@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:gravity="center"
-        android:text="Choose pickup address"
+        android:text="@string/modal_choose_pickup_address_title"
         android:textColor="@color/colorTextIcons"
         android:textSize="20dp" />
 
@@ -50,7 +50,7 @@
         android:id="@+id/receiverNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Type here the pickup address"
+        android:hint="@string/modal_choose_pickup_address_hint"
         android:layout_below="@id/packageInfoTitleDivider"
         android:background="@color/transparentWhite10"
         android:gravity="center"
@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="COMMON ADDRESSES"
+            android:text="@string/modal_choose_pickup_common_addresses_title"
             android:textStyle="bold"
             android:textColor="@color/colorTextIcons"
             android:padding="8dp"
@@ -93,7 +93,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Rua Sen. Fraga 1001 - Manguinhos"
+                android:hint="@string/sample_address_4"
                 android:textColor="@color/colorDivider"
                 android:textColorHint="@color/colorDivider"
                 android:background="@color/transparentWhite05"
@@ -105,7 +105,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Av. Gomes Freire 290 - Centro"
+                android:hint="@string/sample_address_5"
                 android:textColor="@color/colorDivider"
                 android:textColorHint="@color/colorDivider"
                 android:background="@color/transparentWhite05"
@@ -134,7 +134,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="SUGGESTED ADDRESSES"
+            android:text="@string/modal_choose_pickup_suggested_addresses_title"
             android:textStyle="bold"
             android:textColor="@color/colorTextIcons"
             android:padding="8dp"
@@ -152,7 +152,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Av. Gomes Freire 290 - Centro"
+                android:hint="@string/sample_address_5"
                 android:textColor="@color/colorDivider"
                 android:textColorHint="@color/colorDivider"
                 android:background="@color/transparentWhite05"
@@ -164,7 +164,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Alameda Santos, 201/507 - Jardins"
+                android:hint="@string/sample_address_6"
                 android:textColor="@color/colorDivider"
                 android:textColorHint="@color/colorDivider"
                 android:background="@color/transparentWhite05"

@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:gravity="center"
-        android:text="Request Details"
+        android:text="@string/modal_request_details_title"
         android:textColor="@color/colorTextIcons"
         android:textSize="20dp" />
 
@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="ESTIMATES"
+            android:text="@string/modal_request_details_estimates_title"
             android:textStyle="bold"
             android:padding="4dp"
             android:textColor="@color/colorTextIcons"
@@ -78,7 +78,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="PICKUP"
+                android:text="@string/modal_request_details_pickup_title"
                 android:textColor="@color/colorDivider"
                 android:textSize="14dp"
                 android:layout_weight="1"
@@ -89,7 +89,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="2.6 km"
+                android:text="@string/modal_request_details_pickup_distance"
                 android:layout_weight="1"
                 android:textColor="@color/colorDivider"
                 android:textSize="14dp"
@@ -98,7 +98,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="7 min."
+                android:text="@string/modal_request_details_pickup_time"
                 android:layout_weight="1"
                 android:textColor="@color/colorTextIcons"
                 android:textSize="18dp"
@@ -122,7 +122,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="DELIVERY"
+                android:text="@string/modal_request_details_delivery_title"
                 android:textColor="@color/colorDivider"
                 android:textSize="14dp"
                 android:layout_weight="1"
@@ -132,7 +132,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="3.2 km"
+                android:text="@string/modal_request_details_delivery_distance"
                 android:layout_weight="1"
                 android:textColor="@color/colorDivider"
                 android:textSize="14dp"
@@ -141,7 +141,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="10 min."
+                android:text="@string/modal_request_details_delivery_time"
                 android:layout_weight="1"
                 android:textColor="@color/colorTextIcons"
                 android:textSize="18dp"
@@ -163,7 +163,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="FEE"
+                android:text="@string/modal_request_details_fee_title"
                 android:textColor="@color/colorDivider"
                 android:textSize="14dp"
                 android:layout_weight="1"
@@ -182,7 +182,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="R$ 12,50"
+                android:text="@string/modal_request_details_fee_value"
                 android:layout_weight="1"
                 android:textColor="@color/colorTextIcons"
                 android:textSize="18dp"
@@ -208,7 +208,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="DETAILS"
+            android:text="@string/modal_request_details_details_title"
             android:textStyle="bold"
             android:padding="4dp"
             android:textColor="@color/colorTextIcons"
@@ -243,7 +243,7 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Small package"
+                    android:text="@string/modal_request_details_details_package_size_small"
                     android:textColor="@color/colorDivider"
                     android:textSize="14dp"
                     android:padding="8dp"
@@ -271,7 +271,7 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Odd shape"
+                    android:text="@string/modal_request_details_details_package_type_unusual"
                     android:textColor="@color/colorDivider"
                     android:textSize="14dp"
                     android:padding="8dp"
@@ -324,7 +324,7 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Av. Gomes Freire, no. 418 / apto. 301 - ..."
+                    android:text="@string/sample_address_7"
                     android:textColor="@color/colorDivider"
                     android:textSize="14dp"
                     android:padding="8dp"
@@ -368,7 +368,7 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Av. 20 de Abril, no. 48 / sl 2 - Centro"
+                    android:text="@string/sample_address_8"
                     android:textColor="@color/colorDivider"
                     android:textSize="14dp"
                     android:padding="8dp"
@@ -388,7 +388,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/pickupDeliveryPointsContainer"
         android:layout_centerHorizontal="true"
-        android:text="CONFIRM BIKER REQUEST"
+        android:text="@string/modal_request_details_confirm_request_button"
         android:background="@color/colorAccent"
         android:textColor="@color/colorTextIcons"/>
 

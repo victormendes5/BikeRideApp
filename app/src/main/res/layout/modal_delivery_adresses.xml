@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:gravity="center"
-        android:text="Addresses"
+        android:text="@string/modal_delivery_addresses_title"
         android:textColor="@color/colorTextIcons"
         android:textSize="20dp" />
 
@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="PICKUP"
+            android:text="@string/modal_delivery_addresses_pickup_title"
             android:textStyle="bold"
             android:padding="4dp"
             android:textColor="@color/colorTextIcons"
@@ -70,7 +70,7 @@
             android:id="@+id/senderNameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Type here the sender name"
+            android:hint="@string/modal_delivery_addresses_sender_hint"
             android:layout_below="@id/pickupAddressTitle"
             android:background="@color/transparentWhite10"
             android:gravity="center"
@@ -85,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryDark"
-            android:text="PRESS TO CHOOSE PICKUP ADDRESS"
+            android:text="@string/modal_delivery_addresses_choose_pickup_address_button"
             android:layout_below="@id/senderNameEditText"
             android:textColor="@color/colorTextIcons"/>
 
@@ -105,7 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="DELIVERY"
+            android:text="@string/modal_delivery_addresses_delivery_title"
             android:textStyle="bold"
             android:textColor="@color/colorTextIcons"
             android:padding="8dp"
@@ -115,7 +115,7 @@
             android:id="@+id/receiverNameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Type here the receiver name"
+            android:hint="@string/modal_delivery_addresses_receiver_hint"
             android:layout_below="@id/receiverHeaderEditText"
             android:background="@color/transparentWhite10"
             android:gravity="center"
@@ -130,7 +130,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryDark"
-            android:text="PRESS TO CHOOSE DELIVERY ADDRESS"
+            android:text="@string/modal_delivery_addresses_choose_delivery_address_buttons"
             android:layout_below="@id/receiverNameEditText"
             android:textColor="@color/colorTextIcons"/>
 
@@ -144,7 +144,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/packageSizeContainer"
         android:layout_centerHorizontal="true"
-        android:text="GET ESTIMATES"
+        android:text="@string/modal_delivery_addresses_get_estimates_button"
         android:background="@color/colorAccent"
         android:textColor="@color/colorTextIcons"/>
 
