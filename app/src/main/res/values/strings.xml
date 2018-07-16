@@ -2,7 +2,7 @@
     <!-- Nome das strings: layout_tag_função -->
     <string name="app_name">Bike Ride</string>
 
-    <!-- Strings em Main -->
+    <!-- Main -->
     <string name="main_editText_login">Login</string>
     <string name="main_editText_password">Password</string>
     <string name="main_button_login">Login</string>
@@ -12,16 +12,16 @@
     <string name="main_button_signUp">Sign up</string>
     <string name="main_button_lostData">I lost my \n login data</string>
 
-    <!-- Strings em Acompanhamento de Entrega -->
+    <!-- Tracking Delivery -->
     <string name="acompEntrega_textView_deliverName">Luana Fortes</string>
-    <string name="acompEntrega_textView_deliverCount">112 entregas</string>
-    <string name="acompEntrega_button_cancelDelivery">Cancelar Entrega</string>
+    <string name="acompEntrega_textView_deliverCount">112 delivers</string>
+    <string name="acompEntrega_button_cancelDelivery">Cancel Delivery</string>
 
-    <!--Principal-->
-    <string name="principal_EditText_endereco">Digite seu Indereço</string>
-    <string name="principal_button_pedirBike">Pedir Bike</string>
+    <!-- Principal -->
+    <string name="principal_EditText_endereco">Type your address</string>
+    <string name="principal_button_pedirBike">Call Deliver</string>
 
-    <!-- String em Avaliar Entrega -->
+    <!-- Review Delivery -->
     <string name="avaliar_textView_deliveryDistance">30km</string>
     <string name="avaliar_textView_deliveryTime">17 minutes</string>
     <string name="avaliar_textView_commentSugestion">Leave a comment about the delivery!</string>
@@ -32,11 +32,11 @@
     <!-- Menu -->
     <string name="drawer_open">Menu aberto</string>
     <string name="drawer_close">Menu fechado</string>
-    <string name="weight">Peso</string>
-    <string name="height">Altura</string>
-    <string name="width">Largura</string>
-    <string name="length">Comprimento</string>
-    <string name="calculate">Calcular</string>
+    <string name="weight">Weigth</string>
+    <string name="height">Height</string>
+    <string name="width">Width</string>
+    <string name="length">Length</string>
+    <string name="calculate">Calculate</string>
 
     <!-- Profile -->
     <string name="profile_txtView_rating">4,8 ★</string>
@@ -49,7 +49,7 @@
     <string name="profile_txtView_userEmail">mario_princessboy@gmail.com</string>
     <string name="profile_txtView_password">Password</string>
     <string name="profile_txtView_userPassword">k!llB0ws4r</string>
-    <string name="profile_txtView_lastName">Sobrenome</string>
+    <string name="profile_txtView_lastName">Last Name</string>
 
     <!-- MODALS: Choose Delivery Address-->
     <string name="modal_choose_delivery_address_title">Choose delivery address</string>
@@ -120,5 +120,13 @@
     <string name="modal_searching_biker_title">Biker Search</string>
     <string name="modal_searching_biker_caption">Finding biker ...</string>
     <string name="modal_searching_biker_cancel_button">Cancel search</string>
+
+    <!-- MODALS: Change Name-->
+    <string name="modalChangeName_txtView_changeName">Change Name</string>
+
+    <!-- Main Delivery -->
+    <string name="mainDelivery_button_requestDelivery">REQUEST DELIVERY</string>
+    <string name="modalChangeName_edtText_changeNameHint">Type here to change your name</string>
+    <string name="modalChangeName_button_changeName">change</string>
 
 </resources>
