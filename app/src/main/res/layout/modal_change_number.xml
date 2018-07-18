@@ -11,17 +11,17 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/changeNameTitle"
+        android:id="@+id/changeNumberTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:gravity="center"
-        android:text="@string/modalChangeName_txtView_changeName"
+        android:text="@string/modalChangeName_txtView_changeNumber"
         android:textColor="@color/colorTextIcons"
         android:textSize="20sp" />
 
     <ImageView
-        android:id="@+id/changesCloseModalName"
+        android:id="@+id/changesCloseModalNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_cancel_black_24dp"
@@ -30,39 +30,39 @@
         android:layout_marginTop="3dp"/>
 
     <View
-        android:id="@+id/changeNameTitleDivider"
+        android:id="@+id/changeNumberTitleDivider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/changeNameTitle"
+        android:layout_below="@id/changeNumberTitle"
         android:layout_marginBottom="16dp"
         android:background="@color/colorDivider" />
 
     <RelativeLayout
-        android:id="@+id/changeNameContainer"
+        android:id="@+id/changeNumberContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/changeNameTitleDivider"
+        android:layout_below="@id/changeNumberTitleDivider"
         android:background="@color/transparentWhite05"
         android:padding="8dp"
         android:layout_marginBottom="16dp">
 
         <TextView
-            android:id="@+id/profileNameTitle"
+            android:id="@+id/profileNumberTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/profile_txtView_userName"
+            android:text="@string/profile_txtView_userNumber"
             android:textStyle="bold"
             android:padding="4dp"
             android:textColor="@color/colorTextIcons"
             android:layout_marginBottom="8dp"/>
 
         <EditText
-            android:id="@+id/profileNameEditText"
+            android:id="@+id/profileNumberEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/modalChangeName_edtText_changeNameHint"
-            android:layout_below="@id/profileNameTitle"
+            android:hint="@string/modalChangeName_edtText_changeNumberHint"
+            android:layout_below="@id/profileNumberTitle"
             android:background="@color/transparentWhite10"
             android:gravity="center"
             android:focusedByDefault="true"
@@ -76,10 +76,10 @@
     </RelativeLayout>
 
     <Button
-        android:id="@+id/changeNameBtn"
+        android:id="@+id/changeNumberBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/changeNameContainer"
+        android:layout_below="@id/changeNumberContainer"
         android:layout_centerHorizontal="true"
         android:text="@string/modalChangeName_button_changeName"
         android:background="@color/colorAccent"

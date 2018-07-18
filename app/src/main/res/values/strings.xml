@@ -128,5 +128,10 @@
     <string name="mainDelivery_button_requestDelivery">REQUEST DELIVERY</string>
     <string name="modalChangeName_edtText_changeNameHint">Type here to change your name</string>
     <string name="modalChangeName_button_changeName">change</string>
+    <string name="modalChangeName_txtView_changeLastName">Change Last Name</string>
+    <string name="modalChangeName_edtText_changeLastNameHint">Type here to change your Last Name</string>
+    <string name="modalChangeName_txtView_changeNumber">Change Number</string>
+    <string name="modalChangeName_edtText_changeNumberHint">Type here to change your Number</string>
+    <string name="modalChangeName_edtText_changeEmailHint">Type here to change your E-mail</string>
 
 </resources>
