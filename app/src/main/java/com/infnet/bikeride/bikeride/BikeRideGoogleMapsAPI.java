@@ -23,6 +23,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class BikeRideGoogleMapsAPI {
 
     /*
@@ -277,7 +281,10 @@ public class BikeRideGoogleMapsAPI {
         }
     }
 
-    public void calculateDistanceAndDuration(String source, String destination) {
+    public void getEstimatesFromWebAsync(String bikerLocation, String pickupLocation,
+                                         String deliveryLocation, String onCompleteMethodName) {
+
+        // https://developers.google.com/maps/documentation/distance-matrix/intro
 
         String distanceMatrixBaseUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?";
         String unitType = "metric";  // "metric" or "imperial"
@@ -285,13 +292,13 @@ public class BikeRideGoogleMapsAPI {
 
         String executeString = distanceMatrixBaseUrl
                 + "units=" + unitType + "&"
-                + "origins=" + source + "&"
-                + "destinations=" + destination + "&"
+                + "origins=" + bikerLocation + "|" + pickupLocation + "&"
+                + "destinations=" + pickupLocation + "|" + deliveryLocation + "&"
                 + "mode=" + travelMode + "&"
                 + "key=" + API_KEY;
 
-        BikeRideGoogleDistanceMatrixAPI distanceMatrix =
-                new BikeRideGoogleDistanceMatrixAPI(refferedActivity);
-        distanceMatrix.execute(executeString);
+        AsyncReflectedHttpRequest googleMatrixData =
+                new AsyncReflectedHttpRequest(refferedActivity, onCompleteMethodName);
+        googleMatrixData.execute(executeString);
     }
 }

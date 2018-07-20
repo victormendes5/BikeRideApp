@@ -2,60 +2,39 @@ package com.infnet.bikeride.bikeride;
 
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class BikeRideRequestManager {
 
     private static final String TAG = "BikeRideRequestManager";
 
-    private ArrayList<String> mEstimatesList = new ArrayList<String>();
-
     private String mBikerLocation;
     private String mPickupLocation;
     private String mDeliveryLocation;
 
-    public int addResultsToEstimatesList(String source, String destination) {
-
-        mEstimatesList.add(source);
-        mEstimatesList.add(destination);
-
-        return mEstimatesList.size();
-    }
-
-    public void clearEstimatesList () {
-        mEstimatesList.clear();
-    }
+    private String mEstimatesPickupDistance = "";
+    private String mEstimatesPickupDuration = "";
+    private String mEstimatesDeliveryDistance = "";
+    private String mEstimatesDeliveryDuration = "";
 
     public String getPickupDistanceEstimate() {
-        if (mEstimatesList.size() > 0) {
-            return mEstimatesList.get(0);
-
-        }
-        return null;
+        return mEstimatesPickupDistance;
     }
 
     public String getPickupDurationEstimate() {
-        if (mEstimatesList.size() > 0) {
-            return mEstimatesList.get(1);
-
-        }
-        return null;
+        return mEstimatesPickupDuration;
     }
 
     public String getDeliveryDistanceEstimate() {
-        if (mEstimatesList.size() > 0) {
-            return mEstimatesList.get(2);
-
-        }
-        return null;
+        return mEstimatesDeliveryDistance;
     }
 
     public String getDeliveryDurationEstimate() {
-        if (mEstimatesList.size() > 0) {
-            return mEstimatesList.get(3);
-
-        }
-        return null;
+        return mEstimatesDeliveryDuration;
     }
 
     public String getFeeEstimate () {
@@ -68,26 +47,20 @@ public class BikeRideRequestManager {
         double deliveryFeePerMinute = 0.3;
 
         double pickupDistance =
-                Double.valueOf(mEstimatesList.get(0).replace("km", "").trim());
+                Double.valueOf(mEstimatesPickupDistance.replace("km", "").trim());
 
         double deliveryDistance =
-                Double.valueOf(mEstimatesList.get(2).replace("km", "").trim());
+                Double.valueOf(mEstimatesDeliveryDistance.replace("km", "").trim());
 
         double totalFee = 0;
 
-        if (mEstimatesList.size() > 0) {
+        totalFee += pickupDistance * pickupFeePerKM;
+        totalFee += deliveryDistance * deliveryFeePerKM;
 
-            totalFee += pickupDistance * pickupFeePerKM;
-            totalFee += deliveryDistance * deliveryFeePerKM;
-
-            feeEstimate = "R$" + String.format ("%.2f", totalFee).replace(".", ",");
-
-            Log.i(TAG, "getFeeEstimate: estimated fee is - " + feeEstimate);
-
-            return feeEstimate;
-        }
+        feeEstimate = "R$" + String.format ("%.2f", totalFee).replace(".", ",");
 
         Log.i(TAG, "getFeeEstimate: estimated fee is - " + feeEstimate);
+
         return feeEstimate;
     }
 
@@ -131,5 +104,46 @@ public class BikeRideRequestManager {
     public void setDeliveryLocation(String mDeliveryLocation) {
         Log.i(TAG, "setDeliveryLocation: setting Delivery location to - " + mDeliveryLocation);
         this.mDeliveryLocation = mDeliveryLocation;
+    }
+
+    public boolean setEstimatesFromWebData (String s) {
+
+        Log.i(TAG, "setDistanceAndDurationFromWebData: decoding serialized JSON object.");
+
+        try {
+
+            JSONObject distanceMatrixObj = new JSONObject(s);
+            String distanceMatrixRows = distanceMatrixObj.getString("rows");
+            JSONArray distanceMatrixRowsArr = new JSONArray(distanceMatrixRows);
+            JSONObject distanceMatrixElements = distanceMatrixRowsArr.getJSONObject(0);
+            String distanceMatrixDetails = distanceMatrixElements.getString("elements");
+            JSONArray distanceMatrixDetailsArr = new JSONArray(distanceMatrixDetails);
+            JSONObject distanceObject =  distanceMatrixDetailsArr.getJSONObject(0);
+            String distanceMatrixDistance = distanceObject.getString("distance");
+            JSONObject distanceMatrixDistanceText = new JSONObject(distanceMatrixDistance);
+            mEstimatesPickupDistance = distanceMatrixDistanceText.getString("text");
+            String distanceMatrixDuration = distanceObject.getString("duration");
+            JSONObject distanceMatrixDurationText = new JSONObject(distanceMatrixDuration);
+            mEstimatesPickupDuration = distanceMatrixDurationText.getString("text");
+
+            JSONObject distanceMatrixElements2 = distanceMatrixRowsArr.getJSONObject(1);
+            String distanceMatrixDetails2 = distanceMatrixElements2.getString("elements");
+            JSONArray distanceMatrixDetailsArr2 = new JSONArray(distanceMatrixDetails2);
+            JSONObject distanceObject2 =  distanceMatrixDetailsArr2.getJSONObject(1);
+            String distanceMatrixDistance2 = distanceObject2.getString("distance");
+            JSONObject distanceMatrixDistanceText2 = new JSONObject(distanceMatrixDistance2);
+            mEstimatesDeliveryDistance = distanceMatrixDistanceText2.getString("text");
+            String distanceMatrixDuration2 = distanceObject2.getString("duration");
+            JSONObject distanceMatrixDurationText2 = new JSONObject(distanceMatrixDuration2);
+            mEstimatesDeliveryDuration = distanceMatrixDurationText2.getString("text");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.i(TAG, "setDistanceAndDurationFromWebData: " + mEstimatesPickupDistance + " " +
+                mEstimatesPickupDuration + " " + mEstimatesDeliveryDistance + " " + mEstimatesDeliveryDuration);
+
+        return true;
     }
 }

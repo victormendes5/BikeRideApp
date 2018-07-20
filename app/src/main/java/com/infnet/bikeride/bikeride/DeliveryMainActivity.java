@@ -11,8 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class DeliveryMainActivity extends AppCompatActivity implements
-        BikeRideGoogleDistanceMatrixAPIAsyncInterface {
+public class DeliveryMainActivity extends AppCompatActivity {
 
     private static final String TAG = "DeliveryMainActivity";
 
@@ -193,33 +192,29 @@ public class DeliveryMainActivity extends AppCompatActivity implements
     private void oC_getEstimatesBtn() {
         mAnimate.swapViewsLeft(mModalAddressInformation, mModalAwaitingEstimates);
 
-        mRequestManager.clearEstimatesList();
-
-        mGoogleMaps.calculateDistanceAndDuration(
+        mGoogleMaps.getEstimatesFromWebAsync(
                 "Rua Sa Ferreira, 115",
-                mRequestManager.getPickupLocation()
-        );
-
-        mGoogleMaps.calculateDistanceAndDuration(
                 mRequestManager.getPickupLocation(),
-                mRequestManager.getDeliveryLocation()
+                mRequestManager.getDeliveryLocation(),
+                "onGetEstimatesFromWebAsyncCompleted"
         );
     }
 
-    @Override
-    public void onCalculateDistanceAndDurationCompleted(String distance, String duration) {
+    private void onGetEstimatesFromWebAsyncCompleted (String s) {
 
-        if (mRequestManager.addResultsToEstimatesList(distance, duration) == 4) {
-            mEstimatesPickupDistanceTxv.setText(mRequestManager.getPickupDistanceEstimate());
-            mEstimatesPickupDurationTxv.setText(mRequestManager.getPickupDurationEstimate());
-            mEstimatesDeliveryDistanceTxv.setText(mRequestManager.getDeliveryDistanceEstimate());
-            mEstimatesDeliveryDurationTxv.setText(mRequestManager.getDeliveryDurationEstimate());
-            mEstimatesFeeTxv.setText(mRequestManager.getFeeEstimate());
-            mDetailsPickupLocation.setText(mRequestManager.getPickupLocationShort());
-            mDetailsDeliveryLocation.setText(mRequestManager.getDeliveryLocationShort());
+        Log.i(TAG, "onGetEstimatesFromWebCompleted: executed.");
 
-            mAnimate.swapViewsLeft(mModalAwaitingEstimates, mModalRequestDetails);
-        }
+        mRequestManager.setEstimatesFromWebData(s);
+
+        mEstimatesPickupDistanceTxv.setText(mRequestManager.getPickupDistanceEstimate());
+        mEstimatesPickupDurationTxv.setText(mRequestManager.getPickupDurationEstimate());
+        mEstimatesDeliveryDistanceTxv.setText(mRequestManager.getDeliveryDistanceEstimate());
+        mEstimatesDeliveryDurationTxv.setText(mRequestManager.getDeliveryDurationEstimate());
+        mEstimatesFeeTxv.setText(mRequestManager.getFeeEstimate());
+        mDetailsPickupLocation.setText(mRequestManager.getPickupLocationShort());
+        mDetailsDeliveryLocation.setText(mRequestManager.getDeliveryLocationShort());
+
+        mAnimate.swapViewsLeft(mModalAwaitingEstimates, mModalRequestDetails);
     }
 
     private void oC_confirmBikerRequestBtn() {
