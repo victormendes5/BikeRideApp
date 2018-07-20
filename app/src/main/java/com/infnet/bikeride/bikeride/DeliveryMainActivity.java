@@ -1,28 +1,34 @@
 package com.infnet.bikeride.bikeride;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class DeliveryMainActivity extends AppCompatActivity {
 
+    private static final String TAG = "DeliveryMainActivity";
+
     // ---> Modals
     private View mModalPackageInformation, mModalAddressInformation, mModalSearchingBiker,
-            mModalChoosePickupAddress, mModalChooseDeliveryAddress, mModalRequestDetails;
+            mModalChoosePickupAddress, mModalChooseDeliveryAddress, mModalRequestDetails,
+            mModalAwaitingEstimates;
     private RelativeLayout mModalOverlay;
 
     // ---> Modals interaction
     private ImageView mPackageInfoCloseModals, mAddressesCloseModals, mAddressesBack,
             mBikerSearchWaitingWheel, mPickupAddressBackIcon, mPickupAddressCloseIcon,
             mDeliveryAddressBackIcon, mDeliveryAddressCloseIcon, mRequestDetailsBackIcon,
-            mRequestDetailsCloseIcon;
+            mRequestDetailsCloseIcon, mAwaitingEstimatesWaitingWheel;
 
     // ---> Buttons
-    public Button mRequestBikerBtn, mEnterAddressBtn, mFindBikerBtn, mBikerSearchCancelBtn,
+    private Button mRequestBikerBtn, mEnterAddressBtn, mFindBikerBtn, mBikerSearchCancelBtn,
             mChoosePickupAddrBtn, mChooseDeliveryAddrBtn, mConfirmPickupAddrBtn,
             mConfirmDeliveryAddrBtn, mConfirmBikerRequestBtn;
 
@@ -34,13 +40,35 @@ public class DeliveryMainActivity extends AppCompatActivity {
     private RelativeLayout mPackageSizeSmallSlc, mPackageSizeMediumSlc, mPackageSizeLargeSlc;
     private View mPackageSizeSmallSlc_bg, mPackageSizeMediumSlc_bg, mPackageSizeLargeSlc_bg;
 
+    // ---> Estimates display textviews
+    private TextView mEstimatesPickupDistanceTxv, mEstimatesPickupDurationTxv,
+            mEstimatesDeliveryDistanceTxv, mEstimatesDeliveryDurationTxv, mEstimatesFeeTxv,
+            mDetailsPickupLocation, mDetailsDeliveryLocation;
+
+    // ---> Address AutoComplete textviews;
+    private AutoCompleteTextView mPickupAddressAtxv, mDeliveryAddressAtxv;
+
+
     // ---> Animations
     private BikeRideAnimations mAnimate = new BikeRideAnimations(200);
+
+    // ---> Google APIs
+    BikeRideGoogleMapsAPI mGoogleMaps;
+    BikeRideGooglePlacesAPI mGooglePlaces;
+
+    // ---> BikeRide Request Manager
+    BikeRideRequestManager mRequestManager = new BikeRideRequestManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_delivery);
+
+        mGoogleMaps = new BikeRideGoogleMapsAPI(this, R.id.map);
+
+        mGooglePlaces = new BikeRideGooglePlacesAPI(this);
+        mGooglePlaces.setAutoComplete(R.id.pickupAddAutoCompTxtView,
+                R.id.deliveryAddAutoCompTxtView);
 
         BikeRideAbstractions abst = new BikeRideAbstractions(this);
 
@@ -52,13 +80,14 @@ public class DeliveryMainActivity extends AppCompatActivity {
             "mModalSearchingBiker", R.id.include_modal_searching_biker, "",
             "mModalChoosePickupAddress", R.id.include_modal_choose_pickup_address, "",
             "mModalChooseDeliveryAddress", R.id.include_modal_choose_delivery_address, "",
-            "mModalRequestDetails", R.id.include_modal_request_details, ""
+            "mModalRequestDetails", R.id.include_modal_request_details, "",
+            "mModalAwaitingEstimates", R.id.include_modal_awaiting_estimates, ""
         );
 
         // ---> Modals interaction
         abst.connectVariableToViewIdAndOnClickMethod(
             "mPackageInfoCloseModals", R.id.packageInfoCloseModals, "exitModalState",
-            "mAddressesCloseModal", R.id.addressesCloseModals, "exitModalState",
+            "mAddressesCloseModals", R.id.addressesCloseModals, "exitModalState",
             "mAddressesBack", R.id.addressesBack, "oC_addressesBack",
             "mPickupAddressBackIcon", R.id.pickupAddressBackIcon, "oC_pickupAddressBackIcon",
             "mPickupAddressCloseIcon", R.id.pickupAddressCloseIcon, "exitModalState",
@@ -99,11 +128,26 @@ public class DeliveryMainActivity extends AppCompatActivity {
         mPackageSizeMediumSlc_bg   = findViewById(R.id.packageSizeMediumSlc_bg);
         mPackageSizeLargeSlc_bg    = findViewById(R.id.packageSizeLargeSlc_bg);
 
-        // ---> Rotating bike wheel
+        // ---> Rotating bike wheels
         mBikerSearchWaitingWheel = findViewById(R.id.bikerSearchWaitingWheel);
+        mAwaitingEstimatesWaitingWheel = findViewById(R.id.awaitingEstimatesWaitingWheel);
+
+        // ---> Estimates display textviews
+        mEstimatesPickupDistanceTxv = findViewById(R.id.estimatesPickupDistance);
+        mEstimatesPickupDurationTxv = findViewById(R.id.estimatesPickupDuration);
+        mEstimatesDeliveryDistanceTxv = findViewById(R.id.estimatesDeliveryDistance);
+        mEstimatesDeliveryDurationTxv = findViewById(R.id.estimatesDeliveryDuration);
+        mEstimatesFeeTxv = findViewById(R.id.estimatesFee);
+        mDetailsPickupLocation = findViewById(R.id.detailsPickupLocation);
+        mDetailsDeliveryLocation = findViewById(R.id.detailsDeliveryLocation);
+
+        // ---> Address AutoComplete textviews;
+        mPickupAddressAtxv = findViewById(R.id.pickupAddAutoCompTxtView);
+        mDeliveryAddressAtxv = findViewById(R.id.deliveryAddAutoCompTxtView);
 
         // ---> Activate continuous animations
         mAnimate.rotate360Infinitely(mBikerSearchWaitingWheel, 2000);
+        mAnimate.rotate360Infinitely(mAwaitingEstimatesWaitingWheel, 2000);
     }
 
     @Override
@@ -113,6 +157,13 @@ public class DeliveryMainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        mGoogleMaps.verifyPermissionRequestResult(requestCode, grantResults);
     }
 
 
@@ -139,7 +190,31 @@ public class DeliveryMainActivity extends AppCompatActivity {
     }
 
     private void oC_getEstimatesBtn() {
-        mAnimate.swapViewsLeft(mModalAddressInformation, mModalRequestDetails);
+        mAnimate.swapViewsLeft(mModalAddressInformation, mModalAwaitingEstimates);
+
+        mGoogleMaps.getEstimatesFromWebAsync(
+                "Rua Sa Ferreira, 115",
+                mRequestManager.getPickupLocation(),
+                mRequestManager.getDeliveryLocation(),
+                "onGetEstimatesFromWebAsyncCompleted"
+        );
+    }
+
+    private void onGetEstimatesFromWebAsyncCompleted (String s) {
+
+        Log.i(TAG, "onGetEstimatesFromWebCompleted: executed.");
+
+        mRequestManager.setEstimatesFromWebData(s);
+
+        mEstimatesPickupDistanceTxv.setText(mRequestManager.getPickupDistanceEstimate());
+        mEstimatesPickupDurationTxv.setText(mRequestManager.getPickupDurationEstimate());
+        mEstimatesDeliveryDistanceTxv.setText(mRequestManager.getDeliveryDistanceEstimate());
+        mEstimatesDeliveryDurationTxv.setText(mRequestManager.getDeliveryDurationEstimate());
+        mEstimatesFeeTxv.setText(mRequestManager.getFeeEstimate());
+        mDetailsPickupLocation.setText(mRequestManager.getPickupLocationShort());
+        mDetailsDeliveryLocation.setText(mRequestManager.getDeliveryLocationShort());
+
+        mAnimate.swapViewsLeft(mModalAwaitingEstimates, mModalRequestDetails);
     }
 
     private void oC_confirmBikerRequestBtn() {
@@ -151,6 +226,7 @@ public class DeliveryMainActivity extends AppCompatActivity {
     }
 
     private void oC_confirmPickupAddrBtn () {
+        mRequestManager.setPickupLocation(mPickupAddressAtxv.getText().toString());
         mAnimate.crossFadeViews(mModalChoosePickupAddress, mModalAddressInformation,
                 0,400);
     }
@@ -161,6 +237,7 @@ public class DeliveryMainActivity extends AppCompatActivity {
     }
 
     private void oC_confirmDeliveryAddrBtn () {
+        mRequestManager.setDeliveryLocation(mDeliveryAddressAtxv.getText().toString());
         mAnimate.crossFadeViews(mModalChooseDeliveryAddress, mModalAddressInformation,
                 0,400);
     }
