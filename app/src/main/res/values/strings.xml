@@ -105,6 +105,8 @@
     <string name="modal_searching_biker_title">Biker Search</string>
     <string name="modal_searching_biker_caption">Finding biker ...</string>
     <string name="modal_searching_biker_cancel_button">Cancel search</string>
+    <string name="awaiting_estimates">Awaiting Estimates</string>
+    <string name="calculating">Calculating ...</string>
 
 
 </resources>
