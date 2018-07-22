@@ -59,10 +59,16 @@ public class DeliveryMainActivity extends AppCompatActivity {
     // ---> BikeRide Request Manager
     BikeRideRequestManager mRequestManager = new BikeRideRequestManager();
 
+    // ---> Customized setContentView with navigation drawer and toolbar
+    BikeRideContentViewBuilder mContentViewBuilder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_delivery);
+//        setContentView(R.layout.activity_main_delivery);
+
+        mContentViewBuilder = new BikeRideContentViewBuilder(this,
+                R.layout.activity_main_delivery);
 
         mGoogleMaps = new BikeRideGoogleMapsAPI(this, R.id.map);
 
@@ -155,7 +161,9 @@ public class DeliveryMainActivity extends AppCompatActivity {
         if (mModalOverlay.getVisibility() == View.VISIBLE) {
             exitModalState();
         } else {
-            super.onBackPressed();
+            if (mContentViewBuilder.isNavigationDrawerClosed()) {
+                super.onBackPressed();
+            }
         }
     }
 
