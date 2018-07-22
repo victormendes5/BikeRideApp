@@ -64,7 +64,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent);
                 break;
             case R.id.delivery_quotation:
-                intent = new Intent(this, DeliveryQuotationPrice.class);
+                intent = new Intent(this, DeliveryQuotationPriceActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.payment_methods:
+                intent = new Intent(this, AddCreditCardActivity.class);
                 startActivity(intent);
                 break;
             default:

@@ -106,5 +106,11 @@
     <string name="modal_searching_biker_caption">Finding biker ...</string>
     <string name="modal_searching_biker_cancel_button">Cancel search</string>
 
+    <!-- Payment methods -->
+    <string name="card_number">Card Number</string>
+    <string name="expiration">Expiration</string>
+    <string name="cvc">CVC</string>
+    <string name="add_card">Add Card</string>
+    <string name="card_name">Card Name</string>
 
 </resources>
