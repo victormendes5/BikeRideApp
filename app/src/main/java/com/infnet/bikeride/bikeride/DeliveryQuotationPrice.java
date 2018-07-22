@@ -11,7 +11,7 @@ public class DeliveryQuotationPrice extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_delivery_quotation_price);
+//        setContentView(R.layout.activity_delivery_quotation_price);
 
         mContentViewBuilder = new BikeRideContentViewBuilder(this,
                 R.layout.activity_delivery_quotation_price);
