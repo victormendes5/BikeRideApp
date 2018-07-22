@@ -46,8 +46,8 @@
         android:layout_marginBottom="16dp"
         android:background="@color/colorDivider" />
 
-    <EditText
-        android:id="@+id/receiverNameEditText"
+    <AutoCompleteTextView
+        android:id="@+id/pickupAddAutoCompTxtView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/modal_choose_pickup_address_hint"
@@ -58,13 +58,14 @@
         android:textColorHint="@color/colorDivider"
         android:textSize="16dp"
         android:padding="14dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:imeOptions="actionSearch"/>
 
     <RelativeLayout
         android:id="@+id/commonAddressesContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/receiverNameEditText"
+        android:layout_below="@id/pickupAddAutoCompTxtView"
         android:background="@color/transparentWhite05"
         android:padding="8dp"
         android:layout_marginBottom="16dp">
