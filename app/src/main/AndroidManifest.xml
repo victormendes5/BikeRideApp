@@ -24,24 +24,17 @@
             android:value="AIzaSyD3w91P6nWokP4GvyKkkGpnlJ--EmcgOHA" />
 
         <activity android:name=".MainActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
-        <activity android:name=".DeliveryMainActivity" >
-
-
-
-        </activity>
-
+        <activity android:name=".DeliveryMainActivity"></activity>
         <activity android:name=".DeliveryTrackingActivity" />
         <activity android:name=".DeliverymanReviewActivity" />
-        <activity android:name=".DeliveryQuotationPrice"></activity>
+        <activity android:name=".DeliveryQuotationPriceActivity" />
+        <activity android:name=".AddCreditCardActivity"></activity>
     </application>
 
 </manifest>

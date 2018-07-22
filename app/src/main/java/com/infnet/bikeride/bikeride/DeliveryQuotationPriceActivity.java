@@ -3,7 +3,7 @@ package com.infnet.bikeride.bikeride;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class DeliveryQuotationPrice extends AppCompatActivity {
+public class DeliveryQuotationPriceActivity extends AppCompatActivity {
 
     // ---> Customized setContentView with navigation drawer and toolbar
     BikeRideContentViewBuilder mContentViewBuilder;

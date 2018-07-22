@@ -16,5 +16,8 @@
     <item
         android:id="@+id/delivery_quotation"
         android:title="Cotação"/>
+    <item
+        android:id="@+id/payment_methods"
+        android:title="Métodos de pagamento"/>
 
 </menu>
