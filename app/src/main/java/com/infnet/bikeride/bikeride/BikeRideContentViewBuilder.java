@@ -77,7 +77,7 @@ public class BikeRideContentViewBuilder {
                         navigate(DeliveryMainActivity.class);
                         break;
                     case R.id.delivery_quotation:
-                        navigate(DeliveryQuotationPrice.class);
+                        navigate(DeliveryQuotationPriceActivity.class);
                         break;
                     default:
                         break;

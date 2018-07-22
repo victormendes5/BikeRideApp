@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 public class AddCreditCardActivity extends AppCompatActivity {
 
+    TextInputEditText mCardName;
     TextInputEditText mCardNumber;
     TextInputEditText mExpiration;
     TextInputEditText mCVC;
@@ -15,7 +16,8 @@ public class AddCreditCardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_credit_card);
 
-        mCardNumber = findViewById(R.id.creditCardTextInputEditText);
+        mCardName = findViewById(R.id.creditCardNameTextInputEditText);
+        mCardNumber = findViewById(R.id.creditCardNumberTextInputEditText);
         mExpiration = findViewById(R.id.expirationDateTextInputEditText);
         mCVC = findViewById(R.id.cvcTextInputEditText);
     }
