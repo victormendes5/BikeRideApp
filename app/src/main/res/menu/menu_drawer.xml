@@ -17,4 +17,8 @@
         android:id="@+id/delivery_quotation"
         android:title="Cotação"/>
 
+    <item
+        android:id="@+id/logout_app"
+        android:title="Logout"/>
+
 </menu>

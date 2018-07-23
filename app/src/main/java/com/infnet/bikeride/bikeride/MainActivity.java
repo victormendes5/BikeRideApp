@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         autentication = ConfigurationFirebase.getFirebaseAuth();
         user = autentication.getCurrentUser();
-        if (user == null){
+//        if (user == null){
             setContentView(R.layout.main_drawer_layout);
 
             //Declaração de EdiText
@@ -130,12 +130,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             NavigationView navigationView = findViewById(R.id.navigation_view);
             navigationView.setNavigationItemSelectedListener(this);
-        } else {
-
-            intent = new Intent(this, DeliveryMainActivity.class);
-            startActivity(intent);
-
-        }
+//        } else {
+//
+//
+//        }
 
 
     }
@@ -172,6 +170,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intent = new Intent(this, DeliveryQuotationPrice.class);
                 startActivity(intent);
                 break;
+
+            case R.id.logout_app:
+                if (user == null){
+                    Toast.makeText(MainActivity.this,"Nenhum usuário Logado",Toast.LENGTH_SHORT).show();
+
+                }else {
+
+                    Logout();
+                    Toast.makeText(MainActivity.this,"Usuário Deslogado",Toast.LENGTH_SHORT).show();
+
+                }
             default:
                 break;
         }
@@ -313,8 +322,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if(task.isSuccessful()){
-                    Toast.makeText(MainActivity.this,"Sucesso Login Facebook no Firebase",Toast.LENGTH_SHORT).show();
 
+                    Toast.makeText(MainActivity.this,"Sucesso Login Facebook no Firebase",Toast.LENGTH_SHORT).show();
+                    intent = new Intent(MainActivity.this, MainActivity.class);
+                    startActivity(intent);
                 }else {
                     Toast.makeText(MainActivity.this,"Error Login Facebook",Toast.LENGTH_SHORT).show();
                 }
@@ -361,6 +372,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
     };
+
+
+    // Logout
+
+    private void Logout(){
+
+    autentication.signOut();
+        intent = new Intent(MainActivity.this, MainActivity.class);
+        startActivity(intent);
+    }
 
 
 }
