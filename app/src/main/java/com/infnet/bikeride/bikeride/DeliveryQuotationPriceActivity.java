@@ -3,7 +3,7 @@ package com.infnet.bikeride.bikeride;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity{
+public class DeliveryQuotationPriceActivity extends AppCompatActivity {
 
     // ---> Customized setContentView with navigation drawer and toolbar
     BikeRideContentViewBuilder mContentViewBuilder;
@@ -11,9 +11,10 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.main_drawer_layout);
+//        setContentView(R.layout.activity_delivery_quotation_price);
 
-        mContentViewBuilder = new BikeRideContentViewBuilder(this, R.layout.activity_main);
+        mContentViewBuilder = new BikeRideContentViewBuilder(this,
+                R.layout.activity_delivery_quotation_price);
     }
 
     @Override

@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/modalBikerSearchContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:background="@color/transparentBlack70"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/packageInfoTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="@string/modal_request_details_title"
+        android:textColor="@color/colorTextIcons"
+        android:textSize="20dp" />
+
+    <ImageView
+        android:id="@+id/requestDetailsBackIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_back_black_24dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="3dp"/>
+
+    <ImageView
+        android:id="@+id/requestDetailsCloseIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_cancel_black_24dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="3dp"/>
+
+    <View
+        android:id="@+id/bikerFoundTitleDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/packageInfoTitle"
+        android:layout_marginBottom="16dp"
+        android:background="@color/colorDivider" />
+
+    <LinearLayout
+        android:id="@+id/distancesAndValueContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/transparentWhite05"
+        android:layout_below="@id/bikerFoundTitleDivider"
+        android:padding="8dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/distancesAndValueHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/modal_request_details_estimates_title"
+            android:textStyle="bold"
+            android:padding="4dp"
+            android:textColor="@color/colorTextIcons"
+            android:layout_marginBottom="8dp"/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/transparentWhite05"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_request_details_pickup_title"
+                android:textColor="@color/colorDivider"
+                android:textSize="14dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:gravity="left"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/estimatesPickupDistance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_request_details_pickup_distance"
+                android:layout_weight="1"
+                android:textColor="@color/colorDivider"
+                android:textSize="14dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/estimatesPickupDuration"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_request_details_pickup_time"
+                android:layout_weight="1"
+                android:textColor="@color/colorTextIcons"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:gravity="right"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/transparentWhite05"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_request_details_delivery_title"
+                android:textColor="@color/colorDivider"
+                android:textSize="14dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:gravity="left"/>
+
+            <TextView
+                android:id="@+id/estimatesDeliveryDistance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_request_details_delivery_distance"
+                android:layout_weight="1"
+                android:textColor="@color/colorDivider"
+                android:textSize="14dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/estimatesDeliveryDuration"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_request_details_delivery_time"
+                android:layout_weight="1"
+                android:textColor="@color/colorTextIcons"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:gravity="right"/>
+
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/transparentWhite05"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_request_details_fee_title"
+                android:textColor="@color/colorDivider"
+                android:textSize="14dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:gravity="left"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_weight="1"
+                android:textColor="@color/colorDivider"
+                android:textSize="16dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/estimatesFee"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_request_details_fee_value"
+                android:layout_weight="1"
+                android:textColor="@color/colorTextIcons"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:gravity="right"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/pickupDeliveryPointsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/transparentWhite05"
+        android:layout_below="@id/distancesAndValueContainer"
+        android:padding="8dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/pickupDeliveryPointsHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/modal_request_details_details_title"
+            android:textStyle="bold"
+            android:padding="4dp"
+            android:textColor="@color/colorTextIcons"
+            android:layout_marginBottom="8dp"/>
+
+        <LinearLayout
+            android:id="@+id/typeAndSizeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/pickupDeliveryPointsHeader"
+            android:layout_marginBottom="8dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="4dp"
+                android:background="@color/transparentWhite05"
+                >
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_mail_black_24dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:scaleType="centerInside"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginLeft="8dp"/>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/modal_request_details_details_package_size_small"
+                    android:textColor="@color/colorDivider"
+                    android:textSize="14dp"
+                    android:padding="8dp"
+                    android:layout_marginLeft="28dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="4dp"
+                android:background="@color/transparentWhite05">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_show_chart_black_24dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:scaleType="centerInside"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginLeft="8dp"/>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/modal_request_details_details_package_type_unusual"
+                    android:textColor="@color/colorDivider"
+                    android:textSize="14dp"
+                    android:padding="8dp"
+                    android:layout_marginLeft="28dp"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@+id/typeAndSizeContainer">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/transparentWhite05"
+                android:layout_marginBottom="8dp">
+
+                <RelativeLayout
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="5dp">
+
+                        <ImageView
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:src="@drawable/ic_arrow_back_black_24dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true"
+                            android:rotation="180"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginLeft="0dp"
+                            android:layout_centerInParent="true"/>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_directions_bike_black_24dp"
+                            android:layout_marginBottom="8dp"
+                            android:scaleType="centerInside"
+                            android:layout_centerInParent="true"/>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/detailsPickupLocation"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sample_address_7"
+                    android:textColor="@color/colorDivider"
+                    android:textSize="14dp"
+                    android:padding="8dp"
+                    android:layout_marginLeft="28dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/transparentWhite05">
+
+                <RelativeLayout
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="5dp">
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:src="@drawable/ic_arrow_back_black_24dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_centerInParent="true"/>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_directions_bike_black_24dp"
+                        android:layout_marginBottom="8dp"
+                        android:scaleType="centerInside"
+                        android:layout_centerInParent="true"
+                        android:scaleX="-1"/>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/detailsDeliveryLocation"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sample_address_8"
+                    android:textColor="@color/colorDivider"
+                    android:textSize="14dp"
+                    android:padding="8dp"
+                    android:layout_marginLeft="28dp"/>
+
+            </RelativeLayout>
+
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/confirmBikerRequestBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pickupDeliveryPointsContainer"
+        android:layout_centerHorizontal="true"
+        android:text="@string/modal_request_details_confirm_request_button"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorTextIcons"/>
+
+</RelativeLayout>

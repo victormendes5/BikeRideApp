@@ -12,6 +12,19 @@
     <color name="lightGray1">#EEEEEE</color>
     <color name="lightGray2">#F0F0F0</color>
 
+
+    <color name="transparentPrimaryDark30">#4D0097A7</color>
+
+    <color name="transparentAccent10">#1A7C4DFF</color>
+    <color name="transparentAccent20">#337C4DFF</color>
+    <color name="transparentAccent30">#4D7C4DFF</color>
+    <color name="transparentAccent40">#667C4DFF</color>
+    <color name="transparentAccent50">#807C4DFF</color>
+    <color name="transparentAccent60">#997C4DFF</color>
+    <color name="transparentAccent70">#B37C4DFF</color>
+    <color name="transparentAccent80">#CC7C4DFF</color>
+    <color name="transparentAccent90">#E67C4DFF</color>
+
     <color name="transparentBlack10">#1A000000</color>
     <color name="transparentBlack20">#33000000</color>
     <color name="transparentBlack30">#4D000000</color>
@@ -21,4 +34,15 @@
     <color name="transparentBlack70">#B3000000</color>
     <color name="transparentBlack80">#CC000000</color>
     <color name="transparentBlack90">#E6000000</color>
+
+    <color name="transparentWhite05">#10FFFFFF</color>
+    <color name="transparentWhite10">#1AFFFFFF</color>
+    <color name="transparentWhite20">#33FFFFFF</color>
+    <color name="transparentWhite30">#4DFFFFFF</color>
+    <color name="transparentWhite40">#66FFFFFF</color>
+    <color name="transparentWhite50">#80FFFFFF</color>
+    <color name="transparentWhite60">#99FFFFFF</color>
+    <color name="transparentWhite70">#B3FFFFFF</color>
+    <color name="transparentWhite80">#CCFFFFFF</color>
+    <color name="transparentWhite90">#E6FFFFFF</color>
 </resources>
