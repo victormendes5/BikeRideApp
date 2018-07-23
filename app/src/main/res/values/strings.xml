@@ -106,5 +106,9 @@
     <string name="modal_searching_biker_caption">Finding biker ...</string>
     <string name="modal_searching_biker_cancel_button">Cancel search</string>
 
+    <!-- Facebook Auth -->
+    <string name="facebook_app_id">250988672380164</string>
+    <string name="fb_login_protocol_scheme">fb250988672380164</string>
+    <string name="signUp_editText_email">Email</string>
 
 </resources>

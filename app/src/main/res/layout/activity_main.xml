@@ -88,33 +88,26 @@
 
         <TableRow>
 
-            <Button
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/login_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/main_button_loginFacebook"
-                android:textAllCaps="true"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_margin="6dp"
-                android:textColor="@color/colorTextIcons"
-                android:background="@color/colorAccent" />
+                android:onClick="LoginFacebook"
+                android:layout_gravity="center_horizontal" />
 
-            <Button
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/sign_in_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/main_button_loginGoogle"
-                android:textStyle="bold"
-                android:layout_margin="6dp"
-                android:textAllCaps="true"
-                android:gravity="center"
-                android:textColor="@color/colorTextIcons"
-                android:background="@color/colorAccent" />
+                android:layout_height="wrap_content" />
+
+
 
         </TableRow>
 
         <TableRow>
 
             <Button
+                android:id="@+id/btnSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/main_button_signUp"
@@ -126,6 +119,7 @@
                 android:background="@color/colorAccent" />
 
             <Button
+                android:id="@+id/btnLostLoginData"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/main_button_lostData"
