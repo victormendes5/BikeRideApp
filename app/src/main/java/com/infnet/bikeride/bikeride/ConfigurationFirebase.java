@@ -10,14 +10,14 @@ public class ConfigurationFirebase {
     private static DatabaseReference referenceFirebase;
     private static FirebaseAuth autentication;
 
-    public static DatabaseReference getFirebase (){
-
-        if (referenceFirebase == null){
-            referenceFirebase = FirebaseDatabase.getInstance().getReference();
-        }
-
-        return referenceFirebase;
-    }
+//    public static DatabaseReference getFirebase (){
+//
+//        if (referenceFirebase == null){
+//            referenceFirebase = FirebaseDatabase.getInstance().getReference();
+//        }
+//
+//        return referenceFirebase;
+//    }
 
 
     public static FirebaseAuth getFirebaseAuth(){

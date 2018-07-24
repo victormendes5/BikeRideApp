@@ -78,9 +78,9 @@
 
             <com.facebook.login.widget.LoginButton
                 android:id="@+id/login_button"
+                android:onClick="LoginFacebook"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="LoginFacebook"
                 android:layout_gravity="center_horizontal" />
 
             <com.google.android.gms.common.SignInButton

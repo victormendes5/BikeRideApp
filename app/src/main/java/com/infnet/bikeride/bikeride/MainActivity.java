@@ -1,5 +1,7 @@
 package com.infnet.bikeride.bikeride;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -47,6 +49,9 @@ public class MainActivity extends AppCompatActivity{
     // ---> Customized setContentView with navigation drawer and toolbar
     BikeRideContentViewBuilder mContentViewBuilder;
 
+    private Intent intent;
+
+
     private EditText edtEmail;
     private EditText edtPassword;
 
@@ -69,17 +74,16 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
 
-=======
-//        setContentView(R.layout.main_drawer_layout);
+        autentication = FirebaseAuth.getInstance();
+
 
         mContentViewBuilder = new BikeRideContentViewBuilder(this, R.layout.activity_main);
->>>>>>> 7a8514772b6dc764e7ff03644d3e784829bc3436
-        autentication = ConfigurationFirebase.getFirebaseAuth();
-        user = autentication.getCurrentUser();
+
+
+//        user = autentication.getCurrentUser();
 //        if (user == null){
-            setContentView(R.layout.main_drawer_layout);
+//            setContentView(R.layout.main_drawer_layout);
 
             //Declaração de EdiText
 
@@ -116,35 +120,13 @@ public class MainActivity extends AppCompatActivity{
 
 
 
-            // Configuração da Toolbar
-            Toolbar toolbar = findViewById(R.id.customToolbar);
-            setSupportActionBar(toolbar);
-            drawerLayout =  findViewById(R.id.main_drawer_layout);
 
-            ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,
-                    drawerLayout,
-                    toolbar,
-                    R.string.drawer_open,
-                    R.string.drawer_close);
-
-            actionBarDrawerToggle.syncState();
-
-            NavigationView navigationView = findViewById(R.id.navigation_view);
-            navigationView.setNavigationItemSelectedListener(this);
 //        } else {
 //
 //
 //        }
 
 
-<<<<<<< HEAD
-
-//        setContentView(R.layout.main_drawer_layout);
-
-        mContentViewBuilder = new BikeRideContentViewBuilder(this, R.layout.activity_main);
-
-=======
->>>>>>> 7a8514772b6dc764e7ff03644d3e784829bc3436
     }
 
 
@@ -155,49 +137,9 @@ public class MainActivity extends AppCompatActivity{
             super.onBackPressed();
         }
     }
-<<<<<<< HEAD
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int itemID = item.getItemId();
 
-        switch (itemID) {
-            case R.id.deliveryman_review:
-                intent = new Intent(this, DeliverymanReviewActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.delivery_tracking:
-                intent = new Intent(this, DeliveryTrackingActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.delivery_main:
-                intent = new Intent(this, DeliveryMainActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.delivery_quotation:
-                intent = new Intent(this, DeliveryQuotationPrice.class);
-                startActivity(intent);
-                break;
 
-            case R.id.logout_app:
-                if (user == null){
-                    Toast.makeText(MainActivity.this,"Nenhum usuário Logado",Toast.LENGTH_SHORT).show();
-
-                }else {
-
-                    Logout();
-                    Toast.makeText(MainActivity.this,"Usuário Deslogado",Toast.LENGTH_SHORT).show();
-
-                }
-            default:
-                break;
-        }
-
-        return false;
-    }
-
-=======
->>>>>>> 7a8514772b6dc764e7ff03644d3e784829bc3436
     //Login Anonimo
 
     // Button Login
@@ -296,6 +238,7 @@ public class MainActivity extends AppCompatActivity{
 
     //Login com Facebook
 
+
     public void LoginFacebook(View v){
 
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -391,15 +334,11 @@ public class MainActivity extends AppCompatActivity{
 
     autentication.signOut();
 
-        onRestart();
+//        onRestart();
 
 //        intent = new Intent(MainActivity.this, MainActivity.class);
 //        startActivity(intent);
 
-<<<<<<< HEAD
     }
-=======
-
->>>>>>> 7a8514772b6dc764e7ff03644d3e784829bc3436
 }
 
