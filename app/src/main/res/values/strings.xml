@@ -105,7 +105,15 @@
     <string name="modal_searching_biker_title">Biker Search</string>
     <string name="modal_searching_biker_caption">Finding biker ...</string>
     <string name="modal_searching_biker_cancel_button">Cancel search</string>
+    <string name="awaiting_estimates">Awaiting Estimates</string>
+    <string name="calculating">Calculating ...</string>
 
+    <!-- Payment methods -->
+    <string name="card_number">Card Number</string>
+    <string name="expiration">Expiration</string>
+    <string name="cvc">CVC</string>
+    <string name="add_card">Add Card</string>
+    <string name="card_name">Card Name</string>
     <!-- Facebook Auth -->
     <string name="facebook_app_id">250988672380164</string>
     <string name="fb_login_protocol_scheme">fb250988672380164</string>

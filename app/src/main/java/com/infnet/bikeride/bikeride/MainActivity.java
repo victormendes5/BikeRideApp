@@ -1,10 +1,5 @@
 package com.infnet.bikeride.bikeride;
 
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -47,10 +42,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity{
 
-    private DrawerLayout drawerLayout;
-    private Intent intent;
+    // ---> Customized setContentView with navigation drawer and toolbar
+    BikeRideContentViewBuilder mContentViewBuilder;
 
     private EditText edtEmail;
     private EditText edtPassword;
@@ -74,7 +69,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        setContentView(R.layout.main_drawer_layout);
 
+        mContentViewBuilder = new BikeRideContentViewBuilder(this, R.layout.activity_main);
         autentication = ConfigurationFirebase.getFirebaseAuth();
         user = autentication.getCurrentUser();
 //        if (user == null){
@@ -142,52 +139,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(Gravity.START)) {
-            drawerLayout.closeDrawer(Gravity.START);
-        } else {
+        if (mContentViewBuilder.isNavigationDrawerClosed()) {
             super.onBackPressed();
         }
     }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int itemID = item.getItemId();
-
-        switch (itemID) {
-            case R.id.deliveryman_review:
-                intent = new Intent(this, DeliverymanReviewActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.delivery_tracking:
-                intent = new Intent(this, DeliveryTrackingActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.delivery_main:
-                intent = new Intent(this, DeliveryMainActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.delivery_quotation:
-                intent = new Intent(this, DeliveryQuotationPrice.class);
-                startActivity(intent);
-                break;
-
-            case R.id.logout_app:
-                if (user == null){
-                    Toast.makeText(MainActivity.this,"Nenhum usuário Logado",Toast.LENGTH_SHORT).show();
-
-                }else {
-
-                    Logout();
-                    Toast.makeText(MainActivity.this,"Usuário Deslogado",Toast.LENGTH_SHORT).show();
-
-                }
-            default:
-                break;
-        }
-
-        return false;
-    }
-
     //Login Anonimo
 
     // Button Login
@@ -382,6 +337,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         intent = new Intent(MainActivity.this, MainActivity.class);
         startActivity(intent);
     }
+
 
 
 }
