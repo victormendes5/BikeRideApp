@@ -293,6 +293,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onSuccess(LoginResult loginResult) {
 
                 handleFacebookToken(loginResult.getAccessToken());
+
                 Toast.makeText(MainActivity.this,"Entrou o login com Facebook",Toast.LENGTH_SHORT).show();
 
 
@@ -379,8 +380,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void Logout(){
 
     autentication.signOut();
-        intent = new Intent(MainActivity.this, MainActivity.class);
-        startActivity(intent);
+
+        onRestart();
+
+//        intent = new Intent(MainActivity.this, MainActivity.class);
+//        startActivity(intent);
+
     }
 
 
