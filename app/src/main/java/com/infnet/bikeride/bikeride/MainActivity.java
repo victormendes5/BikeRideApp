@@ -1,10 +1,5 @@
 package com.infnet.bikeride.bikeride;
 
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -47,10 +42,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity{
 
-    private DrawerLayout drawerLayout;
-    private Intent intent;
+    // ---> Customized setContentView with navigation drawer and toolbar
+    BikeRideContentViewBuilder mContentViewBuilder;
 
     private EditText edtEmail;
     private EditText edtPassword;
@@ -136,15 +131,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        }
 
 
+
+//        setContentView(R.layout.main_drawer_layout);
+
+        mContentViewBuilder = new BikeRideContentViewBuilder(this, R.layout.activity_main);
+
     }
 
 
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(Gravity.START)) {
-            drawerLayout.closeDrawer(Gravity.START);
-        } else {
+        if (mContentViewBuilder.isNavigationDrawerClosed()) {
             super.onBackPressed();
         }
     }
@@ -387,7 +385,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        startActivity(intent);
 
     }
-
-
 }
 
