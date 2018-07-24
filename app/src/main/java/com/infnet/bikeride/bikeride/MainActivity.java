@@ -69,7 +69,13 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
 
+=======
+//        setContentView(R.layout.main_drawer_layout);
+
+        mContentViewBuilder = new BikeRideContentViewBuilder(this, R.layout.activity_main);
+>>>>>>> 7a8514772b6dc764e7ff03644d3e784829bc3436
         autentication = ConfigurationFirebase.getFirebaseAuth();
         user = autentication.getCurrentUser();
 //        if (user == null){
@@ -131,11 +137,14 @@ public class MainActivity extends AppCompatActivity{
 //        }
 
 
+<<<<<<< HEAD
 
 //        setContentView(R.layout.main_drawer_layout);
 
         mContentViewBuilder = new BikeRideContentViewBuilder(this, R.layout.activity_main);
 
+=======
+>>>>>>> 7a8514772b6dc764e7ff03644d3e784829bc3436
     }
 
 
@@ -146,6 +155,7 @@ public class MainActivity extends AppCompatActivity{
             super.onBackPressed();
         }
     }
+<<<<<<< HEAD
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -186,6 +196,8 @@ public class MainActivity extends AppCompatActivity{
         return false;
     }
 
+=======
+>>>>>>> 7a8514772b6dc764e7ff03644d3e784829bc3436
     //Login Anonimo
 
     // Button Login
@@ -384,6 +396,10 @@ public class MainActivity extends AppCompatActivity{
 //        intent = new Intent(MainActivity.this, MainActivity.class);
 //        startActivity(intent);
 
+<<<<<<< HEAD
     }
+=======
+
+>>>>>>> 7a8514772b6dc764e7ff03644d3e784829bc3436
 }
 

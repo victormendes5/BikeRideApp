@@ -108,17 +108,27 @@
     <string name="awaiting_estimates">Awaiting Estimates</string>
     <string name="calculating">Calculating ...</string>
 
+<<<<<<< HEAD
 
     <!-- Facebook Auth -->
     <string name="facebook_app_id">250988672380164</string>
     <string name="fb_login_protocol_scheme">fb250988672380164</string>
     <string name="signUp_editText_email">Email</string>
 
+=======
+>>>>>>> 7a8514772b6dc764e7ff03644d3e784829bc3436
     <!-- Payment methods -->
     <string name="card_number">Card Number</string>
     <string name="expiration">Expiration</string>
     <string name="cvc">CVC</string>
     <string name="add_card">Add Card</string>
     <string name="card_name">Card Name</string>
+<<<<<<< HEAD
+=======
+    <!-- Facebook Auth -->
+    <string name="facebook_app_id">250988672380164</string>
+    <string name="fb_login_protocol_scheme">fb250988672380164</string>
+    <string name="signUp_editText_email">Email</string>
+>>>>>>> 7a8514772b6dc764e7ff03644d3e784829bc3436
 
 </resources>
