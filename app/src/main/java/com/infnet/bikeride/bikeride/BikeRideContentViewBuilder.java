@@ -131,6 +131,7 @@ public class BikeRideContentViewBuilder {
             LoginManager.getInstance().logOut();
 
         } else if (apiGoogle.getInstanceId() != 0){
+            apiGoogle.revokeAccess();
             apiGoogle.signOut();
         }
 

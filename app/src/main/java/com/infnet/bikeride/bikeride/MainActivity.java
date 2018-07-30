@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity{
 
             Toast.makeText(this,"Usuário Logado",Toast.LENGTH_SHORT).show();
 
-//            Redirect(DeliveryMainActivity.class);
+            Redirect(DeliveryMainActivity.class);
 
         } else {
 
@@ -191,8 +191,6 @@ public class MainActivity extends AppCompatActivity{
     public  View.OnClickListener LogarGoogle = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
-            Toast.makeText(MainActivity.this,"Clocou no sign in google" ,Toast.LENGTH_SHORT).show();
 
             signInGoogle();
 
