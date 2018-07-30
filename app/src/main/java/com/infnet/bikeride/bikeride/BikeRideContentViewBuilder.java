@@ -13,6 +13,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInApi;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
+
 public class BikeRideContentViewBuilder {
 
     private static final int NAVIGATION_DRAWER_LAYOUT_FILE_ID = R.layout.main_drawer_layout;
@@ -22,6 +34,10 @@ public class BikeRideContentViewBuilder {
     private AppCompatActivity mRefferedActivity;
     private int mActivityLayoutId;
     private DrawerLayout mDrawerLayout;
+
+    private FirebaseAuth autentication;
+    private GoogleSignInClient apiGoogle;
+
 
     public BikeRideContentViewBuilder(Context context, int activityLayoutId) {
 
@@ -79,6 +95,11 @@ public class BikeRideContentViewBuilder {
                     case R.id.delivery_quotation:
                         navigate(DeliveryQuotationPriceActivity.class);
                         break;
+                    case R.id.logout_app:
+                        autentication = ConfigurationFirebase.getFirebaseAuth();
+                        Logout();
+                        navigate(MainActivity.class);
+                        break;
                     default:
                         break;
                 }
@@ -87,7 +108,7 @@ public class BikeRideContentViewBuilder {
         });
     }
 
-    private void navigate (Class destination) {
+    public void navigate (Class destination) {
 
         Intent newIntent = new Intent(mRefferedActivity, destination);
         mRefferedActivity.startActivity(newIntent);
@@ -99,5 +120,23 @@ public class BikeRideContentViewBuilder {
             return false;
         }
         return true;
+    }
+
+    private void Logout(){
+
+
+        autentication.signOut();
+
+        if (LoginManager.getInstance() != null){
+            LoginManager.getInstance().logOut();
+
+        } else {
+            apiGoogle.signOut();
+            apiGoogle.revokeAccess();
+        }
+
+
+
+
     }
 }
