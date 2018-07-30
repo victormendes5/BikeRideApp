@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity{
 
             Toast.makeText(this,"Usuário Logado",Toast.LENGTH_SHORT).show();
 
-            Redirect(DeliveryMainActivity.class);
+//            Redirect(DeliveryMainActivity.class);
 
         } else {
 
