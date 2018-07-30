@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity{
     // ---> Customized setContentView with navigation drawer and toolbar
     BikeRideContentViewBuilder mContentViewBuilder;
 
+    Intent intent;
 
     private EditText edtEmail;
     private EditText edtPassword;
@@ -74,15 +75,16 @@ public class MainActivity extends AppCompatActivity{
 
         autentication = ConfigurationFirebase.getFirebaseAuth();
 
-        mContentViewBuilder = new BikeRideContentViewBuilder(this, R.layout.activity_main);
+//        mContentViewBuilder = new BikeRideContentViewBuilder(this, R.layout.activity_main);
 
+        setContentView(R.layout.activity_main);
 
         user = autentication.getCurrentUser();
         if (user != null){
 
             Toast.makeText(this,"Usuário Logado",Toast.LENGTH_SHORT).show();
 
-            Redirect();
+            Redirect(DeliveryMainActivity.class);
 
         } else {
 
@@ -132,9 +134,9 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     public void onBackPressed() {
-        if (mContentViewBuilder.isNavigationDrawerClosed()) {
+//        if (mContentViewBuilder.isNavigationDrawerClosed()) {
             super.onBackPressed();
-        }
+//        }
     }
 
 
@@ -173,7 +175,7 @@ public class MainActivity extends AppCompatActivity{
 
                     Toast.makeText(MainActivity.this,"Sucesso ao Logar",Toast.LENGTH_SHORT).show();
 
-                    Redirect();
+                    Redirect(DeliveryMainActivity.class);
 
                 }else if(!task.isSuccessful()) {
                     Log.w(TAG, "signInWithEmail:failed", task.getException());
@@ -215,7 +217,7 @@ public class MainActivity extends AppCompatActivity{
 
                             Toast.makeText(MainActivity.this,"login com google sucesso" ,Toast.LENGTH_SHORT).show();
 
-                            Redirect();
+                            Redirect(DeliveryMainActivity.class);
 
                         } else {
 
@@ -270,7 +272,7 @@ public class MainActivity extends AppCompatActivity{
 
                     Toast.makeText(MainActivity.this,"Sucesso Login Facebook no Firebase",Toast.LENGTH_SHORT).show();
 
-                    Redirect();
+                    Redirect(DeliveryMainActivity.class);
 
                 }else {
                     Toast.makeText(MainActivity.this, FirebaseError.class.toString(),Toast.LENGTH_SHORT).show();
@@ -321,10 +323,11 @@ public class MainActivity extends AppCompatActivity{
 
     // Redirect Page
 
-    private void Redirect(){
+    private void Redirect(Class destination){
 
 
-        mContentViewBuilder.navigate(DeliveryMainActivity.class);
+        Intent newIntent = new Intent(MainActivity.this, destination);
+        startActivity(newIntent);
 
     }
 

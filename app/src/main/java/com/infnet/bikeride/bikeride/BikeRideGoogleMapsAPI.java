@@ -106,7 +106,7 @@ public class BikeRideGoogleMapsAPI {
 
     private static final String TAG = "BikeRideGoogleMapsClass";
     private static final int ERROR_DIALOG_REQUEST = 9001;
-    private static final String API_KEY = "AIzaSyD3w91P6nWokP4GvyKkkGpnlJ--EmcgOHA";
+    private static final String API_KEY = "AAIzaSyBNHqa3hUDjRRmSz7vW4t_3q4eE34JMTH8";
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
