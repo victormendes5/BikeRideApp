@@ -20,4 +20,8 @@
         android:id="@+id/payment_methods"
         android:title="Métodos de pagamento"/>
 
+    <item
+        android:id="@+id/logout_app"
+        android:title="Logout"/>
+
 </menu>

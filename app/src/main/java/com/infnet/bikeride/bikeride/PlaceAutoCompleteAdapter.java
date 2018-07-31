@@ -203,6 +203,7 @@ public class PlaceAutoCompleteAdapter
         }
 
         try {
+//            AutocompletePredictionBufferResponse autocompletePredictions = results.getResult();
             AutocompletePredictionBufferResponse autocompletePredictions = results.getResult();
 
             Log.i(TAG, "Query completed. Received " + autocompletePredictions.getCount()

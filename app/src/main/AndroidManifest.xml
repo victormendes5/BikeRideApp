@@ -21,7 +21,8 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyD3w91P6nWokP4GvyKkkGpnlJ--EmcgOHA" />
+            android:value="AIzaSyBNHqa3hUDjRRmSz7vW4t_3q4eE34JMTH8" />
+            <!--android:value="AIzaSyD3w91P6nWokP4GvyKkkGpnlJ&#45;&#45;EmcgOHA" />-->
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -30,6 +31,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--<activity android:name=".DeliveryMainActivity"></activity>-->
+        <!--<activity android:name=".DeliveryTrackingActivity" />-->
+        <!--<activity android:name=".DeliverymanReviewActivity" />-->
+        <!--<activity android:name=".DeliveryQuotationPrice" />-->
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".SingUpActivity"></activity>
+
         <activity android:name=".DeliveryMainActivity"></activity>
         <activity android:name=".DeliveryTrackingActivity" />
         <activity android:name=".DeliverymanReviewActivity" />
