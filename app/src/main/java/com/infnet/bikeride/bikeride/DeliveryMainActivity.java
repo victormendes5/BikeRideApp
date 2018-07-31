@@ -1,5 +1,6 @@
 package com.infnet.bikeride.bikeride;
 
+import android.animation.ObjectAnimator;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -56,8 +57,11 @@ public class DeliveryMainActivity extends AppCompatActivity {
     BikeRideGoogleMapsAPI mGoogleMaps;
     BikeRideGooglePlacesAPI mGooglePlaces;
 
+    // ---> Location
+//    BikeRideLocations mLocations;
+
     // ---> BikeRide Request Manager
-    BikeRideRequestManager mRequestManager = new BikeRideRequestManager();
+    BikeRideRequestManager mRequestManager;
 
     // ---> Customized setContentView with navigation drawer and toolbar
     BikeRideContentViewBuilder mContentViewBuilder;
@@ -75,6 +79,8 @@ public class DeliveryMainActivity extends AppCompatActivity {
         mGooglePlaces = new BikeRideGooglePlacesAPI(this);
         mGooglePlaces.setAutoComplete(R.id.pickupAddAutoCompTxtView,
                 R.id.deliveryAddAutoCompTxtView);
+
+        mRequestManager = new BikeRideRequestManager(this);
 
         BikeRideAbstractions abst = new BikeRideAbstractions(this);
 
@@ -198,35 +204,79 @@ public class DeliveryMainActivity extends AppCompatActivity {
     }
 
     private void oC_getEstimatesBtn() {
-        mAnimate.swapViewsLeft(mModalAddressInformation, mModalAwaitingEstimates);
+        mAnimate.swapViewsLeft(mModalAddressInformation, mModalAwaitingEstimates,
+                new BikeRideAnimations.AnimationCallback() {
+            @Override
+            public void OnComplete() {
 
-        mGoogleMaps.getEstimatesFromWebAsync(
-                "Rua Sa Ferreira, 115",
-                mRequestManager.getPickupLocation(),
-                mRequestManager.getDeliveryLocation(),
-                "onGetEstimatesFromWebAsyncCompleted"
-        );
-    }
+                mRequestManager.getEstimates(
+                        new BikeRideRequestManager.GetEstimatesResponses() {
+                            @Override
+                            public void onSuccess() {
 
-    private void onGetEstimatesFromWebAsyncCompleted (String s) {
+                                mEstimatesPickupDistanceTxv.setText(
+                                        mRequestManager.getPickupDistanceEstimate());
+                                mEstimatesPickupDurationTxv.setText(
+                                        mRequestManager.getPickupDurationEstimate());
+                                mEstimatesDeliveryDistanceTxv.setText(
+                                        mRequestManager.getDeliveryDistanceEstimate());
+                                mEstimatesDeliveryDurationTxv.setText(
+                                        mRequestManager.getDeliveryDurationEstimate());
+                                mEstimatesFeeTxv.setText(
+                                        mRequestManager.getFeeEstimate());
+                                mDetailsPickupLocation.setText(
+                                        mRequestManager.getPickupAddressShort());
+                                mDetailsDeliveryLocation.setText(
+                                        mRequestManager.getDeliveryAddressShort());
 
-        Log.i(TAG, "onGetEstimatesFromWebCompleted: executed.");
+                                mAnimate.swapViewsLeft(mModalAwaitingEstimates,
+                                        mModalRequestDetails);
+                            }
 
-        mRequestManager.setEstimatesFromWebData(s);
+                            @Override
+                            public void onInvalidAddresses() {
 
-        mEstimatesPickupDistanceTxv.setText(mRequestManager.getPickupDistanceEstimate());
-        mEstimatesPickupDurationTxv.setText(mRequestManager.getPickupDurationEstimate());
-        mEstimatesDeliveryDistanceTxv.setText(mRequestManager.getDeliveryDistanceEstimate());
-        mEstimatesDeliveryDurationTxv.setText(mRequestManager.getDeliveryDurationEstimate());
-        mEstimatesFeeTxv.setText(mRequestManager.getFeeEstimate());
-        mDetailsPickupLocation.setText(mRequestManager.getPickupLocationShort());
-        mDetailsDeliveryLocation.setText(mRequestManager.getDeliveryLocationShort());
+                                mAnimate.swapViewsRight(mModalAwaitingEstimates,
+                                        mModalAddressInformation);
+                            }
 
-        mAnimate.swapViewsLeft(mModalAwaitingEstimates, mModalRequestDetails);
+                            @Override
+                            public void noBikersAvailable() {
+                                mAnimate.swapViewsRight(mModalAwaitingEstimates,
+                                        mModalAddressInformation);
+                            }
+
+                            @Override
+                            public void onError() {
+                                mAnimate.swapViewsRight(mModalAwaitingEstimates,
+                                        mModalAddressInformation);
+                            }
+                        });
+            }
+        });
     }
 
     private void oC_confirmBikerRequestBtn() {
         mAnimate.swapViewsLeft(mModalRequestDetails, mModalSearchingBiker);
+
+        mRequestManager.postNewDeliveryRequestAndAwaitBikerResponse(
+                new BikeRideRequestManager.RequestStatus() {
+            @Override
+            public void onRequestAccepted() {
+
+            }
+
+            @Override
+            public void onSearchTimedOut() {
+                mAnimate.swapViewsRight(mModalSearchingBiker, mModalRequestDetails);
+
+            }
+
+            @Override
+            public void onError() {
+                mAnimate.swapViewsRight(mModalSearchingBiker, mModalRequestDetails);
+            }
+        });
     }
 
     private void oC_bikerSearchCancelBtn () {
