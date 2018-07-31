@@ -313,7 +313,7 @@ public class MainActivity extends AppCompatActivity{
         @Override
         public void onClick(View v) {
 
-            mContentViewBuilder.navigate(SingUpActivity.class);
+            Redirect(SingUpActivity.class);
 
         }
     };
