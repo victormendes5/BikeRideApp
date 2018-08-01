@@ -3,6 +3,7 @@ package com.infnet.bikeride.bikeride;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -44,7 +45,7 @@ public class BikeRideRequestManager {
                                              VARIABLES
      =======================================================================================*/
 
-    private AppCompatActivity referredActivity;
+    private AppCompatActivity mReferredActivity;
     private BikeRideRequestModel mRequest = new BikeRideRequestModel();
     private FirebaseAccess mFirebase = new FirebaseAccess();
     boolean mIsBikerFound = false;
@@ -89,12 +90,22 @@ public class BikeRideRequestManager {
         void onError();
     }
 
+    public interface OnComplete<T> {
+        void onSuccess(T data);
+        void onFailure(T data);
+    }
+
+    public interface OnCompleteVoid {
+        void onSuccess();
+        void onFailure();
+    }
+
     /*=======================================================================================
                                             CONSTRUCTORS
      =======================================================================================*/
 
     public BikeRideRequestManager (Context context) {
-        referredActivity = (AppCompatActivity) context;
+        mReferredActivity = (AppCompatActivity) context;
         mockBikerData();
     }
 
@@ -103,67 +114,19 @@ public class BikeRideRequestManager {
                                          GETTERS & SETTERS
      =======================================================================================*/
 
-    public String getPickupDistanceEstimate() {
+    public String getPickupDistanceEstimate() { return mRequest.estimatesPickupDistance; }
 
-        Log.d(TAG, "getPickupDistanceEstimate: pickup distance estimate is - " +
-                mRequest.estimatesPickupDistance);
-        return mRequest.estimatesPickupDistance;
-    }
+    public String getPickupDurationEstimate() { return mRequest.estimatesPickupDuration; }
 
-    public String getPickupDurationEstimate() {
+    public String getDeliveryDistanceEstimate() { return mRequest.estimatesDeliveryDistance; }
 
-        Log.d(TAG, "getPickupDurationEstimate: pickup duration estimate is - " +
-                mRequest.estimatesPickupDuration);
-        return mRequest.estimatesPickupDuration;
-    }
+    public String getDeliveryDurationEstimate() { return mRequest.estimatesDeliveryDuration; }
 
-    public String getDeliveryDistanceEstimate() {
+    public String getFeeEstimate () { return mRequest.estimatesFee; }
 
-        Log.d(TAG, "getDeliveryDistanceEstimate: delivery distance estimate is - " +
-                mRequest.estimatesDeliveryDistance);
-        return mRequest.estimatesDeliveryDistance;
-    }
+    public String getPickupAddress() { return  mRequest.pickupAddress; }
 
-    public String getDeliveryDurationEstimate() {
-
-        Log.d(TAG, "getDeliveryDurationEstimate: delivery duration estimate is - " +
-                mRequest.estimatesDeliveryDuration);
-        return mRequest.estimatesDeliveryDuration;
-    }
-
-    public String getFeeEstimate () {
-
-        String feeEstimate = "null";
-
-        double pickupFeePerKM = 1;
-        double pickupFeePerMinute = 0.2;
-        double deliveryFeePerKM = 1.5;
-        double deliveryFeePerMinute = 0.3;
-
-        double pickupDistance =
-                Double.valueOf(mRequest.estimatesPickupDistance.replace("km",
-                        "").trim());
-
-        double deliveryDistance =
-                Double.valueOf(mRequest.estimatesDeliveryDistance.replace("km",
-                        "").trim());
-
-        double totalFee = 0;
-
-        totalFee += pickupDistance * pickupFeePerKM;
-        totalFee += deliveryDistance * deliveryFeePerKM;
-
-        feeEstimate = "R$" + String.format ("%.2f", totalFee).replace(".", ",");
-
-        Log.i(TAG, "getFeeEstimate: estimated fee is - " + feeEstimate);
-
-        return feeEstimate;
-    }
-
-    public String getPickupAddress() {
-        Log.d(TAG, "getPickupAddress: Pickup location is - " + mRequest.pickupAddress);
-        return  mRequest.pickupAddress;
-    }
+    public String getDeliveryAddress() { return mRequest.deliveryAddress; }
 
     public String getPickupAddressShort() {
 
@@ -173,14 +136,7 @@ public class BikeRideRequestManager {
             location = location.substring(0, 40) + "...";
         }
 
-        Log.d(TAG, "getPickupAddressShort: Pickup Location short is - " + location);
         return  location;
-    }
-
-    public String getDeliveryAddress() {
-
-        Log.d(TAG, "getDeliveryAddress: Delivery location is - " + mRequest.deliveryAddress);
-        return mRequest.deliveryAddress;
     }
 
     public String getDeliveryAddressShort() {
@@ -191,7 +147,6 @@ public class BikeRideRequestManager {
             location = location.substring(0, 40) + "...";
         }
 
-        Log.d(TAG, "getPickupAddressShort: Delivery Location short is - " + location);
         return  location;
     }
 
@@ -204,14 +159,24 @@ public class BikeRideRequestManager {
         mRequest.bikerPositionLongitude = longitude;
     }
 
-    public void setPickupLocation(String location) {
-        Log.i(TAG, "setPickupLocation: setting Pickup location to - " + location);
+    public void setPickupAddress(String location) {
+        Log.i(TAG, "setPickupAddress: setting pickuo address to - " + location);
         mRequest.pickupAddress = location;
     }
 
-    public void setDeliveryLocation(String location) {
-        Log.i(TAG, "setDeliveryLocation: setting Delivery location to - " + location);
+    public void setDeliveryAddress(String location) {
+        Log.i(TAG, "setDeliveryAddress: setting delivery address to - " + location);
         mRequest.deliveryAddress = location;
+    }
+
+    public void setPackageType (String type) {
+        Log.i(TAG, "setPackageType: setting package type to - " + type);
+        mRequest.packageType = type;
+    }
+
+    public void setPackageSize (String size) {
+        Log.i(TAG, "setPackageType: setting package size to - " + size);
+        mRequest.packageSize = size;
     }
 
 
@@ -228,155 +193,198 @@ public class BikeRideRequestManager {
 
     public void getEstimates (final GetEstimatesResponses callback) {
 
-        Log.d(TAG, "getEstimates: updating coordinates from given addresses ...");
+        Log.d(TAG, "getEstimates: updating coordinates for given " +
+                "addresses ...");
 
-        if (!setCoordinatesFromAddresses()) {
-            Log.d(TAG, "getEstimates: given addresses are invalid. Aborting " +
-                    "getting estimates.");
-            callback.onInvalidAddresses();
-            return;
-        };
+        setCoordinatesFromAddresses(new OnCompleteVoid() {
+            @Override
+            public void onSuccess() {
 
-        Log.d(TAG, "getEstimates: getting available bikers ....");
+                Log.d(TAG, "getEstimates: Successfully updated coordinates for addresses." +
+                        " Getting available bikers ....");
 
-        mFirebase.getAll(BikeRideAvailableBikerModel.class,
-                new FirebaseAccess.OnComplete<ArrayList<BikeRideAvailableBikerModel>>() {
-                    @Override
-                    public void onSuccess(ArrayList<BikeRideAvailableBikerModel> data) {
+                mFirebase.getAll(BikeRideAvailableBikerModel.class,
 
-                        if (data.size() == 0) {
+                    new FirebaseAccess.OnComplete<ArrayList<BikeRideAvailableBikerModel>>() {
+                        @Override
+                        public void onSuccess(ArrayList<BikeRideAvailableBikerModel> data) {
+
+                            if (data.size() == 0) {
+                                Log.d(TAG, "getEstimates: data successfully retrieved from " +
+                                        "Available Bikers node, but none is available at this " +
+                                        "moment.");
+                                callback.noBikersAvailable();
+                                return;
+                            }
+
                             Log.d(TAG, "getEstimates: data successfully retrieved from " +
-                                    "Available Bikers node, but none is available at this " +
-                                    "moment.");
-                            callback.noBikersAvailable();
-                            return;
-                        }
+                                    "Available Bikers node, arranging bikers by proximity. (" +
+                                    data.size() + " bikers found)");
 
-                        Log.d(TAG, "getEstimates: data successfully retrieved from " +
-                                "Available Bikers node, arranging bikers by proximity. (" +
-                                data.size() + " bikers found)");
+                            data = sortByClosestBiker(data,
+                                    mRequest.pickupAddressLatitude,
+                                    mRequest.pickupAddressLongitude);
 
-                        data = sortByClosestBiker(data,
-                                mRequest.pickupAddressLatitude,
-                                mRequest.pickupAddressLongitude);
+                            Log.d(TAG, "getEstimates: closest biker is '" +
+                                    data.get(0).bikerName + "' (ID: " + data.get(0).bikerId + ").");
 
-                        Log.d(TAG, "getEstimates: closest biker is '" + data.get(0).bikerName
-                                + "' (ID: " + data.get(0).bikerId + ").");
+                            Log.d(TAG, "getEstimates: getting closest biker's street address "
+                                    + "from coordinates ...");
 
-                        Log.d(TAG, "getEstimates: getting closest biker's street address " +
-                                "from coordinates ...");
+                            String currentBikerAddress = getAddressFromCoordinates(
+                                    data.get(0).bikerPositionLatitude,
+                                    data.get(0).bikerPositionLongitude
+                            );
 
-                        String currentBikerAddress = getAddressFromCoordinates(
-                                data.get(0).bikerPositionLatitude,
-                                data.get(0).bikerPositionLongitude
-                        );
+                            if (currentBikerAddress.equals("") || currentBikerAddress == null) {
+                                Log.d(TAG, "getEstimates: could not determine closest biker's"
+                                        + " street address. Aborting getting estimates.");
+                                callback.onError();
+                                return;
+                            }
 
-                        if (currentBikerAddress.equals("") || currentBikerAddress == null) {
-                            Log.d(TAG, "getEstimates: could not determine closest biker's " +
-                                    "street address. Aborting getting estimates.");
-                            callback.onError();
-                            return;
-                        }
+                            Log.d(TAG, "getEstimates: closest biker street address found - "
+                                    + currentBikerAddress);
 
-                        Log.d(TAG, "getEstimates: closest biker street address found - "
-                                + currentBikerAddress);
+                            Log.d(TAG, "getEstimates: requesting estimate data from Google " +
+                                    "Distance Matrix ...");
 
-                        Log.d(TAG, "getEstimates: requesting estimate data from Google " +
-                                "Distance Matrix ...");
+                            getGoogleDistanceMatrixData(currentBikerAddress,
 
-                        getGoogleDistanceMatrixData(currentBikerAddress,
                                 new OnDistanceMatrixComplete() {
-                            @Override
-                            public void OnSuccess(String s) {
-
-                                Log.d(TAG, "getEstimates: successfully retrieved JSON object"
-                                        + "from Google Distance Matrix API. Decoding content ...");
-
-                                decodeGoogleDistanceMatrixData(s,
-                                        new OnDistanceMatrixDecode() {
                                     @Override
-                                    public void OnSuccess() {
+                                    public void OnSuccess(String s) {
 
-                                        Log.d(TAG, "getEstimates: successfully decoded Google"
-                                                + "DistanceMatrix JSON object and updated request" +
-                                                "properties.");
-                                        callback.onSuccess();
-                                        return;
+                                        Log.d(TAG, "getEstimates: successfully retrieved " +
+                                                "JSON object from Google Distance Matrix API. " +
+                                                "Decoding content ...");
+
+                                        decodeGoogleDistanceMatrixData(s,
+
+                                            new OnDistanceMatrixDecode() {
+                                                @Override
+                                                public void OnSuccess() {
+
+                                                    Log.d(TAG, "getEstimates: successfully " +
+                                                            "decoded Google DistanceMatrix JSON " +
+                                                            "object and updated request " +
+                                                            "properties.");
+                                                    callback.onSuccess();
+                                                    return;
+                                                }
+
+                                                @Override
+                                                public void OnFailure(String status) {
+
+                                                    Log.d(TAG, "getEstimates: data sent to " +
+                                                            "API presented some anomaly. Aborting "
+                                                            + "getting estimates. (" + status
+                                                            + ")");
+                                                    callback.onError();
+                                                    return;
+                                                }
+
+                                                @Override
+                                                public void OnDecodeFailure(JSONException e) {
+
+                                                    Log.d(TAG, "getEstimates:  could not " +
+                                                            "decode Google Distance Matrix " +
+                                                            "object. Data structure might have " +
+                                                            "changed. Aborting getting estimates.");
+                                                    callback.onError();
+                                                    return;
+                                                }
+                                            });
                                     }
 
                                     @Override
-                                    public void OnFailure(String status) {
+                                    public void OnFailure(Exception e) {
 
-                                        Log.d(TAG, "getEstimates: data sent presented some " +
-                                                "anomaly. Aborting getting estimates. (" + status
-                                                + ")");
-                                        callback.onError();
-                                        return;
-                                    }
+                                        Log.d(TAG, "getEstimates: an error has occurred " +
+                                                "while accessing the Google Distance Matrix API. " +
+                                                "Check stack trace below. Aborting getting " +
+                                                "estimates.");
 
-                                    @Override
-                                    public void OnDecodeFailure(JSONException e) {
-
-                                        Log.d(TAG, "getEstimates:  could not decode Google " +
-                                                "Distance Matrix object. Data structure might have " +
-                                                "changed. Aborting getting estimates.");
                                         callback.onError();
                                         return;
                                     }
                                 });
-                            }
+                        }
 
-                            @Override
-                            public void OnFailure(Exception e) {
+                        @Override
+                        public void onFailure(ArrayList<BikeRideAvailableBikerModel> data) {
 
-                                Log.d(TAG, "getEstimates: an error has occurred while " +
-                                        "accessing the Google Distance Matrix API. Check stack " +
-                                        "trace below. Aborting getting estimates.");
+                        }
+                    }, AVAILABLE_BIKERS_CHILD);
 
-                                callback.onError();
-                                return;
-                            }
-                        });
+            }
 
+            @Override
+            public void onFailure() {
 
+                Log.d(TAG, "getEstimates: cannot get coordinates for given " +
+                        "addresses." +
+                        " Aborting estimates.");
+                callback.onInvalidAddresses();
+                return;
+            }
+        });
+    }
+
+    private void setCoordinatesFromAddresses (final OnCompleteVoid callbacks) {
+
+        Log.d(TAG, "setCoordinatesFromAddresses: getting LatLng coordinates for " +
+                "pickup address - " + mRequest.pickupAddress);
+
+        new GetCoordinatesFromAddress(mReferredActivity, new OnComplete<LatLng>() {
+            @Override
+            public void onSuccess(LatLng data) {
+
+                Log.d(TAG, "setCoordinatesFromAddresses: successfully gotten LatLng " +
+                        "coordinates for pickup address (Latitude: " + data.latitude + " / " +
+                        "Longitude: " + data.longitude + ")");
+
+                mRequest.pickupAddressLatitude = data.latitude;
+                mRequest.pickupAddressLongitude = data.latitude;
+
+                new GetCoordinatesFromAddress(mReferredActivity, new OnComplete<LatLng>() {
+                    @Override
+                    public void onSuccess(LatLng data) {
+
+                        Log.d(TAG, "setCoordinatesFromAddresses: successfully gotten " +
+                                "LatLng coordinates for delivery address (Latitude: " +
+                                data.latitude + " / Longitude: " + data.longitude + ")");
+
+                        mRequest.deliveryAddressLatitude = data.latitude;
+                        mRequest.deliveryAddressLongitude = data.latitude;
+
+                        callbacks.onSuccess();
 
                     }
 
                     @Override
-                    public void onFailure(ArrayList<BikeRideAvailableBikerModel> data) {
+                    public void onFailure(LatLng data) {
+
+                        Log.d(TAG, "setCoordinatesFromAddresses: could not get LatLng " +
+                                "coordinates for delivery address.");
+
+                        callbacks.onFailure();
 
                     }
-                }, AVAILABLE_BIKERS_CHILD);
-    }
+                }).execute(mRequest.deliveryAddress);
 
-    private boolean setCoordinatesFromAddresses() {
+            }
 
-        Log.d(TAG, "setAddressCoordinates: updating delivery and pickup address coordinates" +
-                " ...");
+            @Override
+            public void onFailure(LatLng data) {
 
-        LatLng pickupCoordinates = getCoordinatesFromAddress(mRequest.pickupAddress);
+                Log.d(TAG, "setCoordinatesFromAddresses: could not get LatLng coordinates " +
+                        "for pickup address.");
 
-        if (pickupCoordinates == null) {
-            Log.d(TAG, "setAddressCoordinates: cannot extract coordinates from pickup " +
-                    "address.");
-            return false;
-        }
+                callbacks.onFailure();
 
-        LatLng deliveryCoordinates = getCoordinatesFromAddress(mRequest.deliveryAddress);
-
-        if (deliveryCoordinates == null) {
-            Log.d(TAG, "setAddressCoordinates: cannot extract coordinates from delivery " +
-                    "address.");
-            return false;
-        }
-
-        mRequest.pickupAddressLatitude = pickupCoordinates.latitude;
-        mRequest.pickupAddressLongitude = pickupCoordinates.longitude;
-
-        mRequest.deliveryddressLatitude = deliveryCoordinates.latitude;
-        mRequest.deliveryAddressLongitude = deliveryCoordinates.longitude;
-
-        return true;
+            }
+        }).execute(mRequest.pickupAddress);
     }
 
     private ArrayList<BikeRideAvailableBikerModel> sortByClosestBiker (
@@ -427,7 +435,6 @@ public class BikeRideRequestManager {
         return array;
     }
 
-
     private double getDistanceBetweenCoordinates(double lat1, double lon1, double lat2,
                                                         double lon2) {
 
@@ -451,10 +458,10 @@ public class BikeRideRequestManager {
 
 
     /*=======================================================================================
-                                    POST NEW DELIVERY REQUEST
+                                      POST NEW DELIVERY REQUEST
      =======================================================================================*/
 
-    public void postNewDeliveryRequestAndAwaitBikerResponse(
+    public void postNewDeliveryRequest(
             final RequestStatus requestStatusCallback) {
 
         BikeRideRequestModel request = mRequest;
@@ -462,121 +469,117 @@ public class BikeRideRequestManager {
         request.userName = getUid();
         request.createTime = getCurrentISODateTime();
 
-
-        Log.d(TAG, "postNewDeliveryRequestAndListenToChanges: posting new delivery request " +
+        Log.d(TAG, "postNewDeliveryRequest: posting new delivery request " +
                 "from user " + getUid() + " with data below.");
 
-        Log.d(TAG, "postNewDeliveryRequestAndListenToChanges: " + request.toString());
+        Log.d(TAG, "postNewDeliveryRequest: " + request.toString());
 
         mIsBikerFound = false;
 
         mFirebase.addOrUpdate(
-                request,
-                new FirebaseAccess.OnCompleteVoid() {
-                    @Override
-                    public void onSuccess() {
-                        Log.d(TAG, "postNewDeliveryRequestAndListenToChanges: new " +
-                                "delivery request successfully posted.");
 
-                        // ---> Await Biker response
-                        mFirebase.setListenerToObjectOrProperty(
-                                BikeRideRequestModel.class,
-                                new FirebaseAccess.ListenToChanges<BikeRideRequestModel>() {
-                                    @Override
-                                    public void onChange(BikeRideRequestModel data) {
+            request,
+            new FirebaseAccess.OnCompleteVoid() {
+                @Override
+                public void onSuccess() {
+                    Log.d(TAG, "postNewDeliveryRequest: new " +
+                            "delivery request successfully posted.");
 
-                                        if (data.bikerId.equals("")) return;
+                    // ---> Await Biker response
+                    mFirebase.setListenerToObjectOrProperty(
 
-                                        Log.d(TAG, "postNewDeliveryRequestAndListenToChanges: "
-                                                + "Biker named " + data.bikerName + " (ID: " +
-                                                data.bikerId + ") has accepted the request.");
+                        BikeRideRequestModel.class,
+                        new FirebaseAccess.ListenToChanges<BikeRideRequestModel>() {
+                            @Override
+                            public void onChange(BikeRideRequestModel data) {
 
-                                        mIsBikerFound = true;
+                                if (data.bikerId.equals("")) return;
 
-                                        transferRequestObject(
-                                                new BikeRideRequestManager.StartDelivery() {
-                                                    @Override
-                                                    public void onStartDeliveryComplete() {
-                                                        Log.i(TAG, "postNewDeliveryRequestAndListenToChanges: " +
-                                                                "Request object transfer completed, " +
-                                                                "starting delivery ...");
-                                                        requestStatusCallback.onRequestAccepted();
-                                                    }
+                                Log.d(TAG, "postNewDeliveryRequest: "
+                                        + "Biker named " + data.bikerName + " (ID: " +
+                                        data.bikerId + ") has accepted the request.");
 
-                                                    @Override
-                                                    public void onError() {
-                                                        Log.i(TAG, "onRequestAccepted: " +
-                                                                "FAILED! Could not complete Request" +
-                                                                " object transfer.");
-                                                        requestStatusCallback.onError();
-                                                    }
-                                                });
+                                mIsBikerFound = true;
 
-                                    }
+                                transferRequestObject(
+                                    new BikeRideRequestManager.StartDelivery() {
+                                        @Override
+                                        public void onStartDeliveryComplete() {
+                                            Log.i(TAG, "postNewDeliveryRequest: " +
+                                                    "Request object transfer completed, " +
+                                                    "starting delivery ...");
+                                            requestStatusCallback.onRequestAccepted();
+                                        }
 
-                                    @Override
-                                    public boolean removeListenerCondition (DataSnapshot data) {
+                                        @Override
+                                        public void onError() {
+                                            Log.i(TAG, "postNewDeliveryRequest: " +
+                                                    "FAILED! Could not complete Request" +
+                                                    " object transfer.");
+                                            requestStatusCallback.onError();
+                                        }
+                                    });
+                            }
 
-                                        if (data.getValue() == null) return true;
-                                        return false;
-                                    }
+                            @Override
+                            public boolean removeListenerCondition (DataSnapshot data) {
 
-                                    @Override
-                                    public void onError(BikeRideRequestModel data) {
-                                        Log.d(TAG, "postNewDeliveryRequestAndListenToChanges: "
-                                                + "request object is missing or has been deleted.");
-                                    }
-                                },
-                                REQUESTS_CHILD, getUid());
+                                if (data.getValue() == null) return true;
+                                return false;
+                            }
 
-                        // ---> Set maximum response waiting time limit
-                        new android.os.Handler().postDelayed(
-                                new Runnable() {
-                                    public void run() {
+                            @Override
+                            public void onError(BikeRideRequestModel data) {
+                                Log.d(TAG, "postNewDeliveryRequest: "
+                                        + "request object is missing or has been deleted.");
+                            }
+                        }, REQUESTS_CHILD, getUid());
 
-                                        if (mIsBikerFound) return;
+                // ---> Set maximum response waiting time limit
+                new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
 
-                                        Log.d(TAG,
-                                                "postNewDeliveryRequestAndListenToChanges: "
-                                                        + "delivery request timed out.");
+                            if (mIsBikerFound) return;
 
-                                        // ---> Cancel request by deleting object
-                                        mFirebase.delete(new FirebaseAccess.OnCompleteVoid() {
-                                                            @Override
-                                                            public void onSuccess() {
-                                                                Log.d(TAG,
-                                                                        "postNewDeliveryRequestAndListenToChanges: "
-                                                                                + "cancelled request by deleting request "
-                                                                                + "object associated with this user.");
+                            Log.d(TAG,
+                                    "postNewDeliveryRequest: "
+                                            + "delivery request timed out.");
 
-                                                                requestStatusCallback
-                                                                        .onSearchTimedOut();
-                                                            }
+                            // ---> Cancel request by deleting object
+                            mFirebase.delete(new FirebaseAccess.OnCompleteVoid() {
+                                @Override
+                                public void onSuccess() {
+                                    Log.d(TAG,
+                                            "postNewDeliveryRequest: "
+                                                    + "cancelled request by deleting request "
+                                                    + "object associated with this user.");
 
-                                                            @Override
-                                                            public void onFailure() {
-                                                                Log.d(TAG,
-                                                                        "postNewDeliveryRequestAndListenToChanges: "
-                                                                                + " thought request time limit has been " +
-                                                                                "reached, request hasn't been cancelled " +
-                                                                                "due to some error.");
+                                    requestStatusCallback
+                                            .onSearchTimedOut();
+                                }
 
-                                                                requestStatusCallback.onError();
-                                                            }
-                                                        },
-                                                REQUESTS_CHILD, getUid());
-                                    }
-                                },
-                                REQUEST_TIMEOUT);
-                    }
+                                @Override
+                                public void onFailure() {
+                                    Log.d(TAG,
+                                            "postNewDeliveryRequest: "
+                                                    + " thought request time limit has been " +
+                                                    "reached, request hasn't been cancelled " +
+                                                    "due to some error.");
 
-                    @Override
-                    public void onFailure() {
-                        Log.d(TAG, "postNewDeliveryRequestAndListenToChanges: new " +
-                                "delivery request post failed.");
-                    }
-                },
-                REQUESTS_CHILD, getUid()
+                                    requestStatusCallback.onError();
+                                }
+                            }, REQUESTS_CHILD, getUid());
+                        }
+                    }, REQUEST_TIMEOUT);
+                }
+
+                @Override
+                public void onFailure() {
+                    Log.d(TAG, "postNewDeliveryRequest: new " +
+                            "delivery request post failed.");
+                }
+            }, REQUESTS_CHILD, getUid()
         );
     }
 
@@ -587,68 +590,65 @@ public class BikeRideRequestManager {
 
         mFirebase.getObjectOrProperty(
 
-                BikeRideRequestModel.class,
-                new FirebaseAccess.OnComplete<BikeRideRequestModel>() {
-                    @Override
-                    public void onSuccess(BikeRideRequestModel data) {
-                        Log.d(TAG, "transferRequestObject: successfully acquired request object " +
-                                "from Requests child.");
+            BikeRideRequestModel.class,
+            new FirebaseAccess.OnComplete<BikeRideRequestModel>() {
+                @Override
+                public void onSuccess(BikeRideRequestModel data) {
+                    Log.d(TAG, "transferRequestObject: successfully acquired request object "
+                            + "from Requests child.");
 
-                        mFirebase.addOrUpdate(
+                    mFirebase.addOrUpdate(
 
-                                data,
-                                new FirebaseAccess.OnCompleteVoid() {
+                        data,
+                        new FirebaseAccess.OnCompleteVoid() {
+                            @Override
+                            public void onSuccess() {
+                                Log.d(TAG, "transferRequestObject: successfully copied" +
+                                        " request object from Requests to Deliveries " +
+                                        "child.");
+
+                                mFirebase.delete(new FirebaseAccess.OnCompleteVoid() {
+
                                     @Override
                                     public void onSuccess() {
-                                        Log.d(TAG, "transferRequestObject: successfully copied" +
-                                                " request object from Requests to Deliveries " +
-                                                "child.");
+                                        Log.d(TAG, "transferRequestObject: " +
+                                                "successfully deleted request object " +
+                                                "from Requests child.");
 
-                                        mFirebase.delete(new FirebaseAccess.OnCompleteVoid() {
-
-                                                            @Override
-                                                            public void onSuccess() {
-                                                                Log.d(TAG, "transferRequestObject: " +
-                                                                        "successfully deleted request object " +
-                                                                        "from Requests child.");
-
-                                                                startDeliveryCallback.onStartDeliveryComplete();
-                                                            }
-
-                                                            @Override
-                                                            public void onFailure() {
-                                                                Log.d(TAG, "transferRequestObject: FAILED! " +
-                                                                        "Could not delete request object from " +
-                                                                        "Requests child.");
-
-                                                                startDeliveryCallback.onError();
-                                                            }
-                                                        },
-                                                REQUESTS_CHILD, getUid());
+                                        startDeliveryCallback.onStartDeliveryComplete();
                                     }
 
                                     @Override
                                     public void onFailure() {
-                                        Log.d(TAG, "transferRequestObject: FAILED! Could " +
-                                                "not copy request object from Requests to " +
-                                                "Deliveries child.");
+                                        Log.d(TAG, "transferRequestObject: FAILED! " +
+                                                "Could not delete request object from " +
+                                                "Requests child.");
 
                                         startDeliveryCallback.onError();
                                     }
-                                },
-                                DELIVERIES_CHILD, getUid());
-                    }
+                                }, REQUESTS_CHILD, getUid());
+                            }
 
-                    @Override
-                    public void onFailure(BikeRideRequestModel data) {
+                            @Override
+                            public void onFailure() {
+                                Log.d(TAG, "transferRequestObject: FAILED! Could " +
+                                        "not copy request object from Requests to " +
+                                        "Deliveries child.");
 
-                        Log.d(TAG, "transferRequestObject: FAILED! Could not retrieve " +
-                                "request object from Requests child.");
+                                startDeliveryCallback.onError();
+                            }
+                        }, DELIVERIES_CHILD, getUid());
+                }
 
-                        startDeliveryCallback.onError();
-                    }
-                },
-                REQUESTS_CHILD, getUid()
+                @Override
+                public void onFailure(BikeRideRequestModel data) {
+
+                    Log.d(TAG, "transferRequestObject: FAILED! Could not retrieve " +
+                            "request object from Requests child.");
+
+                    startDeliveryCallback.onError();
+                }
+            }, REQUESTS_CHILD, getUid()
         );
 
     }
@@ -658,44 +658,68 @@ public class BikeRideRequestManager {
                                               OTHER
      =======================================================================================*/
 
-    private LatLng getCoordinatesFromAddress (String strAddress) {
+    private static class GetCoordinatesFromAddress extends AsyncTask<String, Void, LatLng> {
 
-        Log.d(TAG, "getCoordinatesFromAddress: getting LatLng coordinates for address - " +
-                strAddress);
+            AppCompatActivity context;
+            OnComplete<LatLng> callbacks;
 
-        Geocoder coder = new Geocoder(referredActivity);
-        List<Address> address;
-        LatLng p1 = null;
-
-        try {
-            // May throw an IOException
-            address = coder.getFromLocationName(strAddress, 5);
-            if (address == null) {
-                return null;
+            public GetCoordinatesFromAddress (AppCompatActivity context,
+                                              OnComplete<LatLng> callbacks) {
+                this.context = context;
+                this.callbacks = callbacks;
             }
 
-            Address location = address.get(0);
-            p1 = new LatLng(location.getLatitude(), location.getLongitude() );
+            @Override
+            protected LatLng doInBackground (String... params) {
 
-            Log.d(TAG, "getCoordinatesFromAddress: coordinates found! (Latitude: " +
-                    p1.latitude + " / Longitude: " + p1.longitude);
+                Geocoder coder = new Geocoder(context);
+                List<Address> address;
+                LatLng p1 = null;
 
-        } catch (IOException ex) {
+                try {
+                    // May throw an IOException
+                    address = coder.getFromLocationName(params[0], 5);
+                    if (address == null) {
+                        return null;
+                    }
 
-            Log.d(TAG, "getCoordinatesFromAddress: could not locate coordinates for " +
-                    "given address. Check stack trace below. Returning LatLng with null value.");
+                    Address location = address.get(0);
+                    p1 = new LatLng(location.getLatitude(), location.getLongitude() );
 
-            ex.printStackTrace();
-        }
+                    Log.d(TAG, "GetCoordinatesFromAddress: coordinates found! (Latitude: " +
+                            p1.latitude + " / Longitude: " + p1.longitude);
 
-        return p1;
+                } catch (IOException ex) {
+
+                    Log.d(TAG, "GetCoordinatesFromAddress: could not locate coordinates for " +
+                            "given address. Check stack trace below. Returning LatLng with null value.");
+
+                    ex.printStackTrace();
+
+                    return null;
+                }
+
+                return p1;
+            }
+
+            @Override
+            protected void onPostExecute (LatLng result) {
+                super.onPostExecute(result);
+
+                if (result == null) {
+                    callbacks.onFailure(result);
+                    return;
+                }
+
+                callbacks.onSuccess(result);
+            }
     }
 
     private String getAddressFromCoordinates (double lat, double lon) {
 
         Geocoder geocoder;
         List<Address> addresses;
-        geocoder = new Geocoder(referredActivity, Locale.getDefault());
+        geocoder = new Geocoder(mReferredActivity, Locale.getDefault());
 
         // Here 1 represent max location result to returned, by documents it recommended 1 to 5
         try {
@@ -903,6 +927,8 @@ public class BikeRideRequestManager {
             mRequest.estimatesDeliveryDistance = deliveryDistance;
             mRequest.estimatesDeliveryDuration = deliveryDuration;
 
+            setFeeEstimate();
+
             callbacks.OnSuccess();
         }
 
@@ -915,5 +941,40 @@ public class BikeRideRequestManager {
 
     private String getUid() {
         return "EvenAnotherUserId";
+    }
+
+    public void setFeeEstimate () {
+
+        String feeEstimate = "null";
+
+        double pickupFeePerKM = 1;
+        double pickupFeePerMinute = 0.2;
+        double deliveryFeePerKM = 1.5;
+        double deliveryFeePerMinute = 0.3;
+
+        double pickupDistance =
+                Double.valueOf(mRequest.estimatesPickupDistance.replace("km",
+                        "").trim());
+
+        double deliveryDistance =
+                Double.valueOf(mRequest.estimatesDeliveryDistance.replace("km",
+                        "").trim());
+
+        double totalFee = 0;
+
+        totalFee += pickupDistance * pickupFeePerKM;
+        totalFee += deliveryDistance * deliveryFeePerKM;
+
+        feeEstimate = "R$" + String.format ("%.2f", totalFee).replace(".", ",");
+
+        Log.i(TAG, "getFeeEstimate: estimated fee is - " + feeEstimate);
+
+        mRequest.estimatesFee = feeEstimate;
+
+    }
+
+    public void resetRequestProperties() {
+        BikeRideRequestModel newModel = new BikeRideRequestModel();
+        mRequest = newModel;
     }
 }

@@ -1,10 +1,8 @@
 package com.infnet.bikeride.bikeride;
 
-import android.animation.ObjectAnimator;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -69,7 +67,6 @@ public class DeliveryMainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main_delivery);
 
         mContentViewBuilder = new BikeRideContentViewBuilder(this,
                 R.layout.activity_main_delivery);
@@ -181,85 +178,63 @@ public class DeliveryMainActivity extends AppCompatActivity {
     }
 
 
-    //   /==================================================================================\
-    //   |                                ONCLICK METHODS                                   |
-    //   \==================================================================================/
+       /*=================================================================================\
+       |                                                                                  |
+       |                                  ONCLICK METHODS                                 |
+       |                                                                                  |
+       \=================================================================================*/
 
-    private void oC_requestBikerBtn () {
-        enterModalState();
-    }
 
-    private void oC_enterAddressBtn () {
-        mAnimate.swapViewsLeft(mModalPackageInformation, mModalAddressInformation);
-    }
-
-    private void oC_choosePickupAddrBtn () {
-        mAnimate.crossFadeViews(mModalAddressInformation, mModalChoosePickupAddress,
-                0,400);
-    }
-
-    private void oC_chooseDeliveryAddrBtn () {
-        mAnimate.crossFadeViews(mModalAddressInformation, mModalChooseDeliveryAddress,
-                0,400);
-    }
+                /*---------------------------------------------------------------\
+                                            CORE LOGIC
+                \---------------------------------------------------------------*/
 
     private void oC_getEstimatesBtn() {
-        mAnimate.swapViewsLeft(mModalAddressInformation, mModalAwaitingEstimates,
-                new BikeRideAnimations.AnimationCallback() {
-            @Override
-            public void OnComplete() {
+        mAnimate.swapViewsLeft(mModalAddressInformation, mModalAwaitingEstimates);
 
-                mRequestManager.getEstimates(
-                        new BikeRideRequestManager.GetEstimatesResponses() {
-                            @Override
-                            public void onSuccess() {
+        mRequestManager.getEstimates(
 
-                                mEstimatesPickupDistanceTxv.setText(
-                                        mRequestManager.getPickupDistanceEstimate());
-                                mEstimatesPickupDurationTxv.setText(
-                                        mRequestManager.getPickupDurationEstimate());
-                                mEstimatesDeliveryDistanceTxv.setText(
-                                        mRequestManager.getDeliveryDistanceEstimate());
-                                mEstimatesDeliveryDurationTxv.setText(
-                                        mRequestManager.getDeliveryDurationEstimate());
-                                mEstimatesFeeTxv.setText(
-                                        mRequestManager.getFeeEstimate());
-                                mDetailsPickupLocation.setText(
-                                        mRequestManager.getPickupAddressShort());
-                                mDetailsDeliveryLocation.setText(
-                                        mRequestManager.getDeliveryAddressShort());
+            new BikeRideRequestManager.GetEstimatesResponses() {
+                @Override
+                public void onSuccess() {
 
-                                mAnimate.swapViewsLeft(mModalAwaitingEstimates,
-                                        mModalRequestDetails);
-                            }
+                    mEstimatesPickupDistanceTxv.setText(mRequestManager.getPickupDistanceEstimate());
+                    mEstimatesPickupDurationTxv.setText(mRequestManager.getPickupDurationEstimate());
+                    mEstimatesDeliveryDistanceTxv.setText(mRequestManager.getDeliveryDistanceEstimate());
+                    mEstimatesDeliveryDurationTxv.setText(mRequestManager.getDeliveryDurationEstimate());
+                    mEstimatesFeeTxv.setText(mRequestManager.getFeeEstimate());
+                    mDetailsPickupLocation.setText(mRequestManager.getPickupAddressShort());
+                    mDetailsDeliveryLocation.setText(mRequestManager.getDeliveryAddressShort());
 
-                            @Override
-                            public void onInvalidAddresses() {
+                    mAnimate.swapViewsLeft(mModalAwaitingEstimates,
+                            mModalRequestDetails);
+                }
 
-                                mAnimate.swapViewsRight(mModalAwaitingEstimates,
-                                        mModalAddressInformation);
-                            }
+                @Override
+                public void onInvalidAddresses() {
 
-                            @Override
-                            public void noBikersAvailable() {
-                                mAnimate.swapViewsRight(mModalAwaitingEstimates,
-                                        mModalAddressInformation);
-                            }
+                    mAnimate.swapViewsRight(mModalAwaitingEstimates,
+                            mModalAddressInformation);
+                }
 
-                            @Override
-                            public void onError() {
-                                mAnimate.swapViewsRight(mModalAwaitingEstimates,
-                                        mModalAddressInformation);
-                            }
-                        });
-            }
-        });
+                @Override
+                public void noBikersAvailable() {
+                    mAnimate.swapViewsRight(mModalAwaitingEstimates,
+                            mModalAddressInformation);
+                }
+
+                @Override
+                public void onError() {
+                    mAnimate.swapViewsRight(mModalAwaitingEstimates,
+                            mModalAddressInformation);
+                }
+            });
     }
 
     private void oC_confirmBikerRequestBtn() {
         mAnimate.swapViewsLeft(mModalRequestDetails, mModalSearchingBiker);
 
-        mRequestManager.postNewDeliveryRequestAndAwaitBikerResponse(
+        mRequestManager.postNewDeliveryRequest(
                 new BikeRideRequestManager.RequestStatus() {
             @Override
             public void onRequestAccepted() {
@@ -284,20 +259,83 @@ public class DeliveryMainActivity extends AppCompatActivity {
     }
 
     private void oC_confirmPickupAddrBtn () {
-        mRequestManager.setPickupLocation(mPickupAddressAtxv.getText().toString());
-        mAnimate.crossFadeViews(mModalChoosePickupAddress, mModalAddressInformation,
-                0,400);
-    }
-
-    private void oC_pickupAddressBackIcon () {
+        mRequestManager.setPickupAddress(mPickupAddressAtxv.getText().toString());
         mAnimate.crossFadeViews(mModalChoosePickupAddress, mModalAddressInformation,
                 0,400);
     }
 
     private void oC_confirmDeliveryAddrBtn () {
-        mRequestManager.setDeliveryLocation(mDeliveryAddressAtxv.getText().toString());
+        mRequestManager.setDeliveryAddress(mDeliveryAddressAtxv.getText().toString());
         mAnimate.crossFadeViews(mModalChooseDeliveryAddress, mModalAddressInformation,
                 0,400);
+    }
+
+
+                /*---------------------------------------------------------------\
+                                            SELECTORS
+                \---------------------------------------------------------------*/
+
+    private void oC_packageTypeMailSlc() {
+        mRequestManager.setPackageType("mail");
+        mAnimate.selectionFader(mPackageTypeMailSlc_bg, mPackageTypeBoxSlc_bg,
+                mPackageTypeUnusualSlc_bg);
+    }
+
+    private void oC_packageTypeBoxSlc() {
+        mRequestManager.setPackageType("box");
+        mAnimate.selectionFader(mPackageTypeBoxSlc_bg, mPackageTypeMailSlc_bg,
+                mPackageTypeUnusualSlc_bg);
+    }
+
+    private void oC_packageTypeUnusualSlc() {
+        mRequestManager.setPackageType("unusual");
+        mAnimate.selectionFader(mPackageTypeUnusualSlc_bg, mPackageTypeBoxSlc_bg,
+                mPackageTypeMailSlc_bg);
+    }
+
+    private void oC_packageSizeSmallSlc() {
+        mRequestManager.setPackageSize("small");
+        mAnimate.selectionFader(mPackageSizeSmallSlc_bg, mPackageSizeMediumSlc_bg,
+                mPackageSizeLargeSlc_bg);
+    }
+
+    private void oC_packageSizeMediumSlc() {
+        mRequestManager.setPackageSize("medium");
+        mAnimate.selectionFader(mPackageSizeMediumSlc_bg, mPackageSizeSmallSlc_bg,
+                mPackageSizeLargeSlc_bg);
+    }
+
+    private void oC_packageSizeLargeSlc() {
+        mRequestManager.setPackageSize("large");
+        mAnimate.selectionFader(mPackageSizeLargeSlc_bg, mPackageSizeMediumSlc_bg,
+                mPackageSizeSmallSlc_bg);
+    }
+
+
+                /*---------------------------------------------------------------\
+                                          NAVIGATION ONLY
+                \---------------------------------------------------------------*/
+
+    private void oC_requestBikerBtn () {
+        enterModalState();
+    }
+
+    private void oC_enterAddressBtn () {
+        mAnimate.swapViewsLeft(mModalPackageInformation, mModalAddressInformation);
+    }
+
+    private void oC_choosePickupAddrBtn () {
+        mAnimate.crossFadeViews(mModalAddressInformation, mModalChoosePickupAddress,
+                0,400);
+    }
+
+    private void oC_chooseDeliveryAddrBtn () {
+        mAnimate.crossFadeViews(mModalAddressInformation, mModalChooseDeliveryAddress,
+                0,400);
+    }
+
+    private void oC_addressesBack () {
+        mAnimate.swapViewsRight(mModalAddressInformation, mModalPackageInformation);
     }
 
     private void oC_deliveryAddressBackIcon () {
@@ -309,39 +347,15 @@ public class DeliveryMainActivity extends AppCompatActivity {
         mAnimate.swapViewsRight(mModalRequestDetails, mModalAddressInformation);
     }
 
-    private void oC_packageTypeMailSlc() {
-        mAnimate.selectionFader(mPackageTypeMailSlc_bg, mPackageTypeBoxSlc_bg,
-                mPackageTypeUnusualSlc_bg);
+    private void oC_pickupAddressBackIcon () {
+        mAnimate.crossFadeViews(mModalChoosePickupAddress, mModalAddressInformation,
+                0, 400);
     }
 
-    private void oC_packageTypeBoxSlc() {
-        mAnimate.selectionFader(mPackageTypeBoxSlc_bg, mPackageTypeMailSlc_bg,
-                mPackageTypeUnusualSlc_bg);
-    }
 
-    private void oC_packageTypeUnusualSlc() {
-        mAnimate.selectionFader(mPackageTypeUnusualSlc_bg, mPackageTypeBoxSlc_bg,
-                mPackageTypeMailSlc_bg);
-    }
-
-    private void oC_packageSizeSmallSlc() {
-        mAnimate.selectionFader(mPackageSizeSmallSlc_bg, mPackageSizeMediumSlc_bg,
-                mPackageSizeLargeSlc_bg);
-    }
-
-    private void oC_packageSizeMediumSlc() {
-        mAnimate.selectionFader(mPackageSizeMediumSlc_bg, mPackageSizeSmallSlc_bg,
-                mPackageSizeLargeSlc_bg);
-    }
-
-    private void oC_packageSizeLargeSlc() {
-        mAnimate.selectionFader(mPackageSizeLargeSlc_bg, mPackageSizeMediumSlc_bg,
-                mPackageSizeSmallSlc_bg);
-    }
-
-    private void oC_addressesBack () {
-        mAnimate.swapViewsRight(mModalAddressInformation, mModalPackageInformation);
-    }
+                /*---------------------------------------------------------------\
+                                             MODALS
+                \---------------------------------------------------------------*/
 
     private void enterModalState () {
         mAnimate.crossFadeViews(mRequestBikerBtn, mModalOverlay);
@@ -358,5 +372,9 @@ public class DeliveryMainActivity extends AppCompatActivity {
         mAnimate.fadeAllOut(mPackageTypeMailSlc_bg, mPackageTypeBoxSlc_bg,
                 mPackageTypeUnusualSlc_bg, mPackageSizeSmallSlc_bg,
                 mPackageSizeMediumSlc_bg, mPackageSizeLargeSlc_bg);
+
+        mRequestManager.resetRequestProperties();
+
+        // reset edittext contents
     }
 }

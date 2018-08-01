@@ -34,7 +34,6 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
         HttpURLConnection urlConnection = null;
 
         try {
-
             url = new URL(urls[0]);
             urlConnection = (HttpURLConnection) url.openConnection();
             InputStream in = urlConnection.getInputStream();

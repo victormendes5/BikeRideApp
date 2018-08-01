@@ -20,6 +20,7 @@ public class BikeRideRequestModel {
     public String estimatesPickupDuration = "";
     public String estimatesDeliveryDistance = "";
     public String estimatesDeliveryDuration = "";
+    public String estimatesFee = "";
 
     public String packageType = "";
     public String packageSize = "";
@@ -31,7 +32,7 @@ public class BikeRideRequestModel {
 
     public String receiversName = "";
     public String deliveryAddress = "";
-    public double deliveryddressLatitude = 0;
+    public double deliveryAddressLatitude = 0;
     public double deliveryAddressLongitude = 0;
 
     public boolean confirmedPickupByUser = false;
@@ -68,7 +69,7 @@ public class BikeRideRequestModel {
         this.pickupAddressLatitude = pickupAddressLatitude;
         this.pickupAddressLongitude = pickupAddressLong;
         this.deliveryAddress = deliveryAddress;
-        this.deliveryddressLatitude = deliveryddressLatitude;
+        this.deliveryAddressLatitude = deliveryddressLatitude;
         this.deliveryAddressLongitude = deliveryAddressLong;
         this.createTime = createTime;
     }
@@ -85,6 +86,7 @@ public class BikeRideRequestModel {
                 "estimatesPickupDuration    = " + estimatesPickupDuration + "\n" +
                 "estimatesDeliveryDistance  = " + estimatesDeliveryDistance + "\n" +
                 "estimatesDeliveryDuration  = " + estimatesDeliveryDuration + "\n" +
+                "estimatesFee               = " + estimatesFee + "\n" +
                 "bikerName                  = " + bikerName + "\n" +
                 "bikerId                    = " + bikerId + "\n" +
                 "bikerPositionLatitude      = " + bikerPositionLatitude + "\n" +
@@ -93,7 +95,7 @@ public class BikeRideRequestModel {
                 "pickupAddressLatitude      = " + pickupAddressLatitude + "\n" +
                 "pickupAddressLongitude     = " + pickupAddressLongitude + "\n" +
                 "deliveryAddress            = " + deliveryAddress + "\n" +
-                "deliveryddressLatitude     = " + deliveryddressLatitude + "\n" +
+                "deliveryAddressLatitude     = " + deliveryAddressLatitude + "\n" +
                 "deliveryAddressLongitude   = " + deliveryAddressLongitude + "\n" +
                 "createTime                 = " + createTime + "\n" +
                 "updateTime                 = " + updateTime + "\n\n";
