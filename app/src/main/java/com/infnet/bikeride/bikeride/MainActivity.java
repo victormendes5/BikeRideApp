@@ -8,16 +8,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawerLayout;
     private Intent intent;
+    private TextView mProfileName;
+    private ProfileManager mProfileManager = new ProfileManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        mProfileName = findViewById(R.id.drawer_header_profileName);
+        if(mProfileManager.getName() != null){
+            mProfileName.setText(mProfileManager.getName());
+        }
     }
 
     @Override

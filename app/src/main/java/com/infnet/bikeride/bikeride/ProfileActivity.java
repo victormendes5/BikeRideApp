@@ -15,6 +15,8 @@ public class ProfileActivity extends AppCompatActivity {
     // ~~ Main Profile
     ImageView mProfileImgView;
     CardView mCardViewName, mCardViewLastName, mCardViewNumber, mCardViewEmail, mCardViewPassword;
+    ProfileManager mProfileManager = new ProfileManager();
+    TextView mTxtViewUserName, mTxtViewUserLastname, mTxtViewUserNumber, mTxtViewUserEmail;
 
     // ~~ Modals
     View mModalChangeName, mModalChangeLastName, mModalChangeNumber, mModalChangeEmail;
@@ -39,11 +41,13 @@ public class ProfileActivity extends AppCompatActivity {
         // ~~ Main Profile
         abst.connectVariableToViewIdAndOnClickMethod(
                      "mProfileImgView", R.id.profile_photo, "",
-                            "mCardViewName", R.id.profile_cardView_edtName, "oC_changeName",
-                            "mCardViewLastName", R.id.profile_cardView_edtLastName, "oC_changeLastName",
-                            "mCardViewNumber", R.id.profile_cardView_edtNumber,"oC_changeNumber",
-                            "mCardViewEmail", R.id.profile_cardView_edtEmail, "oC_changeEmail",
+                            "mCardViewName", R.id.profile_cardView_edtName, "oC_cardViewChangeName",
+                            "mCardViewLastName", R.id.profile_cardView_edtLastName, "oC_cardViewChangeLastName",
+                            "mCardViewNumber", R.id.profile_cardView_edtNumber,"oC_cardViewChangeNumber",
+                            "mCardViewEmail", R.id.profile_cardView_edtEmail, "oC_cardViewChangeEmail",
                             "mCardViewPassword", R.id.profile_cardView_edtPassword, "");
+        mTxtViewUserName = findViewById(R.id.profile_txtView_userName);
+        mTxtViewUserName.setText(mProfileManager.getName());
 
         // ~~ Modals
         abst.connectVariableToViewIdAndOnClickMethod(
@@ -60,40 +64,44 @@ public class ProfileActivity extends AppCompatActivity {
         abst.connectVariableToViewIdAndOnClickMethod(
                 "mTxtProfileName", R.id.profileNameTitle, "",
                        "mEdtProfileName", R.id.profileNameEditText, "",
-                       "mChangeName", R.id.changeNameBtn, "");
+                       "mChangeName", R.id.changeNameBtn, "oC_btnChangeName");
 
         // ~~ Modal: Change Last Name
         abst.connectVariableToViewIdAndOnClickMethod(
                 "mTxtProfileLastName", R.id.profileLastNameTitle, "",
                        "mEdtProfileLastName", R.id.profileLastNameEditText, "",
-                       "mChangeLastName", R.id.changeLastNameBtn, "");
+                       "mChangeLastName", R.id.changeLastNameBtn, "oC_btnChangeLastName");
 
         // ~~ Modal: Change Number
         abst.connectVariableToViewIdAndOnClickMethod(
                 "mTxtProfileNumber", R.id.profileNumberTitle, "",
                        "mEdtProfileNumber", R.id.profileNumberEditText, "",
-                       "mChangeNumber", R.id.changeNumberBtn, "");
+                       "mChangeNumber", R.id.changeNumberBtn, "oC_btnChangeNumber");
 
         // ~~ Modal: Change Email
         abst.connectVariableToViewIdAndOnClickMethod(
                 "mTxtProfileEmail", R.id.profileEmailTitle, "",
                        "mEdtProfileEmail", R.id.profileEmailEditText, "",
-                       "mChangeEmail", R.id.changeEmailBtn, "");
+                       "mChangeEmail", R.id.changeEmailBtn, "oC_btnChangeEmail");
     }
 
-    private void oC_changeName () {
+    // ~ Click to Enter in Modal States
+    private void oC_cardViewChangeName () {
         enterModalStateName();
     }
 
-    private void oC_changeLastName () { enterModalStateLastName(); }
+    private void oC_cardViewChangeLastName () { enterModalStateLastName(); }
 
-    private void oC_changeNumber () { enterModalStateNumber(); }
+    private void oC_cardViewChangeNumber () { enterModalStateNumber(); }
 
-    private void oC_changeEmail () { enterModalStateEmail(); }
+    private void oC_cardViewChangeEmail () { enterModalStateEmail(); }
 
+    // ~ Enter in Modal States methods
     private void enterModalStateName () {
         mAnimate.crossFadeViews(mCardViewName, mModalOverlay);
         mAnimate.translateFromBottom(mModalChangeName, 200);
+        mEdtProfileName.findFocus();
+        mEdtProfileName.clearComposingText();
     }
 
     private void enterModalStateLastName () {
@@ -111,6 +119,7 @@ public class ProfileActivity extends AppCompatActivity {
         mAnimate.translateFromBottom(mModalChangeEmail, 200);
     }
 
+    // ~ Exit Modal States
     @Override
     public void onBackPressed() {
         if (mModalOverlay.getVisibility() == View.VISIBLE) {
@@ -149,6 +158,25 @@ public class ProfileActivity extends AppCompatActivity {
         mAnimate.translateToBottomIfVisible(mModalChangeEmail);
 
         mAnimate.crossFadeViews(mModalOverlay, mCardViewEmail, 200);
+    }
+
+    // ~ Change users props
+
+    private void oC_btnChangeName () {
+        String newName = mEdtProfileName.getText().toString();
+        mProfileManager.setName(newName);
+        mTxtViewUserName.setText(mProfileManager.getName());
+        exitModalStateName();
+        mEdtProfileName.setText("");
+    }
+    private void oC_btnChangeLastName () {
+        exitModalStateLastName();
+    }
+    private void oC_btnChangeNumber () {
+        exitModalStateNumber();
+    }
+    private void oC_btnChangeEmail () {
+        exitModalStateEmail();
     }
 
 }
