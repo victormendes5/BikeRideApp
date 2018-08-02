@@ -15,7 +15,7 @@ public class ProfileActivity extends AppCompatActivity {
     // ~~ Main Profile
     ImageView mProfileImgView;
     CardView mCardViewName, mCardViewLastName, mCardViewNumber, mCardViewEmail, mCardViewPassword;
-    ProfileManager mProfileManager = new ProfileManager();
+    ProfileManager mProfileManager = new ProfileManager(this);
     TextView mTxtViewUserName, mTxtViewUserLastname, mTxtViewUserNumber, mTxtViewUserEmail;
 
     // ~~ Modals

@@ -87,6 +87,7 @@
                 android:layout_marginBottom="8dp"/>
 
             <TextView
+                android:id="@+id/estimatesPickupDistance"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/modal_request_details_pickup_distance"
@@ -96,6 +97,7 @@
                 android:gravity="center"/>
 
             <TextView
+                android:id="@+id/estimatesPickupDuration"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/modal_request_details_pickup_time"
@@ -130,6 +132,7 @@
                 android:gravity="left"/>
 
             <TextView
+                android:id="@+id/estimatesDeliveryDistance"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/modal_request_details_delivery_distance"
@@ -139,6 +142,7 @@
                 android:gravity="center"/>
 
             <TextView
+                android:id="@+id/estimatesDeliveryDuration"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/modal_request_details_delivery_time"
@@ -180,6 +184,7 @@
                 android:gravity="center"/>
 
             <TextView
+                android:id="@+id/estimatesFee"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/modal_request_details_fee_value"
@@ -322,6 +327,7 @@
                 </RelativeLayout>
 
                 <TextView
+                    android:id="@+id/detailsPickupLocation"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/sample_address_7"
@@ -366,6 +372,7 @@
                 </RelativeLayout>
 
                 <TextView
+                    android:id="@+id/detailsDeliveryLocation"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/sample_address_8"

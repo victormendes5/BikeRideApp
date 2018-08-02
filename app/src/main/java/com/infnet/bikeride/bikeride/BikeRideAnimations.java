@@ -9,6 +9,10 @@ public class BikeRideAnimations {
     private int mDefaultAnimationSpeed = 200;
     private int mScreenBias = 1500;
 
+    public interface AnimationCallback {
+        void OnComplete();
+    }
+
     //   /===============================================================================\
     //   |                                CONSTRUCTORS                                   |
     //   \===============================================================================/
@@ -268,6 +272,22 @@ public class BikeRideAnimations {
     public void swapViewsLeft (final View oldview, final View newview) {
         translateFromRight(newview);
         translateToLeft(oldview);
+    }
+
+    public void swapViewsLeft (final View oldview, final View newview,
+                               final AnimationCallback callback) {
+        translateFromRight(newview);
+        translateToLeft(oldview);
+
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+
+                        callback.OnComplete();
+
+                    }
+                },
+                mDefaultAnimationSpeed*2);
     }
 
     public void swapViewsRight (final View oldview, final View newview) {
