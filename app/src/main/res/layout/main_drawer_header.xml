@@ -5,7 +5,7 @@
     android:id="@+id/drawer_header"
     android:layout_width="match_parent"
     android:layout_height="176dp"
-    android:background="@color/colorAccent">
+    android:background="@color/colorPrimary">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/drawerHeader_profile_photo"

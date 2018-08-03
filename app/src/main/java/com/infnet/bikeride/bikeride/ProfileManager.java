@@ -16,7 +16,7 @@ public class ProfileManager{
 
     public ProfileManager (Activity context) {
         this.activity = context;
-        this.mDrawerUserName = context.findViewById(R.id.drawer_header_profileName);
+//        this.mDrawerUserName = context.findViewById(R.id.drawer_header_profileName);
     }
 
     public Profile user = new Profile();

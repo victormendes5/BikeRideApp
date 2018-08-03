@@ -48,11 +48,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity{
 
-    private DrawerLayout drawerLayout;
     private TextView mProfileName;
-    private ProfileManager mProfileManager = new ProfileManager(this);
+//    private ProfileManager mProfileManager = new ProfileManager(this);
     Toolbar toolbar;
 
     private static final String TAG = "";
@@ -88,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         autentication = ConfigurationFirebase.getFirebaseAuth();
 
-//        mContentViewBuilder = new BikeRideContentViewBuilder(this, R.layout.activity_main);
+        mContentViewBuilder = new BikeRideContentViewBuilder(this, R.layout.activity_main);
 
         setContentView(R.layout.activity_main);
 
@@ -138,30 +137,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .build();
 
 
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,
-                drawerLayout,
-                toolbar,
-                R.string.drawer_open,
-                R.string.drawer_close);
+//        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,
+//                drawerLayout,
+//                toolbar,
+//                R.string.drawer_open,
+//                R.string.drawer_close);
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        NavigationView navigationView = findViewById(R.id.navigation_view);
-        navigationView.setNavigationItemSelectedListener(this);
+//        NavigationView navigationView = findViewById(R.id.navigation_view);
+//        navigationView.setNavigationItemSelectedListener(this);
 
-        mProfileName = findViewById(R.id.drawer_header_profileName);
-        if (mProfileManager.getName() != null) {
-            mProfileName.setText(mProfileManager.getName());
-        }
+//        mProfileName = findViewById(R.id.drawer_header_profileName);
+//        if (mProfileManager.getName() != null) {
+//            mProfileName.setText(mProfileManager.getName());
+//        }
     }
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(Gravity.START)) {
-            drawerLayout.closeDrawer(Gravity.START);
-        } else {
+//        if (drawerLayout.isDrawerOpen(Gravity.START)) {
+//            drawerLayout.closeDrawer(Gravity.START);
+//        } else {
             super.onBackPressed();
-        }
+//        }
     }
 
 
@@ -307,36 +306,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     // Método que pega o resultado do login da api em geral
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int itemID = item.getItemId();
-
-        switch (itemID) {
-            case R.id.deliveryman_review:
-                intent = new Intent(this, DeliverymanReviewActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.delivery_tracking:
-                intent = new Intent(this, DeliveryTrackingActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.delivery_main:
-                intent = new Intent(this, DeliveryMainActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.delivery_quotation:
-                intent = new Intent(this, DeliveryQuotationPriceActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.profile:
-                intent = new Intent(this, ProfileActivity.class);
-                startActivity(intent);
-                break;
-            default:
-                break;
-        }
-        return false;
-    }
+//    @Override
+//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//        int itemID = item.getItemId();
+//
+//        switch (itemID) {
+//            case R.id.deliveryman_review:
+//                intent = new Intent(this, DeliverymanReviewActivity.class);
+//                startActivity(intent);
+//                break;
+//            case R.id.delivery_tracking:
+//                intent = new Intent(this, DeliveryTrackingActivity.class);
+//                startActivity(intent);
+//                break;
+//            case R.id.delivery_main:
+//                intent = new Intent(this, DeliveryMainActivity.class);
+//                startActivity(intent);
+//                break;
+//            case R.id.delivery_quotation:
+//                intent = new Intent(this, DeliveryQuotationPriceActivity.class);
+//                startActivity(intent);
+//                break;
+//            case R.id.profile:
+//                intent = new Intent(this, ProfileActivity.class);
+//                startActivity(intent);
+//                break;
+//            default:
+//                break;
+//        }
+//        return false;
+//    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode,resultCode,data);

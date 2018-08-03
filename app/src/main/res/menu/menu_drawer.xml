@@ -22,7 +22,7 @@
         android:title="Profile"/>
     <item
         android:id="@+id/payment_methods"
-        android:title="Métodos de pagamento"/>
+        android:title="Payment Methods"/>
 
     <item
         android:id="@+id/logout_app"

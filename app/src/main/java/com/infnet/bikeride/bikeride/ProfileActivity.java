@@ -31,10 +31,16 @@ public class ProfileActivity extends AppCompatActivity {
     // ~~ Animations
     private BikeRideAnimations mAnimate = new BikeRideAnimations(200);
 
+    // ---> Customized setContentView with navigation drawer and toolbar
+    BikeRideContentViewBuilder mContentViewBuilder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        mContentViewBuilder = new BikeRideContentViewBuilder(this,
+                R.layout.activity_profile);
 
         BikeRideAbstractions abst = new BikeRideAbstractions(this);
 
