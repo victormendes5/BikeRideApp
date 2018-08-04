@@ -51,7 +51,7 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity{
 
     private TextView mProfileName;
-//    private ProfileManager mProfileManager = new ProfileManager(this);
+//    private UserManager mUserManager = new UserManager(this);
     Toolbar toolbar;
 
     private static final String TAG = "";
@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity{
 
     private SignInButton btnGooglePlus;
     private GoogleSignInClient mGoogleSignInClient;
+
+    private UserManager mUserManager = new UserManager();
 
 
     @Override
@@ -149,8 +151,8 @@ public class MainActivity extends AppCompatActivity{
 //        navigationView.setNavigationItemSelectedListener(this);
 
 //        mProfileName = findViewById(R.id.drawer_header_profileName);
-//        if (mProfileManager.getName() != null) {
-//            mProfileName.setText(mProfileManager.getName());
+//        if (mUserManager.getName() != null) {
+//            mProfileName.setText(mUserManager.getName());
 //        }
     }
 

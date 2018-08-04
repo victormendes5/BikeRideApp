@@ -15,7 +15,7 @@ public class ProfileActivity extends AppCompatActivity {
     // ~~ Main Profile
     ImageView mProfileImgView;
     CardView mCardViewName, mCardViewLastName, mCardViewNumber, mCardViewEmail, mCardViewPassword;
-    ProfileManager mProfileManager = new ProfileManager(this);
+//    UserManager mUserManager = new UserManager(this);
     TextView mTxtViewUserName, mTxtViewUserLastname, mTxtViewUserNumber, mTxtViewUserEmail;
 
     // ~~ Modals
@@ -53,7 +53,7 @@ public class ProfileActivity extends AppCompatActivity {
                             "mCardViewEmail", R.id.profile_cardView_edtEmail, "oC_cardViewChangeEmail",
                             "mCardViewPassword", R.id.profile_cardView_edtPassword, "");
         mTxtViewUserName = findViewById(R.id.profile_txtView_userName);
-        mTxtViewUserName.setText(mProfileManager.getName());
+//        mTxtViewUserName.setText(mUserManager.getName());
 
         // ~~ Modals
         abst.connectVariableToViewIdAndOnClickMethod(
@@ -170,8 +170,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void oC_btnChangeName () {
         String newName = mEdtProfileName.getText().toString();
-        mProfileManager.setName(newName);
-        mTxtViewUserName.setText(mProfileManager.getName());
+//        mUserManager.setName(newName);
+//        mTxtViewUserName.setText(mUserManager.getName());
         exitModalStateName();
         mEdtProfileName.setText("");
     }
