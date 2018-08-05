@@ -1,9 +1,7 @@
 package com.infnet.bikeride.bikeride;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 
 /**
@@ -25,19 +23,28 @@ public class UserManager {
     public Users user = new Users();
     public Profile profile = new Profile();
 
-    public void getPerfil(){
+
+    private void  UsuarioLogado(){
+
+//        getPerfil();
+
+    }
+
+    public void getPerfil() {
 
         mFirebase.getObjectOrProperty(Users.class,
 
                 new FirebaseAccess.OnComplete<Users>() {
                     @Override
-                    public void onSuccess(Users data) {
+                    public Users onSuccess(Users data) {
                         Users currentProfile = data;
+                        return currentProfile;
                     }
 
                     @Override
                     public void onFailure(Users data) {
                         Log.e("ERRO", "Deu ruim");
+                        return ;
                     }
                 },"Profile");
     }

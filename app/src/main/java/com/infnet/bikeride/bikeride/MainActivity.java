@@ -107,7 +107,14 @@ public class MainActivity extends AppCompatActivity{
 
             Redirect(DeliveryMainActivity.class);
 
+            mUserManager.getPerfil();
+
+//            Log.v("MainRonan", "");
+
+
         }
+
+
 
         //Declaração de EdiText
         edtEmail = (EditText) findViewById(R.id.edtLogin);
@@ -343,7 +350,6 @@ public class MainActivity extends AppCompatActivity{
 
         try {
 
-            Log.v("MainRonan2", jsonObject.getString("picture"));
             users.setEmail(jsonObject.getString("email").toString());
             users.setLastName(jsonObject.getString("last_name").toString());
             users.setName(jsonObject.getString("first_name").toString());
