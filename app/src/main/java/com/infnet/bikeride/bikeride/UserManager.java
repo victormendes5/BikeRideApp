@@ -39,25 +39,25 @@ public class UserManager {
                     public void onFailure(Users data) {
                         Log.e("ERRO", "Deu ruim");
                     }
-                });
+                },"Profile");
     }
 
-    public void adicionarOuAtualizarPerfil(Users profile){
+    public void adicionarOuAtualizarPerfil(final Users profile){
 
         mFirebase.addOrUpdate(profile,
 
                 new FirebaseAccess.OnCompleteVoid() {
                     @Override
                     public void onSuccess() {
-
+                        Users currentProfile = profile;
                     }
 
                     @Override
                     public void onFailure() {
-
+                        Log.e("ERRO", "Deu ruim");
                     }
 
-                }, PROFILES_CHILD, user.getId());
+                }, PROFILES_CHILD, profile.getId());
     }
 
 }

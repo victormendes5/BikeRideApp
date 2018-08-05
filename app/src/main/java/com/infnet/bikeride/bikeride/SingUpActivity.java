@@ -33,6 +33,10 @@ public class SingUpActivity extends AppCompatActivity  {
     private FirebaseAuth autentication;
     private Users users;
 
+
+    private UserManager mUserManager = new UserManager();
+    private Users mUsersNew =  new Users();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +85,14 @@ public class SingUpActivity extends AppCompatActivity  {
 
                     Toast.makeText(SingUpActivity.this,"Sucesso ao Cadastrar",Toast.LENGTH_SHORT).show();
 
+                    FirebaseUser user = autentication.getCurrentUser();
+
+                    mUsersNew.setId(user.getUid());
+                    mUsersNew.setEmail(user.getEmail());
+                    mUsersNew.setPassword(users.getPassword());
+
+                    CriarUser(mUsersNew);
+
                     intent = new Intent(SingUpActivity.this, DeliveryMainActivity.class);
                     startActivity(intent);
 
@@ -98,5 +110,10 @@ public class SingUpActivity extends AppCompatActivity  {
             super.onBackPressed();
     }
 
+    private void CriarUser(Users u){
+
+        mUserManager.adicionarOuAtualizarPerfil(u);
+
+    }
 
 }

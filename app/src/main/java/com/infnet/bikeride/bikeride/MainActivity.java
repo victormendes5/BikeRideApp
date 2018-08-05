@@ -25,6 +25,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
@@ -46,6 +48,9 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity{
@@ -54,7 +59,7 @@ public class MainActivity extends AppCompatActivity{
 //    private UserManager mUserManager = new UserManager(this);
     Toolbar toolbar;
 
-    private static final String TAG = "";
+    private static final String TAG = "ErrorRonan";
 
     // ---> Customized setContentView with navigation drawer and toolbar
     BikeRideContentViewBuilder mContentViewBuilder;
@@ -72,7 +77,7 @@ public class MainActivity extends AppCompatActivity{
     private FirebaseUser user;
 
     private FirebaseAuth autentication;
-    private Users users;
+    private Users users = new Users();
 
     private CallbackManager callbackManager;
     private LoginButton btnFacebookLogin;
@@ -81,7 +86,7 @@ public class MainActivity extends AppCompatActivity{
     private GoogleSignInClient mGoogleSignInClient;
 
     private UserManager mUserManager = new UserManager();
-
+    private Users mUserNew = new Users();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +99,8 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         user = autentication.getCurrentUser();
+
+        //Se usuário já logado
         if (user != null) {
 
             Toast.makeText(this, "Usuário Logado", Toast.LENGTH_SHORT).show();
@@ -123,7 +130,7 @@ public class MainActivity extends AppCompatActivity{
         AppEventsLogger.activateApp(this);
 
         callbackManager = CallbackManager.Factory.create();
-        btnFacebookLogin.setReadPermissions(Arrays.asList("email"));
+        btnFacebookLogin.setReadPermissions(Arrays.asList("public_profile, email, user_birthday"));
 
 
         //Configuração Google Login
@@ -184,7 +191,6 @@ public class MainActivity extends AppCompatActivity{
             } else {
 
                 Toast.makeText(MainActivity.this, "Preencha os campos de login", Toast.LENGTH_SHORT).show();
-
             }
         }
     };
@@ -240,6 +246,12 @@ public class MainActivity extends AppCompatActivity{
 
                             Toast.makeText(MainActivity.this, "login com google sucesso", Toast.LENGTH_SHORT).show();
 
+                            FirebaseUser userLogad = autentication.getCurrentUser();
+
+                            users.setId(userLogad.getUid());
+
+                            CriarUser(users);
+
                             Redirect(DeliveryMainActivity.class);
 
                         } else {
@@ -262,9 +274,26 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onSuccess(LoginResult loginResult) {
 
-                handleFacebookToken(loginResult.getAccessToken());
 
                 Toast.makeText(MainActivity.this, "Entrou o login com Facebook", Toast.LENGTH_SHORT).show();
+
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+//                                Log.v("MainRonan", response.toString());
+                                setProfileToView(object);
+                            }
+                        });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,first_name,last_name,picture,name,email,gender, birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+
+                handleFacebookToken(loginResult.getAccessToken());
+
 
             }
 
@@ -296,6 +325,11 @@ public class MainActivity extends AppCompatActivity{
                     Toast.makeText(MainActivity.this, "Sucesso Login Facebook no Firebase", Toast.LENGTH_SHORT).show();
 
                     Redirect(DeliveryMainActivity.class);
+                    FirebaseUser userLogad = autentication.getCurrentUser();
+
+                    users.setId(userLogad.getUid());
+
+                    CriarUser(users);
 
                 } else {
                     Toast.makeText(MainActivity.this, FirebaseError.class.toString(), Toast.LENGTH_SHORT).show();
@@ -303,6 +337,22 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+    }
+
+    private void setProfileToView(JSONObject jsonObject) {
+
+        try {
+
+            Log.v("MainRonan2", jsonObject.getString("picture"));
+            users.setEmail(jsonObject.getString("email").toString());
+            users.setLastName(jsonObject.getString("last_name").toString());
+            users.setName(jsonObject.getString("first_name").toString());
+            users.setUrlPhoto(jsonObject.getString("picture").toString());
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -350,10 +400,15 @@ public class MainActivity extends AppCompatActivity{
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                users.setEmail(account.getEmail().toString());
+                users.setUrlPhoto(account.getPhotoUrl().toString());
+                users.setName(account.getGivenName().toString());
                 firebaseAuthWithGoogle(account);
+
             } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                // ...
+
+                Log.v("MainRonan", e.getMessage());
+
             }
 
         }
@@ -382,6 +437,12 @@ public class MainActivity extends AppCompatActivity{
 
         Intent newIntent = new Intent(MainActivity.this, destination);
         startActivity(newIntent);
+
+    }
+
+    private void CriarUser(Users u){
+
+        mUserManager.adicionarOuAtualizarPerfil(u);
 
     }
 
