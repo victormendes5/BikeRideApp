@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity{
 
     private UserManager mUserManager = new UserManager();
     private Users mUserNew = new Users();
+    private Users usuarioLogado = new Users();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +111,8 @@ public class MainActivity extends AppCompatActivity{
             mUserManager.getPerfil(new UserManager.OnUserComplete() {
                 @Override
                 public void onUserComplete(Users data) {
-                    Users usuarioLogado = data;
+//                    usuarioLogado = data;
+                    Log.v("MainRonanError", data.toString());
                 }
                 @Override
                 public void onErrorUserComplete(Users data) {
