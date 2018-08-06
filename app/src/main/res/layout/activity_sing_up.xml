@@ -44,6 +44,29 @@ android:orientation="vertical">
         android:background="@color/lightGray1"
         android:layout_margin="6dp"/>
 
+    <EditText
+        android:id="@+id/edtFirstNameSignUp"
+        android:inputType="textPassword"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:hint="@string/main_editText_password"
+        android:padding="12dp"
+        android:background="@color/lightGray1"
+        android:layout_margin="6dp"/>
+
+    <EditText
+        android:id="@+id/edtLastNameSignUp"
+        android:inputType="textPassword"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:hint="@string/main_editText_password"
+        android:padding="12dp"
+        android:background="@color/lightGray1"
+        android:layout_margin="6dp"/>
+
+
 </LinearLayout>
 
 <Button

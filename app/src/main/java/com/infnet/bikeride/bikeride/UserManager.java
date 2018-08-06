@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 /**
  * Created by Imperiali on 21/07/18.
  */
@@ -16,6 +19,9 @@ public class UserManager {
     private static final String PROFILES_CHILD = "Profiles";
 
     private FirebaseAccess mFirebase = new FirebaseAccess();
+
+    private FirebaseUser userFirebase;
+    private FirebaseAuth autentication;
 
     public UserManager() {
     }
@@ -30,7 +36,15 @@ public class UserManager {
 
     }
 
-    public void getPerfil() {
+    public interface OnUserComplete {
+        void onUserComplete(Users data);
+        void onErrorUserComplete(Users data);
+    }
+
+
+    public void getPerfil(final OnUserComplete callback) {
+
+        userFirebase = autentication.getCurrentUser();
 
         mFirebase.getObjectOrProperty(Users.class,
 
@@ -38,15 +52,16 @@ public class UserManager {
                     @Override
                     public Users onSuccess(Users data) {
                         Users currentProfile = data;
+                        callback.onUserComplete(data);
                         return currentProfile;
                     }
 
                     @Override
                     public void onFailure(Users data) {
                         Log.e("ERRO", "Deu ruim");
-                        return ;
+                        callback.onErrorUserComplete(data);
                     }
-                },"Profile");
+                },"Profile",userFirebase.getUid());
     }
 
     public void adicionarOuAtualizarPerfil(final Users profile){

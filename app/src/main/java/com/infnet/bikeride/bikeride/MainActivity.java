@@ -107,7 +107,16 @@ public class MainActivity extends AppCompatActivity{
 
             Redirect(DeliveryMainActivity.class);
 
-            mUserManager.getPerfil();
+            mUserManager.getPerfil(new UserManager.OnUserComplete() {
+                @Override
+                public void onUserComplete(Users data) {
+                    Users usuarioLogado = data;
+                }
+                @Override
+                public void onErrorUserComplete(Users data) {
+                    Log.v("MainRonanError", data.toString());
+                }
+            });
 
 //            Log.v("MainRonan", "");
 
@@ -406,9 +415,12 @@ public class MainActivity extends AppCompatActivity{
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+
                 users.setEmail(account.getEmail().toString());
                 users.setUrlPhoto(account.getPhotoUrl().toString());
                 users.setName(account.getGivenName().toString());
+                users.setLastName(account.getFamilyName());
+
                 firebaseAuthWithGoogle(account);
 
             } catch (ApiException e) {

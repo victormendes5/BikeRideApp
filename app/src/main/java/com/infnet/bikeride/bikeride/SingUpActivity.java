@@ -28,6 +28,8 @@ public class SingUpActivity extends AppCompatActivity  {
 
     private EditText edtEmail;
     private EditText edtPassWord;
+    private EditText edtFirstName;
+    private EditText edtLastName;
     private Button btnSignUp;
 
     private FirebaseAuth autentication;
@@ -45,6 +47,8 @@ public class SingUpActivity extends AppCompatActivity  {
 
         edtEmail = (EditText) findViewById(R.id.edtEmailSignUp);
         edtPassWord = (EditText) findViewById(R.id.edtPasswordSignUp);
+        edtFirstName = (EditText) findViewById(R.id.edtFirstNameSignUp);
+        edtLastName = (EditText) findViewById(R.id.edtLastNameSignUp);
         btnSignUp = (Button) findViewById(R.id.btnSignUpCad);
 
         btnSignUp.setOnClickListener(SignUp);
@@ -57,11 +61,14 @@ public class SingUpActivity extends AppCompatActivity  {
         @Override
         public void onClick(View v) {
             //Se os Campos de login tiverem Nulos
-            if (!edtEmail.getText().toString().equals("") && !edtPassWord.getText().toString().equals("")){
+            if (!edtEmail.getText().toString().equals("") && !edtPassWord.getText().toString().equals("")
+                    && !edtFirstName.getText().toString().equals("") && !edtLastName.getText().toString().equals("")){
 
                 users = new Users();
                 users.setEmail(edtEmail.getText().toString());
                 users.setPassword(edtPassWord.getText().toString());
+                users.setName(edtFirstName.getText().toString());
+                users.setLastName(edtLastName.getText().toString());
 
                 ValidarSignUp();
 
@@ -89,7 +96,8 @@ public class SingUpActivity extends AppCompatActivity  {
 
                     mUsersNew.setId(user.getUid());
                     mUsersNew.setEmail(user.getEmail());
-                    mUsersNew.setPassword(users.getPassword());
+                    mUsersNew.setName(users.getName().toString());
+                    mUsersNew.setLastName(users.getLastName().toString());
 
                     CriarUser(mUsersNew);
 
