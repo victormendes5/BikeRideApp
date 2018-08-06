@@ -104,23 +104,25 @@ public class MainActivity extends AppCompatActivity{
         //Se usuário já logado
         if (user != null) {
 
-            Toast.makeText(this, "Usuário Logado", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Usuário Logado", Toast.LENGTH_SHORT).show();
 
+            // Redireciona tela pra Drlivery Main
             Redirect(DeliveryMainActivity.class);
 
+            // Func de UserManager para retornar os dados do usuário logado
             mUserManager.getPerfil(new UserManager.OnUserComplete() {
                 @Override
                 public void onUserComplete(Users data) {
-//                    usuarioLogado = data;
-                    Log.v("MainRonanError", data.toString());
+                    usuarioLogado = data;
+                    Log.v("MainRonanError", usuarioLogado.getEmail().toString());//Para pegar email
+                    Log.v("MainRonanError", usuarioLogado.getName().toString());//Para pegar nome
+
                 }
                 @Override
                 public void onErrorUserComplete(Users data) {
                     Log.v("MainRonanError", data.toString());
                 }
-            });
-
-//            Log.v("MainRonan", "");
+            },user.getUid().toString());
 
 
         }

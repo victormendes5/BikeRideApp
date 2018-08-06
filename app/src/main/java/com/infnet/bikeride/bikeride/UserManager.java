@@ -30,25 +30,23 @@ public class UserManager {
     public Profile profile = new Profile();
 
 
-    private void  UsuarioLogado(){
-
-//        getPerfil();
-
-    }
-
+    //Interface de acesso ao getPerfil
     public interface OnUserComplete {
         void onUserComplete(Users data);
         void onErrorUserComplete(Users data);
     }
 
 
-    public void getPerfil(final OnUserComplete callback) {
+    // Função que Chama o firebaseAccess e faz o fetch direto na child
+    public void getPerfil(final OnUserComplete callback, String id) {
 
-        userFirebase = autentication.getCurrentUser();
+
+//        userFirebase = autentication.getCurrentUser();
 
         mFirebase.getObjectOrProperty(Users.class,
 
                 new FirebaseAccess.OnComplete<Users>() {
+                    //Faz o Retorno do usuário logado
                     @Override
                     public Users onSuccess(Users data) {
                         Users currentProfile = data;
@@ -61,9 +59,11 @@ public class UserManager {
                         Log.e("ERRO", "Deu ruim");
                         callback.onErrorUserComplete(data);
                     }
-                },"Profile",userFirebase.getUid().toString());
+                    //Caminho do nó do Firebase
+                },"Profiles",id.toString());
     }
 
+    // Cria o usuário sempre que logar ou atualiza sempre que loga pois está sempre em mudança
     public void adicionarOuAtualizarPerfil(final Users profile){
 
         mFirebase.addOrUpdate(profile,

@@ -134,7 +134,12 @@
     <!-- Facebook Auth -->
     <string name="facebook_app_id">250988672380164</string>
     <string name="fb_login_protocol_scheme">fb250988672380164</string>
-    <string name="signUp_editText_email">Email</string>
+
+    <!-- Sing Up -->
+    <string name="signUp_editText_hint_email">Email</string>
+    <string name="signUp_editText_hint_firstName">First Name</string>
+    <string name="signUp_editText_hint_lastName">Last Name</string>
+
 
     <!-- MODALS: Change Name-->
     <string name="modalChangeName_txtView_changeName">Change Name</string>
