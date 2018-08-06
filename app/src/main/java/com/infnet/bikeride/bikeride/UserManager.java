@@ -61,7 +61,7 @@ public class UserManager {
                         Log.e("ERRO", "Deu ruim");
                         callback.onErrorUserComplete(data);
                     }
-                },"Profile",userFirebase.getUid());
+                },"Profile",userFirebase.getUid().toString());
     }
 
     public void adicionarOuAtualizarPerfil(final Users profile){
