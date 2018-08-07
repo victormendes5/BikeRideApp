@@ -27,7 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class BikeRideGoogleMapsAPI {
+public class BRGoogleMapsAPI {
 
     /*
 
@@ -121,7 +121,7 @@ public class BikeRideGoogleMapsAPI {
 
     private AppCompatActivity refferedActivity;
 
-    public BikeRideGoogleMapsAPI(AppCompatActivity activity, int mapFragmentId) {
+    public BRGoogleMapsAPI(AppCompatActivity activity, int mapFragmentId) {
 
         refferedActivity = activity;
         mMapFragmentId = mapFragmentId;
@@ -146,13 +146,29 @@ public class BikeRideGoogleMapsAPI {
                     public void onComplete(@NonNull Task task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "getDeviceLocation: onComplete - found location.");
+                            Log.d(TAG, "getDeviceLocation: TASK - " + task.toString());
+
                             Location currentLocation = (Location) task.getResult();
+
+                            if (currentLocation == null) {
+                                Log.d(TAG, "getDeviceLocation: unable to get device " +
+                                        "location. Please check if location services " +
+                                        "are enabled on device's settings.");
+                                return;
+                            }
+
+                            Log.d(TAG, "getDeviceLocation: LOCATION - "
+                                    + currentLocation.toString());
+
+
+
                             moveCamera(new LatLng(currentLocation.getLatitude(),
                                     currentLocation.getLongitude()), DEFAULT_ZOOM);
                         } else {
-                            Log.d(TAG, "getDeviceLocation: onComplete - current location is null.");
-                            Toast.makeText(refferedActivity, "Unable to get current location..",
-                                    Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "getDeviceLocation: getDeviceLocation " +
+                                    "- current location is null.");
+                            Toast.makeText(refferedActivity, "Unable to get current " +
+                                    "location.", Toast.LENGTH_SHORT).show();
 
                         }
                     }
@@ -190,10 +206,10 @@ public class BikeRideGoogleMapsAPI {
                     getDeviceLocation();
                     if (ActivityCompat.checkSelfPermission(refferedActivity,
                             Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
-                                .PERMISSION_GRANTED
+                            .PERMISSION_GRANTED
                             && ActivityCompat.checkSelfPermission(refferedActivity,
                             Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager
-                                .PERMISSION_GRANTED) {
+                            .PERMISSION_GRANTED) {
 
                         return;
                     }
@@ -237,23 +253,23 @@ public class BikeRideGoogleMapsAPI {
 
         boolean fineLocationPermissionsGranted =
                 ContextCompat.checkSelfPermission(refferedActivity, FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED;
+                        PackageManager.PERMISSION_GRANTED;
 
         boolean coarseLocationPermissionsGranted =
                 ContextCompat.checkSelfPermission(refferedActivity, COARSE_LOCATION) ==
                         PackageManager.PERMISSION_GRANTED;
 
         if (fineLocationPermissionsGranted && coarseLocationPermissionsGranted) {
-                Log.d(TAG, "getLocationPermissions: location permissions have already " +
-                        "been granted.");
-                mLocationPermissionsGranted = true;
-                initMap();
+            Log.d(TAG, "getLocationPermissions: location permissions have already " +
+                    "been granted.");
+            mLocationPermissionsGranted = true;
+            initMap();
 
         } else {
             ActivityCompat.requestPermissions(refferedActivity, permissions,
                     LOCATION_PERMISSION_REQUEST_CODE);
             Log.d(TAG, "getLocationPermissions: location permissions haven't been found." +
-                    " Asking for new ones");
+                    " Asking for new ones.");
 
         }
     }
@@ -279,26 +295,5 @@ public class BikeRideGoogleMapsAPI {
                     initMap();
                 }
         }
-    }
-
-    public void getEstimatesFromWebAsync(String bikerLocation, String pickupLocation,
-                                         String deliveryLocation, String onCompleteMethodName) {
-
-        // https://developers.google.com/maps/documentation/distance-matrix/intro
-
-        String distanceMatrixBaseUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?";
-        String unitType = "metric";  // "metric" or "imperial"
-        String travelMode = "bicycling"; // "walking", "bicycling", "driving"
-
-        String executeString = distanceMatrixBaseUrl
-                + "units=" + unitType + "&"
-                + "origins=" + bikerLocation + "|" + pickupLocation + "&"
-                + "destinations=" + pickupLocation + "|" + deliveryLocation + "&"
-                + "mode=" + travelMode + "&"
-                + "key=" + API_KEY;
-
-        AsyncReflectedHttpRequest googleMatrixData =
-                new AsyncReflectedHttpRequest(refferedActivity, onCompleteMethodName);
-        googleMatrixData.execute(executeString);
     }
 }

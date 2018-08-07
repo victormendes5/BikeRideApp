@@ -29,20 +29,20 @@ public class ProfileActivity extends AppCompatActivity {
     Button mChangeName, mChangeLastName, mChangeNumber, mChangeEmail;
 
     // ~~ Animations
-    private BikeRideAnimations mAnimate = new BikeRideAnimations(200);
+    private BRAnimations mAnimate = new BRAnimations(200);
 
     // ---> Customized setContentView with navigation drawer and toolbar
-    BikeRideContentViewBuilder mContentViewBuilder;
+    BRContentViewBuilder mContentViewBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        mContentViewBuilder = new BikeRideContentViewBuilder(this,
+        mContentViewBuilder = new BRContentViewBuilder(this,
                 R.layout.activity_profile);
 
-        BikeRideAbstractions abst = new BikeRideAbstractions(this);
+        BRAbstractions abst = new BRAbstractions(this);
 
         // ~~ Main Profile
         abst.connectVariableToViewIdAndOnClickMethod(

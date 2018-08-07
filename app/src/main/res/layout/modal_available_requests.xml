@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:background="@color/transparentBlack70"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/packageInfoTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="New requests available!"
+        android:textColor="@color/colorTextIcons"
+        android:textSize="20dp" />
+
+
+    <View
+        android:id="@+id/packageInfoTitleDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/packageInfoTitle"
+        android:layout_marginBottom="16dp"
+        android:background="@color/colorDivider" />
+
+    <RelativeLayout
+        android:id="@+id/packageTypeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/packageInfoTitleDivider"
+        android:background="@color/transparentWhite05"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/pickupAddressTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="REQUESTS"
+            android:textStyle="bold"
+            android:padding="4dp"
+            android:textColor="@color/colorTextIcons"
+            android:layout_marginBottom="8dp"/>
+
+        <ListView
+            android:id="@+id/newRequestsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pickupAddressTitle"></ListView>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

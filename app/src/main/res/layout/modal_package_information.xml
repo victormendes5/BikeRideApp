@@ -388,6 +388,19 @@
         android:layout_centerHorizontal="true"
         android:text="@string/modal_package_information_enter_address_button"
         android:background="@color/colorAccent"
+        android:visibility="gone"
         android:textColor="@color/colorTextIcons"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="PLEASE FILL NAMES AND ADDRESSES"
+        android:layout_below="@id/packageSizeContainer"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/colorTextIcons"
+        android:background="@color/colorPrimaryText"
+
+        />
 
 </RelativeLayout>

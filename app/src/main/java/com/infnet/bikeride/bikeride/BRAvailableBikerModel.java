@@ -6,7 +6,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 // https://firebase.google.com/docs/database/android/read-and-write
 
 @IgnoreExtraProperties
-public class BikeRideAvailableBikerModel {
+public class BRAvailableBikerModel {
 
     public String bikerName = "";
     public String bikerId = "";
@@ -15,16 +15,16 @@ public class BikeRideAvailableBikerModel {
     public String createTime = "";
     public String lastUpdatedOn = "";
 
-    public BikeRideAvailableBikerModel() {
+    public BRAvailableBikerModel() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public BikeRideAvailableBikerModel(String bikerName,
-                                       String bikerId,
-                                       Double bikerPositionLatitude,
-                                       Double bikerPositionLongitude,
-                                       String createTime,
-                                       String lastUpdatedOn) {
+    public BRAvailableBikerModel(String bikerName,
+                                 String bikerId,
+                                 Double bikerPositionLatitude,
+                                 Double bikerPositionLongitude,
+                                 String createTime,
+                                 String lastUpdatedOn) {
 
         this.bikerName = bikerName;
         this.bikerId = bikerId;
