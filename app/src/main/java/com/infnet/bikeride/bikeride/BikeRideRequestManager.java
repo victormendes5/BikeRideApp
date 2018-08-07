@@ -207,14 +207,14 @@ public class BikeRideRequestManager {
 
                     new FirebaseAccess.OnComplete<ArrayList<BikeRideAvailableBikerModel>>() {
                         @Override
-                        public Users onSuccess(ArrayList<BikeRideAvailableBikerModel> data) {
+                        public void onSuccess(ArrayList<BikeRideAvailableBikerModel> data) {
 
                             if (data.size() == 0) {
                                 Log.d(TAG, "getEstimates: data successfully retrieved from " +
                                         "Available Bikers node, but none is available at this " +
                                         "moment.");
                                 callback.noBikersAvailable();
-                                return null;
+                                return;
                             }
 
                             Log.d(TAG, "getEstimates: data successfully retrieved from " +
@@ -240,7 +240,7 @@ public class BikeRideRequestManager {
                                 Log.d(TAG, "getEstimates: could not determine closest biker's"
                                         + " street address. Aborting getting estimates.");
                                 callback.onError();
-                                return null;
+                                return;
                             }
 
                             Log.d(TAG, "getEstimates: closest biker street address found - "
@@ -309,7 +309,7 @@ public class BikeRideRequestManager {
                                         return;
                                     }
                                 });
-                            return null;
+                            return;
                         }
 
                         @Override
@@ -594,7 +594,7 @@ public class BikeRideRequestManager {
             BikeRideRequestModel.class,
             new FirebaseAccess.OnComplete<BikeRideRequestModel>() {
                 @Override
-                public Users onSuccess(BikeRideRequestModel data) {
+                public void onSuccess(BikeRideRequestModel data) {
                     Log.d(TAG, "transferRequestObject: successfully acquired request object "
                             + "from Requests child.");
 
@@ -639,7 +639,7 @@ public class BikeRideRequestManager {
                                 startDeliveryCallback.onError();
                             }
                         }, DELIVERIES_CHILD, getUid());
-                    return null;
+                    return;
                 }
 
                 @Override

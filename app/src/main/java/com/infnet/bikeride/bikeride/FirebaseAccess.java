@@ -25,7 +25,7 @@ public class FirebaseAccess {
     }
 
     public interface OnComplete<T> {
-        Users onSuccess(T data);
+        void onSuccess(T data);
         void onFailure(T data);
     }
 

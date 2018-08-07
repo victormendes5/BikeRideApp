@@ -48,10 +48,10 @@ public class UserManager {
                 new FirebaseAccess.OnComplete<Users>() {
                     //Faz o Retorno do usuário logado
                     @Override
-                    public Users onSuccess(Users data) {
+                    public void onSuccess(Users data) {
                         Users currentProfile = data;
                         callback.onUserComplete(data);
-                        return currentProfile;
+//                        return currentProfile;
                     }
 
                     @Override
