@@ -309,6 +309,7 @@ public class BikeRideRequestManager {
                                         return;
                                     }
                                 });
+                            return;
                         }
 
                         @Override
@@ -638,6 +639,7 @@ public class BikeRideRequestManager {
                                 startDeliveryCallback.onError();
                             }
                         }, DELIVERIES_CHILD, getUid());
+                    return;
                 }
 
                 @Override

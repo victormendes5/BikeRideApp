@@ -3,22 +3,26 @@
 
     <item
         android:id="@+id/deliveryman_review"
-        android:title="Entregador review"/>
+        android:title="Deliveryman review"/>
 
     <item
         android:id="@+id/delivery_tracking"
-        android:title="Entregador tracking"/>
+        android:title="Delivery tracking"/>
 
     <item
         android:id="@+id/delivery_main"
-        android:title="Pedido"/>
+        android:title="Requests"/>
 
     <item
         android:id="@+id/delivery_quotation"
-        android:title="Cotação"/>
+        android:title="Cotation"/>
+
+    <item
+        android:id="@+id/profile"
+        android:title="Profile"/>
     <item
         android:id="@+id/payment_methods"
-        android:title="Métodos de pagamento"/>
+        android:title="Payment Methods"/>
 
     <item
         android:id="@+id/logout_app"

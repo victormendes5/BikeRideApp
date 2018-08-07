@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:background="@color/transparentBlack70"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/changeEmailTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="Change E-mail"
+        android:textColor="@color/colorTextIcons"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/changesCloseModalEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_cancel_black_24dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="3dp"/>
+
+    <View
+        android:id="@+id/changeEmailTitleDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/changeEmailTitle"
+        android:layout_marginBottom="16dp"
+        android:background="@color/colorDivider" />
+
+    <RelativeLayout
+        android:id="@+id/changeEmailContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/changeEmailTitleDivider"
+        android:background="@color/transparentWhite05"
+        android:padding="8dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/profileEmailTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/profile_txtView_userEmail"
+            android:textStyle="bold"
+            android:padding="4dp"
+            android:textColor="@color/colorTextIcons"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/profileEmailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/modalChangeName_edtText_changeEmailHint"
+            android:layout_below="@id/profileEmailTitle"
+            android:background="@color/transparentWhite10"
+            android:gravity="center"
+            android:inputType="textEmailAddress"
+            android:focusedByDefault="true"
+            android:textColor="@color/colorDivider"
+            android:textColorHint="@color/colorDivider"
+            android:textSize="16sp"
+            android:padding="14dp"
+            android:layout_marginBottom="8dp"/>
+
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/changeEmailBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/changeEmailContainer"
+        android:layout_centerHorizontal="true"
+        android:text="@string/modalChangeName_button_changeName"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorTextIcons"/>
+</RelativeLayout>

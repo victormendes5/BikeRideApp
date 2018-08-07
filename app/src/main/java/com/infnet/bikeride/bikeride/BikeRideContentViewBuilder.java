@@ -95,6 +95,9 @@ public class BikeRideContentViewBuilder {
                     case R.id.delivery_quotation:
                         navigate(DeliveryQuotationPriceActivity.class);
                         break;
+                    case R.id.profile:
+                        navigate(ProfileActivity.class);
+                        break;
                     case R.id.logout_app:
                         autentication = ConfigurationFirebase.getFirebaseAuth();
                         Logout();

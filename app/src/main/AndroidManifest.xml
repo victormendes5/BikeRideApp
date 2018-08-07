@@ -25,11 +25,13 @@
             <!--android:value="AIzaSyD3w91P6nWokP4GvyKkkGpnlJ&#45;&#45;EmcgOHA" />-->
 
         <activity android:name=".MainActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <!--<activity android:name=".DeliveryMainActivity"></activity>-->
         <!--<activity android:name=".DeliveryTrackingActivity" />-->
@@ -62,7 +64,7 @@
         <activity android:name=".DeliveryTrackingActivity" />
         <activity android:name=".DeliverymanReviewActivity" />
         <activity android:name=".DeliveryQuotationPriceActivity" />
-        <activity android:name=".AddCreditCardActivity"></activity>
+        <activity android:name=".ProfileActivity"></activity>
     </application>
 
 </manifest>
