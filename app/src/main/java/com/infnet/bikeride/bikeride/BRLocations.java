@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Locale;
 
-public class BikeRideLocations {
+public class BRLocations {
 
     /*
 
@@ -35,12 +35,12 @@ public class BikeRideLocations {
 
         <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    2 - Declare the BikeRideLocations object on Activity scope
-        (IE: private BikeRideLocations mUserLocation;)
+    2 - Declare the BRLocations object on Activity scope
+        (IE: private BRLocations mUserLocation;)
 
-    3 - Instantiate the BikeRideLocations object on activity's onCreate method passing activity
+    3 - Instantiate the BRLocations object on activity's onCreate method passing activity
         and onLocationChange method name.
-        (IE: mUserLocation = new BikeRideLocations(this, "onLocationChanged");)
+        (IE: mUserLocation = new BRLocations(this, "onLocationChanged");)
 
     4 - Override this method on your referred activity like this
 
@@ -65,7 +65,7 @@ public class BikeRideLocations {
     private Double userAltitude;
     private float userAccuracy;
 
-    public BikeRideLocations (AppCompatActivity activity, final String onLocationChangedMethodName) {
+    public BRLocations(AppCompatActivity activity, final String onLocationChangedMethodName) {
 
         referencedActivity = activity;
 

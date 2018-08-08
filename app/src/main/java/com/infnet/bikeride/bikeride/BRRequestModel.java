@@ -6,7 +6,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 // https://firebase.google.com/docs/database/android/read-and-write
 
 @IgnoreExtraProperties
-public class BikeRideRequestModel {
+public class BRRequestModel {
 
     public String userName = "";
     public String userId = "";
@@ -42,32 +42,50 @@ public class BikeRideRequestModel {
     public String createTime = "";
     public String updateTime = "";
 
-    public BikeRideRequestModel() {
+    public BRRequestModel() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public BikeRideRequestModel(String userName,
-                                String userId,
-                                String bikerName,
-                                String bikerId,
-                                double bikerPositionLatitude,
-                                double bikerPositionLongitude,
-                                String pickupAddress,
-                                double pickupAddressLatitude,
-                                double pickupAddressLong,
-                                String deliveryAddress,
-                                double deliveryddressLatitude,
-                                double deliveryAddressLong,
-                                String createTime) {
+    public BRRequestModel(String userName,
+                          String userId,
+                          String bikerName,
+                          String bikerId,
+                          double bikerPositionLatitude,
+                          double bikerPositionLongitude,
+                          String estimatesPickupDistance,
+                          String estimatesPickupDuration,
+                          String estimatesDeliveryDistance,
+                          String estimatesDeliveryDuration,
+                          String estimatesFee,
+                          String packageType,
+                          String packageSize,
+                          String sendersName,
+                          String pickupAddress,
+                          double pickupAddressLatitude,
+                          double pickupAddressLong,
+                          String receiversName,
+                          String deliveryAddress,
+                          double deliveryddressLatitude,
+                          double deliveryAddressLong,
+                          String createTime) {
         this.userName = userName;
         this.userId = userId;
         this.bikerName = bikerName;
         this.bikerId = bikerId;
         this.bikerPositionLatitude = bikerPositionLatitude;
         this.bikerPositionLongitude = bikerPositionLongitude;
+        this.estimatesPickupDistance = estimatesPickupDistance;
+        this.estimatesPickupDuration = estimatesPickupDuration;
+        this.estimatesDeliveryDistance = estimatesDeliveryDistance;
+        this.estimatesDeliveryDuration = estimatesDeliveryDuration;
+        this.estimatesFee = estimatesFee;
+        this.packageType = packageType;
+        this.packageSize = packageSize;
+        this.sendersName = sendersName;
         this.pickupAddress = pickupAddress;
         this.pickupAddressLatitude = pickupAddressLatitude;
         this.pickupAddressLongitude = pickupAddressLong;
+        this.receiversName = receiversName;
         this.deliveryAddress = deliveryAddress;
         this.deliveryAddressLatitude = deliveryddressLatitude;
         this.deliveryAddressLongitude = deliveryAddressLong;
@@ -81,7 +99,7 @@ public class BikeRideRequestModel {
                 "REQUEST OBJECT CONTENT" + "\n" +
                 "^^^^^^^^^^^^^^^^^^^^^^" + "\n" +
                 "userName                   = " + userName + "\n" +
-                "userId                     = " + userId + "\n" +
+                "requesterId                     = " + userId + "\n" +
                 "estimatesPickupDistance    = " + estimatesPickupDistance + "\n" +
                 "estimatesPickupDuration    = " + estimatesPickupDuration + "\n" +
                 "estimatesDeliveryDistance  = " + estimatesDeliveryDistance + "\n" +

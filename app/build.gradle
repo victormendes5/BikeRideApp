@@ -42,7 +42,6 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-database:16.0.1'
 
-
     // Google play services
 //    implementation 'com.google.android.gms:play-services:11.4.0'
 
