@@ -28,7 +28,7 @@ android:orientation="vertical">
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:layout_width="0dp"
-        android:hint="@string/signUp_editText_email"
+        android:hint="@string/signUp_editText_hint_email"
         android:background="@color/lightGray1"
         android:padding="12dp"
         android:layout_margin="6dp"/>
@@ -43,6 +43,29 @@ android:orientation="vertical">
         android:padding="12dp"
         android:background="@color/lightGray1"
         android:layout_margin="6dp"/>
+
+    <EditText
+        android:id="@+id/edtFirstNameSignUp"
+        android:inputType="text"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:hint="@string/signUp_editText_hint_firstName"
+        android:padding="12dp"
+        android:background="@color/lightGray1"
+        android:layout_margin="6dp"/>
+
+    <EditText
+        android:id="@+id/edtLastNameSignUp"
+        android:inputType="text"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:hint="@string/signUp_editText_hint_lastName"
+        android:padding="12dp"
+        android:background="@color/lightGray1"
+        android:layout_margin="6dp"/>
+
 
 </LinearLayout>
 

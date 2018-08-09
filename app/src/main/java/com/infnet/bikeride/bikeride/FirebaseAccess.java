@@ -13,16 +13,40 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FirebaseAccess {
 
+                /*---------------------------------------------------------------\
+                                               FIELDS
+                \---------------------------------------------------------------*/
+
+    //region FIELDS
+
     private static final String TAG = "FirebaseAccess";
+
+    // ---> Map for active listeners
+    HashMap<Integer, Map.Entry<DatabaseReference, ValueEventListener>> mValueListenersHashMap
+            = new HashMap<>();
+
+    // ---> Main database reference
     private DatabaseReference mDatabase;
 
     public FirebaseAccess() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
+
+    //endregion
+
+
+                /*---------------------------------------------------------------\
+                                            INTERFACES
+                \---------------------------------------------------------------*/
+
+    //region INTERFACES
 
     public interface OnComplete<T> {
         void onSuccess(T data);
@@ -43,6 +67,14 @@ public class FirebaseAccess {
         void onError(T data);
         boolean removeListenerCondition(DataSnapshot data);
     }
+
+    //endregion
+
+                /*---------------------------------------------------------------\
+                                              METHODS
+                \---------------------------------------------------------------*/
+
+    //region METHODS
 
     public <T> void getAll(
             final Class<T> typeToBeReturnedOnArrayList,
@@ -77,6 +109,12 @@ public class FirebaseAccess {
         databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+
+                // ---> If snapshot returns null, nothing was found at given path
+                if (snapshot == null) {
+                    Log.d(TAG, "getAll: no data found at given path.");
+                    return;
+                }
 
                 // ---> Iterate on path of specified child and add to ArrayList
                 for (@NonNull DataSnapshot child : snapshot.getChildren()) {
@@ -137,12 +175,18 @@ public class FirebaseAccess {
         firebasePath = firebasePath.substring(0, firebasePath.length() - 3);
 
         // ---> Inform developer of method start and acquired path
-        Log.d(TAG, "getByPath: getting object from path - " + firebasePath);
+        Log.d(TAG, "getObjectOrProperty: getting object from path - " + firebasePath);
 
         // ---> Execute Firebase method for fetching object one time from specified path
         databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+
+                // ---> If snapshot is null, no data was found at given path
+                if (snapshot == null) {
+                    Log.d(TAG, "getObjectOrProperty: no data found at given path.");
+                    onCompleteCallback.onFailure(null);
+                }
 
                 // ---> Initialize object to be returned
                 T element;
@@ -151,20 +195,20 @@ public class FirebaseAccess {
                     element = snapshot.getValue(typeToBeReturned);
 
                 } catch (Exception e) {
-                    Log.d(TAG, "getByPath: object found cannot be converted to the specified "
-                            + "type.");
+                    Log.d(TAG, "getObjectOrProperty: object found cannot be converted to " +
+                            "the specified type.");
                     onCompleteCallback.onFailure(null);
                     return;
                 }
 
-                Log.d(TAG, "getByPath: found object - " + element.toString());
+                Log.d(TAG, "getObjectOrProperty: found object - " + element.toString());
 
                 onCompleteCallback.onSuccess(element);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.w(TAG, "getByPath: error accessing Firebase or retrieving data - ",
+                Log.w(TAG, "getObjectOrProperty: error accessing Firebase or retrieving data - ",
                         databaseError.toException());
                 onCompleteCallback.onFailure(null);
             }
@@ -377,52 +421,65 @@ public class FirebaseAccess {
         // ---> Set base reference for listener
         final DatabaseReference baseReference = database;
 
+
         // ---> Set listener on base reference
         final ValueEventListener listener = baseReference
                 .addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (onChangesCallback.removeListenerCondition(dataSnapshot)) {
-                    Log.d(TAG, "setListenerToObjectOrProperty: onDataChange: " +
-                            "removeListenerCondition has been met. Removing listener on path "
-                            + firebasePath);
+                        if (onChangesCallback.removeListenerCondition(dataSnapshot)) {
+                            Log.d(TAG, "setListenerToObjectOrProperty: onDataChange: " +
+                                    "removeListenerCondition has been met. Removing listener on path "
+                                    + firebasePath);
 
-                    baseReference.removeEventListener(this);
-                    return;
-                }
+                            baseReference.removeEventListener(this);
+                            return;
+                        }
 
-                // ---> Iterate on path of specified child and add to ArrayList
-                for (@NonNull DataSnapshot child : dataSnapshot.getChildren()) {
+                        arrayList.clear();
 
-                    T element;
+                        // ---> Iterate on path of specified child and add to ArrayList
+                        for (@NonNull DataSnapshot child : dataSnapshot.getChildren()) {
 
-                    try {
-                        element = child.getValue(typeToBeReturnedOnArrayList);
+                            T element;
 
-                    } catch (Exception e) {
-                        Log.d(TAG, "setListenerToChild: an object that can't be converted to "
-                                + "the provided type has been detected and ignored.");
-                        continue;
+                            try {
+                                element = child.getValue(typeToBeReturnedOnArrayList);
+
+                            } catch (Exception e) {
+                                Log.d(TAG, "setListenerToChild: an object that can't be converted to "
+                                        + "the provided type has been detected and ignored.");
+                                continue;
+                            }
+
+                            Log.d(TAG, "setListenerToChild: found object - " + child.toString());
+
+                            arrayList.add(element);
+                        }
+
+                        onChangesCallback.onChange(arrayList);
                     }
 
-                    Log.d(TAG, "setListenerToChild: found object - " + child.toString());
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.w(TAG, "setListenerToChild: loadPost: onCancelled - error accessing "
+                                + "Firebase or retrieving data - ", databaseError.toException());
 
-                    arrayList.add(element);
-                }
+                        onChangesCallback.onError(null);
 
-                onChangesCallback.onChange(arrayList);
-            }
+                    }
+                });
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.w(TAG, "setListenerToChild: loadPost: onCancelled - error accessing "
-                        + "Firebase or retrieving data - ", databaseError.toException());
+        Log.d(TAG, "setListenerToChild: adding listener to ListenersHashMap on index " +
+                mValueListenersHashMap.size() + ". DatabaseReference '" + baseReference.toString()
+                + "'.");
 
-                onChangesCallback.onError(null);
+        mValueListenersHashMap.put(new Integer(mValueListenersHashMap.size()),
+                new AbstractMap.SimpleEntry<DatabaseReference, ValueEventListener>(
+                        baseReference, listener
+                ));
 
-            }
-        });
     }
 
     public <T> void setListenerToObjectOrProperty (
@@ -456,58 +513,121 @@ public class FirebaseAccess {
         // ---> Set listener on base reference
         final ValueEventListener listener = baseReference
                 .addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (onChangesCallback.removeListenerCondition(dataSnapshot)) {
-                    Log.d(TAG, "setListenerToObjectOrProperty: onDataChange: " +
-                            "removeListenerCondition has been met. Removing listener on path "
-                            + firebasePath);
+                        if (onChangesCallback.removeListenerCondition(dataSnapshot)) {
+                            Log.d(TAG, "setListenerToObjectOrProperty: onDataChange: " +
+                                    "removeListenerCondition has been met. Removing listener on path "
+                                    + firebasePath);
 
-                    baseReference.removeEventListener(this);
-                    return;
-                }
+                            baseReference.removeEventListener(this);
+                            return;
+                        }
 
-                T element;
+                        T element;
 
-                try {
-                    element = dataSnapshot.getValue(typeToBeReturned);
+                        try {
+                            element = dataSnapshot.getValue(typeToBeReturned);
 
-                } catch (Exception e) {
-                    Log.d(TAG, "setListenerToObjectOrProperty: onDataChange: object or " +
-                            "property at path can't be converted to given type.");
+                        } catch (Exception e) {
+                            Log.d(TAG, "setListenerToObjectOrProperty: onDataChange: object or " +
+                                    "property at path can't be converted to given type.");
 
-                    onChangesCallback.onError(null);
-                    return;
-                }
+                            onChangesCallback.onError(null);
+                            return;
+                        }
 
-                if (element == null) {
-                    Log.d(TAG, "setListenerToObjectOrProperty: onDataChange: no object " +
-                            "or property has been found at provided path.");
+                        if (element == null) {
+                            Log.d(TAG, "setListenerToObjectOrProperty: onDataChange: no object " +
+                                    "or property has been found at provided path.");
 
-                    onChangesCallback.onError(null);
-                    return;
-                }
+                            onChangesCallback.onError(null);
+                            return;
+                        }
 
-                Log.d(TAG, "setListenerToObjectOrProperty: found object or property - "
-                        + element.toString());
+                        Log.d(TAG, "setListenerToObjectOrProperty: found object or property - "
+                                + element.toString());
 
-                 onChangesCallback.onChange(element);
-            }
+                        onChangesCallback.onChange(element);
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.w(TAG, "setListenerToObjectOrProperty: loadPost: onCancelled - error " +
-                        "accessing Firebase or retrieving data - ", databaseError.toException());
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.w(TAG, "setListenerToObjectOrProperty: loadPost: onCancelled - error " +
+                                "accessing Firebase or retrieving data - ", databaseError.toException());
 
-                onChangesCallback.onError(null);
-            }
-        });
+                        onChangesCallback.onError(null);
+                    }
+                });
+
+        Log.d(TAG, "setListenerToChild: adding listener to ListenersHashMap on index " +
+                mValueListenersHashMap.size() + ". DatabaseReference '" + baseReference.toString()
+                + "'.");
+
+        mValueListenersHashMap.put(new Integer(mValueListenersHashMap.size()),
+                new AbstractMap.SimpleEntry<DatabaseReference, ValueEventListener>(
+                        baseReference, listener
+                ));
     }
 
+    public void removeAllValueEventListeners() {
 
+        if (mValueListenersHashMap.size() == 0) {
+            Log.d(TAG, "removeAllValueEventListeners: no active listeners detected.");
+            return;
+        }
 
+        for (Map.Entry<Integer, Map.Entry<DatabaseReference, ValueEventListener>> entry :
+                mValueListenersHashMap.entrySet()) {
 
+            Map.Entry<DatabaseReference, ValueEventListener> listenerData = entry.getValue();
 
+            DatabaseReference databaseReference = listenerData.getKey();
+            ValueEventListener valueEventListener = listenerData.getValue();
+
+            databaseReference.removeEventListener(valueEventListener);
+
+            Log.d(TAG, "removeLastValueEventListeners: removing value event listener " +
+                    "indexed " + entry.getKey() + " from node '" + databaseReference.toString()
+                    + "'.");
+
+        }
+
+        mValueListenersHashMap.clear();
+    }
+
+    public void removeLastValueEventListener() {
+
+        if (mValueListenersHashMap.size() == 0) {
+            Log.d(TAG, "removeLastValueEventListeners: no active listeners detected.");
+            return;
+        }
+
+        Integer hashMapLength = new Integer(mValueListenersHashMap.size());
+
+        for (Map.Entry<Integer, Map.Entry<DatabaseReference, ValueEventListener>> entry :
+                mValueListenersHashMap.entrySet()) {
+
+            if (entry.getKey() != hashMapLength-1) continue;
+
+            Map.Entry<DatabaseReference, ValueEventListener> listenerData = entry.getValue();
+
+            DatabaseReference databaseReference = listenerData.getKey();
+            ValueEventListener valueEventListener = listenerData.getValue();
+
+            databaseReference.removeEventListener(valueEventListener);
+
+            mValueListenersHashMap.remove(hashMapLength-1);
+
+            Log.d(TAG, "removeLastValueEventListeners: removing value event listener " +
+                    "indexed " + entry.getKey() + " from node '" + databaseReference.toString()
+                    + "'. " + mValueListenersHashMap.size() + " left active.");
+
+            return;
+        }
+    }
+
+    //endregion
 
 }

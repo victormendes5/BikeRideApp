@@ -7,8 +7,18 @@ public class Users {
     private String name;
     private String lastName;
     private String password;
+    private Boolean isBiker;
+    private String urlPhoto;
 
     public Users() {
+    }
+
+    public String getUrlPhoto() {
+        return urlPhoto;
+    }
+
+    public void setUrlPhoto(String urlPhoto) {
+        this.urlPhoto = urlPhoto;
     }
 
     public String getId() {
@@ -49,5 +59,13 @@ public class Users {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean getBiker() {
+        return isBiker;
+    }
+
+    public void setBiker(Boolean biker) {
+        isBiker = biker;
     }
 }

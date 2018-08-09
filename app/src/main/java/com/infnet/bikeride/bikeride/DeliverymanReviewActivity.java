@@ -6,14 +6,14 @@ import android.os.Bundle;
 public class DeliverymanReviewActivity extends AppCompatActivity {
 
     // ---> Customized setContentView with navigation drawer and toolbar
-    BikeRideContentViewBuilder mContentViewBuilder;
+    BRContentViewBuilder mContentViewBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_review_deliveryman);
 
-        mContentViewBuilder = new BikeRideContentViewBuilder(this,
+        mContentViewBuilder = new BRContentViewBuilder(this,
                 R.layout.activity_review_deliveryman);
     }
 

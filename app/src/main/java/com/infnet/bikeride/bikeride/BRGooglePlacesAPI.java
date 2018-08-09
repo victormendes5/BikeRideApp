@@ -14,7 +14,7 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-public class BikeRideGooglePlacesAPI {
+public class BRGooglePlacesAPI {
 
         /*
 
@@ -102,7 +102,7 @@ public class BikeRideGooglePlacesAPI {
             new LatLng(4.438078, -32.812675));
 
 
-    public BikeRideGooglePlacesAPI(AppCompatActivity activity) {
+    public BRGooglePlacesAPI(AppCompatActivity activity) {
 
         mRefferedActivity = activity;
     }

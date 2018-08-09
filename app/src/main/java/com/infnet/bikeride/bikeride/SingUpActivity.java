@@ -28,10 +28,16 @@ public class SingUpActivity extends AppCompatActivity  {
 
     private EditText edtEmail;
     private EditText edtPassWord;
+    private EditText edtFirstName;
+    private EditText edtLastName;
     private Button btnSignUp;
 
     private FirebaseAuth autentication;
     private Users users;
+
+
+    private UserManager mUserManager = new UserManager();
+    private Users mUsersNew =  new Users();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,8 @@ public class SingUpActivity extends AppCompatActivity  {
 
         edtEmail = (EditText) findViewById(R.id.edtEmailSignUp);
         edtPassWord = (EditText) findViewById(R.id.edtPasswordSignUp);
+        edtFirstName = (EditText) findViewById(R.id.edtFirstNameSignUp);
+        edtLastName = (EditText) findViewById(R.id.edtLastNameSignUp);
         btnSignUp = (Button) findViewById(R.id.btnSignUpCad);
 
         btnSignUp.setOnClickListener(SignUp);
@@ -53,11 +61,14 @@ public class SingUpActivity extends AppCompatActivity  {
         @Override
         public void onClick(View v) {
             //Se os Campos de login tiverem Nulos
-            if (!edtEmail.getText().toString().equals("") && !edtPassWord.getText().toString().equals("")){
+            if (!edtEmail.getText().toString().equals("") && !edtPassWord.getText().toString().equals("")
+                    && !edtFirstName.getText().toString().equals("") && !edtLastName.getText().toString().equals("")){
 
                 users = new Users();
                 users.setEmail(edtEmail.getText().toString());
                 users.setPassword(edtPassWord.getText().toString());
+                users.setName(edtFirstName.getText().toString());
+                users.setLastName(edtLastName.getText().toString());
 
                 ValidarSignUp();
 
@@ -81,6 +92,15 @@ public class SingUpActivity extends AppCompatActivity  {
 
                     Toast.makeText(SingUpActivity.this,"Sucesso ao Cadastrar",Toast.LENGTH_SHORT).show();
 
+                    FirebaseUser user = autentication.getCurrentUser();
+
+                    mUsersNew.setId(user.getUid());
+                    mUsersNew.setEmail(user.getEmail());
+                    mUsersNew.setName(users.getName().toString());
+                    mUsersNew.setLastName(users.getLastName().toString());
+
+                    CriarUser(mUsersNew);
+
                     intent = new Intent(SingUpActivity.this, DeliveryMainActivity.class);
                     startActivity(intent);
 
@@ -98,5 +118,10 @@ public class SingUpActivity extends AppCompatActivity  {
             super.onBackPressed();
     }
 
+    private void CriarUser(Users u){
+
+        mUserManager.adicionarOuAtualizarPerfil(u);
+
+    }
 
 }

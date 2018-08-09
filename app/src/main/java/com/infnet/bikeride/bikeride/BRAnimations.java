@@ -4,7 +4,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.view.View;
 
-public class BikeRideAnimations {
+public class BRAnimations {
 
     private int mDefaultAnimationSpeed = 200;
     private int mScreenBias = 1500;
@@ -17,9 +17,9 @@ public class BikeRideAnimations {
     //   |                                CONSTRUCTORS                                   |
     //   \===============================================================================/
 
-    public BikeRideAnimations () {}
+    public BRAnimations() {}
 
-    public BikeRideAnimations (int defaultspeed) {
+    public BRAnimations(int defaultspeed) {
         mDefaultAnimationSpeed = defaultspeed;
     }
 
@@ -30,91 +30,91 @@ public class BikeRideAnimations {
 
     // ---> Fade In
     public void fadeIn(View v)
-        {fade(v, 0, mDefaultAnimationSpeed, 0, 1);}
+    {fade(v, 0, mDefaultAnimationSpeed, 0, 1);}
     public void fadeIn(View v, int delay)
-        {fade(v, delay, mDefaultAnimationSpeed, 0, 1);}
+    {fade(v, delay, mDefaultAnimationSpeed, 0, 1);}
     public void fadeIn(View v, int delay, int speed)
-        {fade(v, delay, speed, 0, 1);}
+    {fade(v, delay, speed, 0, 1);}
 
     // --- Fade Out
     public void fadeOut(View v)
-        {fade(v, 0, mDefaultAnimationSpeed, 1, 0);}
+    {fade(v, 0, mDefaultAnimationSpeed, 1, 0);}
     public void fadeOut(View v, int delay)
-        {fade(v, delay, mDefaultAnimationSpeed, 1, 0);}
+    {fade(v, delay, mDefaultAnimationSpeed, 1, 0);}
     public void fadeOut(View v, int delay, int speed)
-        {fade(v, delay, speed, 1, 0);}
+    {fade(v, delay, speed, 1, 0);}
 
     // ---> Fade Custom
     public void fadeCustom(View v, int startOpacity, int endOpacity)
-        {fade(v, 0, mDefaultAnimationSpeed, startOpacity, endOpacity);}
+    {fade(v, 0, mDefaultAnimationSpeed, startOpacity, endOpacity);}
     public void fadeCustom(View v, int delay, int startOpacity, int endOpacity)
-        {fade(v, delay, mDefaultAnimationSpeed, startOpacity, endOpacity);}
+    {fade(v, delay, mDefaultAnimationSpeed, startOpacity, endOpacity);}
     public void fadeCustom(View v, int delay, int speed, int startOpacity, int endOpacity)
-        {fade(v, delay, speed, startOpacity, endOpacity);}
+    {fade(v, delay, speed, startOpacity, endOpacity);}
 
     // ---> Translate from Bottom
     public void translateFromBottom (View v)
-        { translateInVertically(v, 0, mDefaultAnimationSpeed, mScreenBias); }
+    { translateInVertically(v, 0, mDefaultAnimationSpeed, mScreenBias); }
     public void translateFromBottom (View v, int delay)
-        { translateInVertically(v, delay, mDefaultAnimationSpeed, mScreenBias); }
+    { translateInVertically(v, delay, mDefaultAnimationSpeed, mScreenBias); }
     public void translateFromBottom (View v, int delay, int speed)
-        { translateInVertically(v, delay, speed, mScreenBias); }
+    { translateInVertically(v, delay, speed, mScreenBias); }
 
     // ---> Translate from Top
     public void translateFromTop (View v)
-        { translateInVertically(v, 0, mDefaultAnimationSpeed,-1* mScreenBias); }
+    { translateInVertically(v, 0, mDefaultAnimationSpeed,-1* mScreenBias); }
     public void translateFromTop (View v, int delay)
-        { translateInVertically(v, delay, mDefaultAnimationSpeed,-1* mScreenBias); }
+    { translateInVertically(v, delay, mDefaultAnimationSpeed,-1* mScreenBias); }
     public void translateFromTop (View v, int delay, int speed)
-        { translateInVertically(v, delay, speed,-1* mScreenBias); }
+    { translateInVertically(v, delay, speed,-1* mScreenBias); }
 
     // ---> Translate to Bottom
     public void translateToBottom (View v)
-        { translateOutVertically(v, 0, mDefaultAnimationSpeed, mScreenBias); }
+    { translateOutVertically(v, 0, mDefaultAnimationSpeed, mScreenBias); }
     public void translateToBottom (View v, int delay)
-        { translateOutVertically(v, delay, mDefaultAnimationSpeed, mScreenBias); }
+    { translateOutVertically(v, delay, mDefaultAnimationSpeed, mScreenBias); }
     public void translateToBottom (View v, int delay, int speed)
-        { translateOutVertically(v, delay, speed, mScreenBias); }
+    { translateOutVertically(v, delay, speed, mScreenBias); }
 
     // ---> Translate to Top
     public void translateToTop (View v)
-        { translateOutVertically(v, 0, mDefaultAnimationSpeed, mScreenBias); }
+    { translateOutVertically(v, 0, mDefaultAnimationSpeed, mScreenBias); }
     public void translateToTop (View v, int delay)
-        { translateOutVertically(v, delay, mDefaultAnimationSpeed, mScreenBias); }
+    { translateOutVertically(v, delay, mDefaultAnimationSpeed, mScreenBias); }
     public void translateToTop (View v, int delay, int speed)
-        { translateOutVertically(v, delay, speed, mScreenBias); }
+    { translateOutVertically(v, delay, speed, mScreenBias); }
 
     // ---> Translate from Right
     public void translateFromRight (View v)
-        { translateInHorizontally(v, 0, mDefaultAnimationSpeed, mScreenBias); }
+    { translateInHorizontally(v, 0, mDefaultAnimationSpeed, mScreenBias); }
     public void translateFromRight (View v, int delay)
-        { translateInHorizontally(v, delay, mDefaultAnimationSpeed, mScreenBias); }
+    { translateInHorizontally(v, delay, mDefaultAnimationSpeed, mScreenBias); }
     public void translateFromRight (View v, int delay, int speed)
-        { translateInHorizontally(v, delay, speed, mScreenBias); }
+    { translateInHorizontally(v, delay, speed, mScreenBias); }
 
     // ---> Translate from Left
     public void translateFromLeft (View v)
-        { translateInHorizontally(v, 0, mDefaultAnimationSpeed,-1* mScreenBias); }
+    { translateInHorizontally(v, 0, mDefaultAnimationSpeed,-1* mScreenBias); }
     public void translateFromLeft (View v, int delay)
-        { translateInHorizontally(v, delay, mDefaultAnimationSpeed,-1* mScreenBias); }
+    { translateInHorizontally(v, delay, mDefaultAnimationSpeed,-1* mScreenBias); }
     public void translateFromLeft (View v, int delay, int speed)
-        { translateInHorizontally(v, delay, speed,-1* mScreenBias); }
+    { translateInHorizontally(v, delay, speed,-1* mScreenBias); }
 
     // ---> Translate to Left
     public void translateToLeft (final View v)
-        { translateOutHorizontally(v, 0, mDefaultAnimationSpeed, -1* mScreenBias); }
+    { translateOutHorizontally(v, 0, mDefaultAnimationSpeed, -1* mScreenBias); }
     public void translateToLeft (final View v, int delay)
-        { translateOutHorizontally(v, delay, mDefaultAnimationSpeed,-1* mScreenBias); }
+    { translateOutHorizontally(v, delay, mDefaultAnimationSpeed,-1* mScreenBias); }
     public void translateToLeft (final View v, int delay, int speed)
-        { translateOutHorizontally(v, delay, speed,-1* mScreenBias); }
+    { translateOutHorizontally(v, delay, speed,-1* mScreenBias); }
 
     // ---> Translate to Right
     public void translateToRight (final View v)
-        { translateOutHorizontally(v, 0, mDefaultAnimationSpeed, mScreenBias); }
+    { translateOutHorizontally(v, 0, mDefaultAnimationSpeed, mScreenBias); }
     public void translateToRight (final View v, int delay)
-        { translateOutHorizontally(v, delay, mDefaultAnimationSpeed, mScreenBias); }
+    { translateOutHorizontally(v, delay, mDefaultAnimationSpeed, mScreenBias); }
     public void translateToRight (final View v, int delay, int speed)
-        { translateOutHorizontally(v, delay, speed, mScreenBias); }
+    { translateOutHorizontally(v, delay, speed, mScreenBias); }
 
 
     //   /========================================================================================\
@@ -316,7 +316,31 @@ public class BikeRideAnimations {
                 translateToBottom(v);
             }
         }
-    };
+    }
+
+    public void translateFromBottomIfInvisible (View ... views) {
+        for (View v : views) {
+            if (v.getVisibility() == View.INVISIBLE || v.getVisibility() == View.GONE) {
+                translateFromBottom(v);
+            }
+        }
+    }
+
+    public void fadeOutIfVisible (View ... views) {
+        for (View v : views) {
+            if (v.getVisibility() == View.VISIBLE) {
+                fadeOut(v);
+            }
+        }
+    }
+
+    public void fadeInIfInvisible (View ... views) {
+        for (View v : views) {
+            if (v.getVisibility() == View.GONE || v.getVisibility() == View.INVISIBLE) {
+                fadeIn(v);
+            }
+        }
+    }
 
 
     //   /===============================================================================\

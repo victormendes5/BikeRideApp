@@ -25,7 +25,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class BikeRideContentViewBuilder {
+public class BRContentViewBuilder {
 
     private static final int NAVIGATION_DRAWER_LAYOUT_FILE_ID = R.layout.main_drawer_layout;
     private static final int NAVIGATION_DRAWER_GROUPVIEW_ID = R.id.main_drawer_groupview;
@@ -39,7 +39,7 @@ public class BikeRideContentViewBuilder {
     private GoogleSignInClient apiGoogle;
 
 
-    public BikeRideContentViewBuilder(Context context, int activityLayoutId) {
+    public BRContentViewBuilder(Context context, int activityLayoutId) {
 
         mRefferedActivity = (AppCompatActivity) context;
         mActivityLayoutId = activityLayoutId;
@@ -97,6 +97,9 @@ public class BikeRideContentViewBuilder {
                         break;
                     case R.id.profile:
                         navigate(ProfileActivity.class);
+                        break;
+                    case R.id.biker_activity:
+                        navigate(BikerActivity.class);
                         break;
                     case R.id.logout_app:
                         autentication = ConfigurationFirebase.getFirebaseAuth();
