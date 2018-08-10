@@ -109,8 +109,8 @@ public class MainActivity extends AppCompatActivity{
                 @Override
                 public void onUserComplete(Users data) {
                     usuarioLogado = data;
-                    Log.v("MainRonanError", usuarioLogado.getEmail().toString());//Para pegar email
-                    Log.v("MainRonanError", usuarioLogado.getName().toString());//Para pegar nome
+                    Log.v("MainRonanError", usuarioLogado.getEmail());//Para pegar email
+                    Log.v("MainRonanError", usuarioLogado.getName());//Para pegar nome
 
                 }
                 @Override

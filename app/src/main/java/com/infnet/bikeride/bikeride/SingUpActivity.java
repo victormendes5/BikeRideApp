@@ -96,8 +96,8 @@ public class SingUpActivity extends AppCompatActivity  {
 
                     mUsersNew.setId(user.getUid());
                     mUsersNew.setEmail(user.getEmail());
-                    mUsersNew.setName(users.getName().toString());
-                    mUsersNew.setLastName(users.getLastName().toString());
+                    mUsersNew.setName(users.getName());
+                    mUsersNew.setLastName(users.getLastName());
 
                     CriarUser(mUsersNew);
 
