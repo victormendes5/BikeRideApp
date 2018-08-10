@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,9 +33,9 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView mCloseModalName, mCloseModalLastName, mCloseModalNumber, mCloseModelEmail ;
     RelativeLayout mModalOverlay;
 
-    // ~~ Modal: Change Name
-    TextView mTxtProfileName, mTxtProfileLastName, mTxtProfileNumber, mTxtProfileEmail;
-    EditText mEdtProfileName, mEdtProfileLastName, mEdtProfileNumber, mEdtProfileEmail;
+    // ~~ User props
+    TextView mTxtProfileName, mTxtProfileLastName, mTxtProfileNumber, mTxtProfileEmail; // <-- Statics
+    EditText mEdtProfileName, mEdtProfileLastName, mEdtProfileNumber, mEdtProfileEmail; // <-- Dinamics
     Button mChangeName, mChangeLastName, mChangeNumber, mChangeEmail;
 
     // ~~ Animations
@@ -48,6 +49,16 @@ public class ProfileActivity extends AppCompatActivity {
     private Users users;
     Users mUsersNew = new Users();
     private FirebaseAuth autentication;
+    FirebaseUser firebaseUser = autentication.getCurrentUser();
+    private String userId = firebaseUser.getUid();
+    private Users currentUser = new Users();
+
+    // ---> Constantes para edição
+    private static final int EDIT_NAME = 0;
+    private static final int EDIT_LASTNAME = 1;
+    private static final int EDIT_EMAIL = 2;
+    private static final int EDIT_NUMBER = 3;
+    private static final int EDIT_PASSWORD = 4;
 
 
     @Override
@@ -105,6 +116,29 @@ public class ProfileActivity extends AppCompatActivity {
                 "mTxtProfileEmail", R.id.profileEmailTitle, "",
                        "mEdtProfileEmail", R.id.profileEmailEditText, "",
                        "mChangeEmail", R.id.changeEmailBtn, "oC_btnChangeEmail");
+
+
+        // ~~ Setting data from Current User
+
+        mUserManager.getPerfil(new UserManager.OnUserComplete() {
+            @Override
+            public void onUserComplete(Users data) {
+                currentUser = data;
+                Log.v("MainRonanError", currentUser.getEmail());//Para pegar email
+                Log.v("MainRonanError", currentUser.getName());//Para pegar nome
+
+            }
+            @Override
+            public void onErrorUserComplete(Users data) {
+                Log.v("MainRonanError", data.toString());
+            }
+        },userId);
+
+        mUsersNew.setId(userId);
+        mTxtProfileName.setText(currentUser.getName());
+        mTxtProfileLastName.setText(currentUser.getLastName());
+        mTxtProfileEmail.setText(currentUser.getEmail());
+        mTxtProfileNumber.setText(currentUser.getPhoneNumber());
     }
 
     // ~ Click to Enter in Modal States
@@ -186,31 +220,68 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void oC_btnChangeName () {
         String newName = mEdtProfileName.getText().toString();
-//        mUserManager.setName(newName);
-//        mTxtViewUserName.setText(mUserManager.getName());
+        editUser(EDIT_NAME, newName);
         exitModalStateName();
-        mEdtProfileName.setText("");
     }
     private void oC_btnChangeLastName () {
+        String newLastName = mEdtProfileLastName.getText().toString();
+        editUser(EDIT_LASTNAME, newLastName);
         exitModalStateLastName();
     }
     private void oC_btnChangeNumber () {
+        String newNumber = mEdtProfileNumber.getText().toString();
+        editUser(EDIT_NUMBER, newNumber);
         exitModalStateNumber();
     }
     private void oC_btnChangeEmail () {
+        String newEmail = mEdtProfileEmail.getText().toString();
+        editUser(EDIT_EMAIL, newEmail);
         exitModalStateEmail();
     }
 
-    private void editaUsuario(){
+    private void editUser(int field, String value){
 
-        // TODO: Metodo deve agora receber os campos editados separadamente e editar de acordo
+        // TODO: Discovers what field should change and then change by the new value
 
-        FirebaseUser user = autentication.getCurrentUser();
+        switch (field){
+            case EDIT_NAME:{
 
-        mUsersNew.setId(user.getUid());
-        mUsersNew.setEmail(user.getEmail());
-        mUsersNew.setName(users.getName());
-        mUsersNew.setLastName(users.getLastName());
+                mUsersNew.setName(value);
+                mUsersNew.setLastName(currentUser.getLastName());
+                mUsersNew.setEmail(currentUser.getEmail());
+                mUsersNew.setPhoneNumber(currentUser.getPhoneNumber());
+
+                break;
+            }
+            case EDIT_LASTNAME:{
+
+                mUsersNew.setName(currentUser.getName());
+                mUsersNew.setLastName(value);
+                mUsersNew.setEmail(currentUser.getEmail());
+                mUsersNew.setPhoneNumber(currentUser.getPhoneNumber());
+
+                break;
+            }
+            case EDIT_EMAIL:{
+
+                mUsersNew.setName(currentUser.getName());
+                mUsersNew.setLastName(currentUser.getLastName());
+                mUsersNew.setEmail(value);
+                mUsersNew.setPhoneNumber(currentUser.getPhoneNumber());
+
+                break;
+            }
+            case EDIT_NUMBER:{
+
+                mUsersNew.setName(currentUser.getName());
+                mUsersNew.setLastName(currentUser.getLastName());
+                mUsersNew.setEmail(currentUser.getEmail());
+                mUsersNew.setPhoneNumber(value);
+
+                break;
+            }
+
+        }
 
         mUserManager.adicionarOuAtualizarPerfil(mUsersNew);
     }
