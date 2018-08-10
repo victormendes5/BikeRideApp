@@ -46,11 +46,10 @@ public class ProfileActivity extends AppCompatActivity {
 
     // ---> User Manager
     UserManager mUserManager = new UserManager();
-    private Users users;
+//    private Users users;
     Users mUsersNew = new Users();
     private FirebaseAuth autentication;
-    FirebaseUser firebaseUser = autentication.getCurrentUser();
-    private String userId = firebaseUser.getUid();
+    //    private String userId = firebaseUser.getUid();
     private Users currentUser = new Users();
 
     // ---> Constantes para edição
@@ -120,25 +119,34 @@ public class ProfileActivity extends AppCompatActivity {
 
         // ~~ Setting data from Current User
 
-        mUserManager.getPerfil(new UserManager.OnUserComplete() {
-            @Override
-            public void onUserComplete(Users data) {
-                currentUser = data;
-                Log.v("MainRonanError", currentUser.getEmail());//Para pegar email
-                Log.v("MainRonanError", currentUser.getName());//Para pegar nome
+        autentication = ConfigurationFirebase.getFirebaseAuth();
 
-            }
-            @Override
-            public void onErrorUserComplete(Users data) {
-                Log.v("MainRonanError", data.toString());
-            }
-        },userId);
+        FirebaseUser firebaseUser = autentication.getCurrentUser();
 
-        mUsersNew.setId(userId);
-        mTxtProfileName.setText(currentUser.getName());
-        mTxtProfileLastName.setText(currentUser.getLastName());
-        mTxtProfileEmail.setText(currentUser.getEmail());
-        mTxtProfileNumber.setText(currentUser.getPhoneNumber());
+        if(firebaseUser != null){
+
+            mUserManager.getPerfil(new UserManager.OnUserComplete() {
+                @Override
+                public void onUserComplete(Users data) {
+                    currentUser = data;
+                    Log.v("MainRonanError", currentUser.getEmail());//Para pegar email
+                    Log.v("MainRonanError", currentUser.getName());//Para pegar nome
+
+                }
+                @Override
+                public void onErrorUserComplete(Users data) {
+                    Log.v("MainRonanError", data.toString());
+                }
+            }, firebaseUser.getUid());
+
+            mUsersNew.setId(firebaseUser.getUid());
+            mTxtProfileName.setText(currentUser.getName());
+            mTxtProfileLastName.setText(currentUser.getLastName());
+            mTxtProfileEmail.setText(currentUser.getEmail());
+            mTxtProfileNumber.setText(currentUser.getPhoneNumber());
+
+        }
+
     }
 
     // ~ Click to Enter in Modal States
