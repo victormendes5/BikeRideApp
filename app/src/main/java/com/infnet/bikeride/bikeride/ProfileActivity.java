@@ -79,7 +79,9 @@ public class ProfileActivity extends AppCompatActivity {
                             "mCardViewEmail", R.id.profile_cardView_edtEmail, "oC_cardViewChangeEmail",
                             "mCardViewPassword", R.id.profile_cardView_edtPassword, "");
         mTxtViewUserName = findViewById(R.id.profile_txtView_userName);
-//        mTxtViewUserName.setText(mUserManager.getName());
+        mTxtViewUserLastname = findViewById(R.id.profile_txtView_userLastName);
+        mTxtViewUserEmail = findViewById(R.id.profile_txtView_userEmail);
+        mTxtViewUserNumber = findViewById(R.id.profile_txtView_userNumber);
 
         // ~~ Modals
         abst.connectVariableToViewIdAndOnClickMethod(
@@ -140,10 +142,8 @@ public class ProfileActivity extends AppCompatActivity {
             }, firebaseUser.getUid());
 
             mUsersNew.setId(firebaseUser.getUid());
-            mTxtProfileName.setText(currentUser.getName());
-            mTxtProfileLastName.setText(currentUser.getLastName());
-            mTxtProfileEmail.setText(currentUser.getEmail());
-            mTxtProfileNumber.setText(currentUser.getPhoneNumber());
+
+            updateProfile();
 
         }
 
@@ -292,5 +292,24 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         mUserManager.adicionarOuAtualizarPerfil(mUsersNew);
+
+        updateProfile();
+    }
+
+    private void updateProfile(){
+        mTxtProfileName.setText(currentUser.getName());
+        mTxtProfileLastName.setText(currentUser.getLastName());
+        mTxtProfileEmail.setText(currentUser.getEmail());
+        mTxtProfileNumber.setText(currentUser.getPhoneNumber());
+
+        mEdtProfileName.setText(currentUser.getName());
+        mEdtProfileLastName.setText(currentUser.getLastName());
+        mEdtProfileEmail.setText(currentUser.getEmail());
+        mEdtProfileNumber.setText(currentUser.getPhoneNumber());
+
+        mTxtViewUserName.setText(currentUser.getName());
+        mTxtViewUserLastname.setText(currentUser.getLastName());
+        mTxtViewUserEmail.setText(currentUser.getEmail());
+        mTxtViewUserNumber.setText(currentUser.getPhoneNumber());
     }
 }
