@@ -50,8 +50,6 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity{
 
-    private TextView mProfileName;
-//    private UserManager mUserManager = new UserManager(this);
     Toolbar toolbar;
 
     private static final String TAG = "ErrorRonan";
@@ -81,7 +79,6 @@ public class MainActivity extends AppCompatActivity{
     private GoogleSignInClient mGoogleSignInClient;
 
     private UserManager mUserManager = new UserManager();
-    private Users mUserNew = new Users();
     private Users usuarioLogado = new Users();
 
     @Override
@@ -99,8 +96,6 @@ public class MainActivity extends AppCompatActivity{
         //Se usuário já logado
         if (user != null) {
 
-//            Toast.makeText(this, "Usuário Logado", Toast.LENGTH_SHORT).show();
-
             // Redireciona tela pra Drlivery Main
             Redirect(DeliveryMainActivity.class);
 
@@ -109,20 +104,17 @@ public class MainActivity extends AppCompatActivity{
                 @Override
                 public void onUserComplete(Users data) {
                     usuarioLogado = data;
-                    Log.v("MainRonanError", usuarioLogado.getEmail().toString());//Para pegar email
-                    Log.v("MainRonanError", usuarioLogado.getName().toString());//Para pegar nome
-
+                    Log.v("MainRonanError", usuarioLogado.getEmail().toString());
+                    Log.v("MainRonanError", usuarioLogado.getName().toString());
                 }
                 @Override
                 public void onErrorUserComplete(Users data) {
                     Log.v("MainRonanError", data.toString());
                 }
-            },user.getUid().toString());
+            }, user.getUid().toString());
 
 
         }
-
-
 
         //Declaração de EdiText
         edtEmail = (EditText) findViewById(R.id.edtLogin);
@@ -160,31 +152,12 @@ public class MainActivity extends AppCompatActivity{
                 .requestEmail()
                 .build();
 
-
-//        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,
-//                drawerLayout,
-//                toolbar,
-//                R.string.drawer_open,
-//                R.string.drawer_close);
-
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-//        NavigationView navigationView = findViewById(R.id.navigation_view);
-//        navigationView.setNavigationItemSelectedListener(this);
-
-//        mProfileName = findViewById(R.id.drawer_header_profileName);
-//        if (mUserManager.getName() != null) {
-//            mProfileName.setText(mUserManager.getName());
-//        }
     }
 
     @Override
     public void onBackPressed() {
-//        if (drawerLayout.isDrawerOpen(Gravity.START)) {
-//            drawerLayout.closeDrawer(Gravity.START);
-//        } else {
-            super.onBackPressed();
-//        }
+        super.onBackPressed();
     }
 
 
@@ -196,15 +169,12 @@ public class MainActivity extends AppCompatActivity{
         public void onClick(View v) {
             //Se os Campos de login tiverem Nulos
             if (!edtEmail.getText().toString().equals("") && !edtPassword.getText().toString().equals("")) {
-
                 users = new Users();
                 users.setEmail(edtEmail.getText().toString());
                 users.setPassword(edtPassword.getText().toString());
 
                 ValidarLogin();
-
             } else {
-
                 Toast.makeText(MainActivity.this, "Preencha os campos de login", Toast.LENGTH_SHORT).show();
             }
         }
@@ -212,34 +182,27 @@ public class MainActivity extends AppCompatActivity{
 
     // Função de Validar Login Auth Anonimo
     private void ValidarLogin() {
-
         autentication.signInWithEmailAndPassword(users.getEmail(), users.getPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()) {
-
                     Toast.makeText(MainActivity.this, "Sucesso ao Logar", Toast.LENGTH_SHORT).show();
-
                     Redirect(DeliveryMainActivity.class);
-
                 } else if (!task.isSuccessful()) {
                     Log.w(TAG, "signInWithEmail:failed", task.getException());
-
                     Toast.makeText(MainActivity.this, "Erroe", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
     }
 
     //Login Google
+
     public View.OnClickListener LogarGoogle = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
             signInGoogle();
-
         }
     };
 
@@ -247,41 +210,35 @@ public class MainActivity extends AppCompatActivity{
     private void signInGoogle() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, 1);
-
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        autentication.signInWithCredential(credential)
-                .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
 
-                            Toast.makeText(MainActivity.this, "login com google sucesso", Toast.LENGTH_SHORT).show();
+        autentication.signInWithCredential(credential).addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
 
-                            FirebaseUser userLogad = autentication.getCurrentUser();
+                    Toast.makeText(MainActivity.this, "login com google sucesso", Toast.LENGTH_SHORT).show();
 
-                            users.setId(userLogad.getUid());
+                    FirebaseUser userLogad = autentication.getCurrentUser();
 
-                            CriarUser(users);
+                    users.setId(userLogad.getUid());
 
-                            Redirect(DeliveryMainActivity.class);
+                    CriarUser(users);
 
-                        } else {
+                    Redirect(DeliveryMainActivity.class);
 
-                            Toast.makeText(MainActivity.this, FirebaseAuthException.class.toString(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, FirebaseAuthException.class.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
-
-                        }
-                    }
-                });
     }
 
-
     //Login com Facebook
-
 
     public void LoginFacebook(View v) {
 
@@ -297,7 +254,6 @@ public class MainActivity extends AppCompatActivity{
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
-//                                Log.v("MainRonan", response.toString());
                                 setProfileToView(object);
                             }
                         });
@@ -308,8 +264,6 @@ public class MainActivity extends AppCompatActivity{
                 request.executeAsync();
 
                 handleFacebookToken(loginResult.getAccessToken());
-
-
             }
 
             @Override
@@ -320,23 +274,18 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onError(FacebookException error) {
                 Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-
             }
         });
 
     }
 
     private void handleFacebookToken(AccessToken accessToken) {
-
-
         AuthCredential authCredential = FacebookAuthProvider.getCredential(accessToken.getToken());
 
         autentication.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-
                 if (task.isSuccessful()) {
-
                     Toast.makeText(MainActivity.this, "Sucesso Login Facebook no Firebase", Toast.LENGTH_SHORT).show();
 
                     Redirect(DeliveryMainActivity.class);
@@ -355,53 +304,15 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void setProfileToView(JSONObject jsonObject) {
-
         try {
-
             users.setEmail(jsonObject.getString("email").toString());
             users.setLastName(jsonObject.getString("last_name").toString());
             users.setName(jsonObject.getString("first_name").toString());
             users.setUrlPhoto(jsonObject.getString("picture").toString());
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-
-
-
-    // Método que pega o resultado do login da api em geral
-//    @Override
-//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        int itemID = item.getItemId();
-//
-//        switch (itemID) {
-//            case R.id.deliveryman_review:
-//                intent = new Intent(this, DeliverymanReviewActivity.class);
-//                startActivity(intent);
-//                break;
-//            case R.id.delivery_tracking:
-//                intent = new Intent(this, DeliveryTrackingActivity.class);
-//                startActivity(intent);
-//                break;
-//            case R.id.delivery_main:
-//                intent = new Intent(this, DeliveryMainActivity.class);
-//                startActivity(intent);
-//                break;
-//            case R.id.delivery_quotation:
-//                intent = new Intent(this, DeliveryQuotationPriceActivity.class);
-//                startActivity(intent);
-//                break;
-//            case R.id.profile:
-//                intent = new Intent(this, ProfileActivity.class);
-//                startActivity(intent);
-//                break;
-//            default:
-//                break;
-//        }
-//        return false;
-//    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode,resultCode,data);
@@ -423,26 +334,18 @@ public class MainActivity extends AppCompatActivity{
                 firebaseAuthWithGoogle(account);
 
             } catch (ApiException e) {
-
                 Log.v("MainRonan", e.getMessage());
-
             }
 
         }
 
     }
 
-
-    // Sign Up
-
-
     // Button Login
     public  View.OnClickListener SignUp = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
             Redirect(SingUpActivity.class);
-
         }
     };
 
@@ -450,19 +353,13 @@ public class MainActivity extends AppCompatActivity{
     // Redirect Page
 
     private void Redirect(Class destination){
-
-
         Intent newIntent = new Intent(MainActivity.this, destination);
         startActivity(newIntent);
-
     }
 
     private void CriarUser(Users u){
-
         mUserManager.adicionarOuAtualizarPerfil(u);
-
     }
-
 
 }
 
