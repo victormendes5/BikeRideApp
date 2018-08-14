@@ -254,18 +254,15 @@ public class ProfileActivity extends AppCompatActivity {
         switch (field){
             case EDIT_NAME:{
 
-                mUsersNew.setId(currentUser.getId());
                 mUsersNew.setName(value);
                 mUsersNew.setLastName(currentUser.getLastName());
                 mUsersNew.setEmail(currentUser.getEmail());
                 mUsersNew.setPhoneNumber(currentUser.getPhoneNumber());
 
-
                 break;
             }
             case EDIT_LASTNAME:{
 
-                mUsersNew.setId(currentUser.getId());
                 mUsersNew.setName(currentUser.getName());
                 mUsersNew.setLastName(value);
                 mUsersNew.setEmail(currentUser.getEmail());
@@ -275,7 +272,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
             case EDIT_EMAIL:{
 
-                mUsersNew.setId(currentUser.getId());
                 mUsersNew.setName(currentUser.getName());
                 mUsersNew.setLastName(currentUser.getLastName());
                 mUsersNew.setEmail(value);
@@ -285,7 +281,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
             case EDIT_NUMBER:{
 
-                mUsersNew.setId(currentUser.getId());
                 mUsersNew.setName(currentUser.getName());
                 mUsersNew.setLastName(currentUser.getLastName());
                 mUsersNew.setEmail(currentUser.getEmail());
@@ -297,6 +292,8 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         mUserManager.adicionarOuAtualizarPerfil(mUsersNew);
+
+        currentUser = mUsersNew;
 
         updateProfile();
     }
