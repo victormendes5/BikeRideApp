@@ -1,4 +1,4 @@
-package com.infnet.bikeride.bikeride;
+package com.infnet.bikeride.bikeride.models;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -6,7 +6,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 // https://firebase.google.com/docs/database/android/read-and-write
 
 @IgnoreExtraProperties
-public class BRAvailableBikerModel {
+public class AvailableBikerModel {
 
     public String bikerName = "";
     public String bikerId = "";
@@ -15,16 +15,16 @@ public class BRAvailableBikerModel {
     public String createTime = "";
     public String lastUpdatedOn = "";
 
-    public BRAvailableBikerModel() {
+    public AvailableBikerModel() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public BRAvailableBikerModel(String bikerName,
-                                 String bikerId,
-                                 Double bikerPositionLatitude,
-                                 Double bikerPositionLongitude,
-                                 String createTime,
-                                 String lastUpdatedOn) {
+    public AvailableBikerModel(String bikerName,
+                               String bikerId,
+                               Double bikerPositionLatitude,
+                               Double bikerPositionLongitude,
+                               String createTime,
+                               String lastUpdatedOn) {
 
         this.bikerName = bikerName;
         this.bikerId = bikerId;

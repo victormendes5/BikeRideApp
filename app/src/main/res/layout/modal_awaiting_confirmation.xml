@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/modalAwaitingEstimatesContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:background="@color/transparentBlack70"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/awaitingEstimatesTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="Request accepted !"
+        android:textColor="@color/colorTextIcons"
+        android:textSize="20dp" />
+
+    <View
+        android:id="@+id/awaitingEstimatesTitleDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/awaitingEstimatesTitle"
+        android:layout_marginBottom="16dp"
+        android:background="@color/colorDivider" />
+
+    <ImageView
+        android:id="@+id/awaitingRequestConfirmationWaitingWheel"
+        android:layout_below="@id/awaitingEstimatesTitleDivider"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/bikewheel"/>
+
+
+    <RelativeLayout
+        android:id="@+id/awaitingEstimatesMessageContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/awaitingRequestConfirmationWaitingWheel"
+        android:background="@color/transparentWhite05"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/packageSizeHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Awaiting confirmation ..."
+            android:textStyle="bold"
+            android:textColor="@color/colorTextIcons"
+            android:padding="4dp"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

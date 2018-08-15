@@ -1,7 +1,5 @@
 package com.infnet.bikeride.bikeride;
 
-import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -12,13 +10,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.infnet.bikeride.bikeride.services.Abstractions;
+import com.infnet.bikeride.bikeride.services.Animations;
+import com.infnet.bikeride.bikeride.services.ContentViewBuilder;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -39,10 +36,10 @@ public class ProfileActivity extends AppCompatActivity {
     Button mChangeName, mChangeLastName, mChangeNumber, mChangeEmail;
 
     // ~~ Animations
-    private BRAnimations mAnimate = new BRAnimations(200);
+    private Animations mAnimate = new Animations(200);
 
     // ---> Customized setContentView with navigation drawer and toolbar
-    BRContentViewBuilder mContentViewBuilder;
+    ContentViewBuilder mContentViewBuilder;
 
     // ---> User Manager
     UserManager mUserManager = new UserManager();
@@ -65,10 +62,10 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        mContentViewBuilder = new BRContentViewBuilder(this,
+        mContentViewBuilder = new ContentViewBuilder(this,
                 R.layout.activity_profile);
 
-        BRAbstractions abst = new BRAbstractions(this);
+        Abstractions abst = new Abstractions(this);
 
         // ~~ Main Profile
         abst.connectVariableToViewIdAndOnClickMethod(

@@ -1,4 +1,4 @@
-package com.infnet.bikeride.bikeride;
+package com.infnet.bikeride.bikeride.services;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -27,7 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class BRGoogleMapsAPI {
+public class GoogleMapsAPI {
 
     /*
 
@@ -121,7 +121,7 @@ public class BRGoogleMapsAPI {
 
     private AppCompatActivity refferedActivity;
 
-    public BRGoogleMapsAPI(AppCompatActivity activity, int mapFragmentId) {
+    public GoogleMapsAPI(AppCompatActivity activity, int mapFragmentId) {
 
         refferedActivity = activity;
         mMapFragmentId = mapFragmentId;

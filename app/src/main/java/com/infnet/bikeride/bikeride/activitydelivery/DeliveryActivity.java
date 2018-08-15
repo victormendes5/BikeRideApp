@@ -1,20 +1,23 @@
-package com.infnet.bikeride.bikeride;
+package com.infnet.bikeride.bikeride.activitydelivery;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class DeliveryTrackingActivity extends AppCompatActivity {
+import com.infnet.bikeride.bikeride.services.ContentViewBuilder;
+import com.infnet.bikeride.bikeride.R;
+
+public class DeliveryActivity extends AppCompatActivity {
 
     // ---> Customized setContentView with navigation drawer and toolbar
-    BRContentViewBuilder mContentViewBuilder;
+    ContentViewBuilder mContentViewBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_tracking_delivery);
+//        setContentView(R.layout.activity_delivery);
 
-        mContentViewBuilder = new BRContentViewBuilder(this,
-                R.layout.activity_tracking_delivery);
+        mContentViewBuilder = new ContentViewBuilder(this,
+                R.layout.activity_delivery);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.infnet.bikeride.bikeride;
+package com.infnet.bikeride.bikeride.services;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,18 +14,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInApi;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
+import com.infnet.bikeride.bikeride.ConfigurationFirebase;
+import com.infnet.bikeride.bikeride.DeliveryQuotationPriceActivity;
+import com.infnet.bikeride.bikeride.DeliverymanReviewActivity;
+import com.infnet.bikeride.bikeride.MainActivity;
+import com.infnet.bikeride.bikeride.ProfileActivity;
+import com.infnet.bikeride.bikeride.R;
+import com.infnet.bikeride.bikeride.activitydelivery.DeliveryActivity;
+import com.infnet.bikeride.bikeride.activityrequestbiker.RequestBikerActivity;
+import com.infnet.bikeride.bikeride.activityrequestuser.RequestUserActivity;
 
-public class BRContentViewBuilder {
+public class ContentViewBuilder {
 
     private static final int NAVIGATION_DRAWER_LAYOUT_FILE_ID = R.layout.main_drawer_layout;
     private static final int NAVIGATION_DRAWER_GROUPVIEW_ID = R.id.main_drawer_groupview;
@@ -39,7 +40,7 @@ public class BRContentViewBuilder {
     private GoogleSignInClient apiGoogle;
 
 
-    public BRContentViewBuilder(Context context, int activityLayoutId) {
+    public ContentViewBuilder(Context context, int activityLayoutId) {
 
         mRefferedActivity = (AppCompatActivity) context;
         mActivityLayoutId = activityLayoutId;
@@ -55,9 +56,9 @@ public class BRContentViewBuilder {
     private void setActivityContent () {
         ViewGroup view = (ViewGroup) View.inflate(mRefferedActivity, mActivityLayoutId,null);
 
-        ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(0, 0);
-        params.setMargins(0, 140, 0, 0);
-        view.setLayoutParams(params);
+        // ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(0, 0);
+        // params.setMargins(0, 140, 0, 0);
+        // view.setLayoutParams(params);
 
         mDrawerLayout.addView(view, 0);
     }
@@ -66,6 +67,7 @@ public class BRContentViewBuilder {
 
         Toolbar toolbar = mRefferedActivity.findViewById(CUSTOM_TOOLBAR_ID);
         mRefferedActivity.setSupportActionBar(toolbar);
+        mRefferedActivity.getSupportActionBar().setTitle("");
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(mRefferedActivity,
                 mDrawerLayout,
@@ -87,10 +89,10 @@ public class BRContentViewBuilder {
                         navigate(DeliverymanReviewActivity.class);
                         break;
                     case R.id.delivery_tracking:
-                        navigate(DeliveryTrackingActivity.class);
+                        navigate(DeliveryActivity.class);
                         break;
                     case R.id.delivery_main:
-                        navigate(DeliveryMainActivity.class);
+                        navigate(RequestUserActivity.class);
                         break;
                     case R.id.delivery_quotation:
                         navigate(DeliveryQuotationPriceActivity.class);
@@ -99,7 +101,7 @@ public class BRContentViewBuilder {
                         navigate(ProfileActivity.class);
                         break;
                     case R.id.biker_activity:
-                        navigate(BikerActivity.class);
+                        navigate(RequestBikerActivity.class);
                         break;
                     case R.id.logout_app:
                         autentication = ConfigurationFirebase.getFirebaseAuth();

@@ -1,14 +1,19 @@
-package com.infnet.bikeride.bikeride;
+package com.infnet.bikeride.bikeride.activityrequestuser;
 
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
+import com.infnet.bikeride.bikeride.dao.FirebaseAccess;
+import com.infnet.bikeride.bikeride.dao.HttpRequest;
+import com.infnet.bikeride.bikeride.models.AvailableBikerModel;
+import com.infnet.bikeride.bikeride.models.RequestModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,11 +26,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
-public class BRRequestManagerUser {
+public class RequestUserManager {
 
     /*=======================================================================================
                                              CONSTANTS
@@ -33,7 +40,7 @@ public class BRRequestManagerUser {
 
     //region CONSTANTS
 
-    private static final String TAG = "BRRequestManagerUser";
+    private static final String TAG = "RequestUserManager";
     private static final String REQUESTS_CHILD = "Requests";
     private static final String DELIVERIES_CHILD = "Deliveries";
     private static final String AVAILABLE_BIKERS_CHILD = "AvailableBikers";
@@ -52,9 +59,11 @@ public class BRRequestManagerUser {
     //region VARIABLES
 
     private AppCompatActivity mReferredActivity;
-    private BRRequestModel mRequest = new BRRequestModel();
+    private RequestModel mRequest = new RequestModel();
     private FirebaseAccess mFirebase = new FirebaseAccess();
-    boolean mIsBikerFound = false;
+
+    // ---> Map for active Time outs
+    HashMap<Handler, Runnable> mTimeouts = new HashMap<>();
 
     //endregion
 
@@ -108,10 +117,10 @@ public class BRRequestManagerUser {
 
     //region CONSTRUCTORS
 
-    public BRRequestManagerUser(Context context) {
+    public RequestUserManager(Context context) {
         mReferredActivity = (AppCompatActivity) context;
-        // mockBikerData();
-        mockRequestData();
+        mockBikerData();
+//        mockRequestData();
     }
 
     //endregion
@@ -250,12 +259,12 @@ public class BRRequestManagerUser {
 
     private void getClosestAvailableBikers(final GetEstimatesResponses callback) {
 
-        mFirebase.getAll(BRAvailableBikerModel.class,
+        mFirebase.getAll(AvailableBikerModel.class,
 
-            new FirebaseAccess.OnComplete<ArrayList<BRAvailableBikerModel>>() {
+            new FirebaseAccess.OnComplete<ArrayList<AvailableBikerModel>>() {
 
                 @Override
-                public void onSuccess(ArrayList<BRAvailableBikerModel> data) {
+                public void onSuccess(ArrayList<AvailableBikerModel> data) {
 
                     if (data.size() == 0) {
                         Log.d(TAG, "getEstimates: data successfully retrieved from " +
@@ -301,7 +310,7 @@ public class BRRequestManagerUser {
                 }
 
                 @Override
-                public void onFailure(ArrayList<BRAvailableBikerModel> data) {
+                public void onFailure(ArrayList<AvailableBikerModel> data) {
 
                     Log.d(TAG, "getEstimates: an error has occurred while accessing the " +
                             "database. Aborting getEstimates.");
@@ -311,7 +320,7 @@ public class BRRequestManagerUser {
     }
 
     private void accessGoogleDistanceMatrixAndFinish (String currentBikerAddress,
-                                                final GetEstimatesResponses callback) {
+                                                      final GetEstimatesResponses callback) {
 
         getGoogleDistanceMatrixData(currentBikerAddress,
 
@@ -326,44 +335,44 @@ public class BRRequestManagerUser {
 
                     decodeGoogleDistanceMatrixData(s,
 
-                        new OnDistanceMatrixDecode() {
+                            new OnDistanceMatrixDecode() {
 
-                            @Override
-                            public void OnSuccess() {
+                                @Override
+                                public void OnSuccess() {
 
-                                Log.d(TAG, "getEstimates: successfully " +
-                                        "decoded Google DistanceMatrix JSON " +
-                                        "object and updated request " +
-                                        "properties.");
+                                    Log.d(TAG, "getEstimates: successfully " +
+                                            "decoded Google DistanceMatrix JSON " +
+                                            "object and updated request " +
+                                            "properties.");
 
-                                Log.d(TAG, "getEstimates: getEstimates successfully " +
-                                        "completed!");
-                                callback.onSuccess();
-                                return;
-                            }
+                                    Log.d(TAG, "getEstimates: getEstimates successfully " +
+                                            "completed!");
+                                    callback.onSuccess();
+                                    return;
+                                }
 
-                            @Override
-                            public void OnFailure(String status) {
+                                @Override
+                                public void OnFailure(String status) {
 
-                                Log.d(TAG, "getEstimates: data sent to " +
-                                        "API presented some anomaly. Aborting "
-                                        + "getting estimates. (" + status
-                                        + ")");
-                                callback.onError();
-                                return;
-                            }
+                                    Log.d(TAG, "getEstimates: data sent to " +
+                                            "API presented some anomaly. Aborting "
+                                            + "getting estimates. (" + status
+                                            + ")");
+                                    callback.onError();
+                                    return;
+                                }
 
-                            @Override
-                            public void OnDecodeFailure(JSONException e) {
+                                @Override
+                                public void OnDecodeFailure(JSONException e) {
 
-                                Log.d(TAG, "getEstimates:  could not " +
-                                        "decode Google Distance Matrix " +
-                                        "object. Data structure might have " +
-                                        "changed. Aborting getting estimates.");
-                                callback.onError();
-                                return;
-                            }
-                        });
+                                    Log.d(TAG, "getEstimates:  could not " +
+                                            "decode Google Distance Matrix " +
+                                            "object. Data structure might have " +
+                                            "changed. Aborting getting estimates.");
+                                    callback.onError();
+                                    return;
+                                }
+                            });
                 }
 
                 @Override
@@ -386,6 +395,7 @@ public class BRRequestManagerUser {
 
 
         new GetCoordinatesFromAddress(mReferredActivity, new OnComplete<LatLng>() {
+
             @Override
             public void onSuccess(LatLng data) {
 
@@ -400,6 +410,7 @@ public class BRRequestManagerUser {
                         "delivery address - " + mRequest.deliveryAddress);
 
                 new GetCoordinatesFromAddress(mReferredActivity, new OnComplete<LatLng>() {
+
                     @Override
                     public void onSuccess(LatLng data) {
 
@@ -439,53 +450,54 @@ public class BRRequestManagerUser {
         }).execute(mRequest.pickupAddress);
     }
 
-    private ArrayList<BRAvailableBikerModel> sortByClosestBiker (
-            ArrayList<BRAvailableBikerModel> array,
+    private ArrayList<AvailableBikerModel> sortByClosestBiker (
+            ArrayList<AvailableBikerModel> array,
             final double lat,
             final double lon) {
 
-        Collections.sort(array, new Comparator<BRAvailableBikerModel>() {
-            @Override
-            public int compare(BRAvailableBikerModel b1,
-                               BRAvailableBikerModel b2) {
+        Collections.sort(array,
 
-                Double distanceBetweenReferenceAndFirst =
-                        getDistanceBetweenCoordinates(
-                                lat,
-                                lon,
-                                b1.bikerPositionLatitude,
-                                b1.bikerPositionLongitude
-                        );
+            new Comparator<AvailableBikerModel>() {
 
-                Double distanceBetweenReferenceAndSecond =
-                        getDistanceBetweenCoordinates(
-                                lat,
-                                lon,
-                                b2.bikerPositionLatitude,
-                                b2.bikerPositionLongitude
-                        );
+                @Override
+                public int compare(AvailableBikerModel b1,
+                                   AvailableBikerModel b2) {
 
-                if (distanceBetweenReferenceAndFirst >
-                        distanceBetweenReferenceAndSecond) {
-                    return 1;
+                    Double distanceBetweenReferenceAndFirst = getDistanceBetweenCoordinates(
+                            lat,
+                            lon,
+                            b1.bikerPositionLatitude,
+                            b1.bikerPositionLongitude
+                    );
+
+                    Double distanceBetweenReferenceAndSecond = getDistanceBetweenCoordinates(
+                            lat,
+                            lon,
+                            b2.bikerPositionLatitude,
+                            b2.bikerPositionLongitude
+                    );
+
+                    if (distanceBetweenReferenceAndFirst >
+                            distanceBetweenReferenceAndSecond) {
+                        return 1;
+                    }
+
+                    else if (distanceBetweenReferenceAndFirst ==
+                            distanceBetweenReferenceAndSecond) {
+                        return 0;
+                    }
+
+                    else {
+                        return -1;
+                    }
                 }
-
-                else if (distanceBetweenReferenceAndFirst ==
-                        distanceBetweenReferenceAndSecond) {
-                    return 0;
-                }
-
-                else {
-                    return -1;
-                }
-            }
-        });
+            });
 
         return array;
     }
 
     private double getDistanceBetweenCoordinates(double lat1, double lon1, double lat2,
-                                                        double lon2) {
+                                                 double lon2) {
 
         double dim1 = lat2 - lat1;
         double dim2 = lon2 - lon1;
@@ -502,10 +514,9 @@ public class BRRequestManagerUser {
 
     //region POST NEW DELIVERY REQUESTS METHODS
 
-    public void postNewDeliveryRequest(
-            final RequestStatus callbacks) {
+    public void postNewDeliveryRequest(final RequestStatus callbacks) {
 
-        BRRequestModel request = mRequest;
+        RequestModel request = mRequest;
 
         request.userId = getUid();
         request.createTime = getCurrentISODateTime();
@@ -515,58 +526,57 @@ public class BRRequestManagerUser {
 
         Log.d(TAG, "postNewDeliveryRequest: " + request.toString());
 
-        mIsBikerFound = false;
-
         addNewDeliveryRequestToRequestsNode (request, callbacks);
     }
 
-    private void addNewDeliveryRequestToRequestsNode (BRRequestModel request,
+    private void addNewDeliveryRequestToRequestsNode (RequestModel request,
                                                       final RequestStatus callbacks) {
 
-        mFirebase.addOrUpdate(
+        mFirebase.addOrUpdate(request,
 
-                request,
-                new FirebaseAccess.OnCompleteVoid() {
-                    @Override
-                    public void onSuccess() {
-                        Log.d(TAG, "postNewDeliveryRequest: new " +
-                                "delivery request successfully posted.");
+            new FirebaseAccess.OnCompleteVoid() {
 
-                        // ---> Await Biker response
-                        awaitBikerResponse(callbacks);
+                @Override
+                public void onSuccess() {
 
-                        // ---> Set maximum response waiting time limit
-                        setMaximumResponseWaitingTimeLimit(callbacks);
-                    }
+                    Log.d(TAG, "postNewDeliveryRequest: new delivery request successfully " +
+                            "posted.");
 
-                    @Override
-                    public void onFailure() {
-                        Log.d(TAG, "postNewDeliveryRequest: new " +
-                                "delivery request post failed.");
+                    // ---> Await Biker response
+                    awaitBikerResponse(callbacks);
 
-                        callbacks.onError();
-                    }
-                }, REQUESTS_CHILD, getUid()
+                    // ---> Set maximum response waiting time limit
+                    setMaximumResponseWaitingTimeLimit(callbacks);
+                }
+
+                @Override
+                public void onFailure() {
+
+                    Log.d(TAG, "postNewDeliveryRequest: new delivery request post failed.");
+
+                    callbacks.onError();
+                }
+            }, REQUESTS_CHILD, getUid()
         );
     }
 
     private void awaitBikerResponse (final RequestStatus callbacks) {
 
-        mFirebase.setListenerToObjectOrProperty (BRRequestModel.class,
+        mFirebase.setListenerToObjectOrProperty (RequestModel.class,
 
-            new FirebaseAccess.ListenToChanges<BRRequestModel>() {
+            new FirebaseAccess.ListenToChanges<RequestModel>() {
+
                 @Override
-                public void onChange(BRRequestModel data) {
+                public void onChange(RequestModel data) {
 
                     if (data.bikerId.equals("")) return;
 
-                    Log.d(TAG, "postNewDeliveryRequest: "
-                            + "Biker named " + data.bikerName + " (ID: " +
-                            data.bikerId + ") has accepted the request.");
+                    Log.d(TAG, "postNewDeliveryRequest: Biker named " + data.bikerName +
+                            " (ID: " + data.bikerId + ") has accepted the request.");
 
-                    mIsBikerFound = true;
+                    cancelTimeouts();
 
-                    initiateRequestObjectTransfer(callbacks);
+                    initiateRequestObjectTransfer(data, callbacks);
                 }
 
                 @Override
@@ -577,9 +587,9 @@ public class BRRequestManagerUser {
                 }
 
                 @Override
-                public void onError(BRRequestModel data) {
-                    Log.d(TAG, "postNewDeliveryRequest: "
-                            + "request object is missing or has been deleted.");
+                public void onError(RequestModel data) {
+                    Log.d(TAG, "postNewDeliveryRequest: request object is missing or has " +
+                            "been deleted.");
                     callbacks.onError();
                 }
             }, REQUESTS_CHILD, getUid());
@@ -587,135 +597,180 @@ public class BRRequestManagerUser {
 
     private void setMaximumResponseWaitingTimeLimit (final RequestStatus callbacks) {
 
-        new android.os.Handler().postDelayed(
+        Handler timeout = new Handler();
 
-            new Runnable() {
-                public void run() {
+        Runnable runnable = new Runnable() {
 
-                    if (mIsBikerFound) return;
+            public void run() {
 
-                    Log.d(TAG,
-                            "postNewDeliveryRequest: "
-                                    + "delivery request timed out.");
+                Log.d(TAG,
+                        "postNewDeliveryRequest: delivery request timed out.");
 
-                    // ---> Cancel request by deleting object
-                    mFirebase.delete(new FirebaseAccess.OnCompleteVoid() {
-                        @Override
-                        public void onSuccess() {
-                            Log.d(TAG,
-                                    "postNewDeliveryRequest: "
-                                            + "cancelled request by deleting request "
-                                            + "object associated with this user.");
+                // ---> Cancel request by deleting object
+                mFirebase.delete(new FirebaseAccess.OnCompleteVoid() {
 
-                            callbacks
-                                    .onSearchTimedOut();
-                        }
-
-                        @Override
-                        public void onFailure() {
-                            Log.d(TAG,
-                                    "postNewDeliveryRequest: "
-                                            + " thought request time limit has been " +
-                                            "reached, request hasn't been cancelled " +
-                                            "due to some error.");
-
-                            callbacks.onError();
-                        }
-                    }, REQUESTS_CHILD, getUid());
-                }
-            }, REQUEST_TIMEOUT);
-    }
-
-    private void initiateRequestObjectTransfer(final RequestStatus callbacks) {
-
-        Log.d(TAG, "transferRequestObject: transferring request object from Requests to" +
-                "Deliveries child ...");
-
-        acquireRequestObjectFromRequestsNode (callbacks);
-    }
-
-    private void acquireRequestObjectFromRequestsNode (final RequestStatus callbacks) {
-
-        mFirebase.getObjectOrProperty(
-
-                BRRequestModel.class,
-                new FirebaseAccess.OnComplete<BRRequestModel>() {
-                    @Override
-                    public void onSuccess(BRRequestModel data) {
-                        Log.d(TAG, "transferRequestObject: successfully acquired request " +
-                                "object from Requests child.");
-
-                        copyRequestObjectToDeliveriesNode(data, callbacks);
-                    }
-
-                    @Override
-                    public void onFailure(BRRequestModel data) {
-
-                        Log.d(TAG, "transferRequestObject: FAILED! Could not retrieve " +
-                                "request object from Requests child.");
-
-                        callbacks.onError();
-                    }
-                }, REQUESTS_CHILD, getUid()
-        );
-    }
-
-    private void copyRequestObjectToDeliveriesNode (BRRequestModel data,
-                                                    final RequestStatus callbacks) {
-        mFirebase.addOrUpdate(
-
-                data,
-                new FirebaseAccess.OnCompleteVoid() {
                     @Override
                     public void onSuccess() {
-                        Log.d(TAG, "transferRequestObject: successfully copied" +
-                                " request object from Requests to Deliveries " +
-                                "child.");
+                        Log.d(TAG,
+                                "postNewDeliveryRequest: cancelled request by deleting " +
+                                        "request object associated with this user.");
 
-                        deleteRequestObjectFromRequestsNode(callbacks);
+                        callbacks
+                                .onSearchTimedOut();
                     }
 
                     @Override
                     public void onFailure() {
-                        Log.d(TAG, "transferRequestObject: FAILED! Could " +
-                                "not copy request object from Requests to " +
-                                "Deliveries child.");
+                        Log.d(TAG,
+                                "postNewDeliveryRequest: "
+                                        + " thought request time limit has been reached, " +
+                                        "request hasn't been cancelled due to some error.");
 
                         callbacks.onError();
                     }
-                }, DELIVERIES_CHILD, getUid());
+                }, REQUESTS_CHILD, getUid());
+            }
+        };
+
+        timeout.postDelayed(runnable, REQUEST_TIMEOUT);
+
+        mTimeouts.put(timeout, runnable);
     }
 
-    private void deleteRequestObjectFromRequestsNode (final RequestStatus callbacks) {
+
+    private void initiateRequestObjectTransfer(RequestModel data,
+                                               final RequestStatus callbacks) {
+
+        Log.d(TAG, "transferRequestObject: transferring request object from Requests to" +
+                "Deliveries child ...");
+
+        copyRequestObjectToDeliveriesNode(data, callbacks);
+    }
+
+    private void copyRequestObjectToDeliveriesNode (RequestModel data,
+                                                    final RequestStatus callbacks) {
+        mFirebase.addOrUpdate(data,
+
+            new FirebaseAccess.OnCompleteVoid() {
+
+                @Override
+                public void onSuccess() {
+
+                    Log.d(TAG, "transferRequestObject: successfully copied" +
+                            " request object from Requests to Deliveries " +
+                            "child.");
+
+                    deleteRequestObjectFromRequestsNode(callbacks);
+                }
+
+                @Override
+                public void onFailure() {
+
+                    Log.d(TAG, "transferRequestObject: FAILED! Could " +
+                            "not copy request object from Requests to " +
+                            "Deliveries child.");
+
+                    callbacks.onError();
+                }
+            }, DELIVERIES_CHILD, getUid());
+    }
+
+    private void deleteRequestObjectFromRequestsNode(final RequestStatus callbacks) {
 
         mFirebase.delete(new FirebaseAccess.OnCompleteVoid() {
 
             @Override
             public void onSuccess() {
-                Log.d(TAG, "transferRequestObject: " +
-                        "successfully deleted request object " +
+
+                Log.d(TAG, "transferRequestObject: successfully deleted request object " +
                         "from Requests child.");
 
-                Log.i(TAG, "postNewDeliveryRequest: " +
-                    "Request object transfer completed, " +
-                    "starting delivery ...");
-
-                callbacks.onRequestAccepted();
+                awaitBikerDataUpdateOnDeliveriesNode(callbacks);
             }
 
             @Override
             public void onFailure() {
-                Log.d(TAG, "transferRequestObject: FAILED! " +
-                        "Could not delete request object from " +
-                        "Requests child.");
 
-                Log.i(TAG, "postNewDeliveryRequest: " +
-                        "FAILED! Could not complete Request" +
+                Log.d(TAG, "transferRequestObject: FAILED! Could not delete request object " +
+                        "from Requests child.");
+
+                Log.i(TAG, "transferRequestObject: FAILED! Could not complete Request" +
                         " object transfer.");
 
                 callbacks.onError();
             }
         }, REQUESTS_CHILD, getUid());
+    }
+
+    private void awaitBikerDataUpdateOnDeliveriesNode (final RequestStatus callbacks) {
+
+        mFirebase.setListenerToObjectOrProperty (RequestModel.class,
+
+            new FirebaseAccess.ListenToChanges<RequestModel>() {
+                @Override
+                public void onChange(RequestModel data) {
+
+                    if (data.bikerName.equals("") ||
+                            data.bikerPositionLongitude == 0d ||
+                            data.bikerPositionLatitude == 0d) return;
+
+                    Log.d(TAG, "transferRequestObject: "
+                            + "Biker named " + data.bikerName + " (ID: " +
+                            data.bikerId + ") has updated his information on deliveries node.");
+
+                    mFirebase.removeLastValueEventListener();
+
+                    Log.i(TAG, "transferRequestObject: Request object transfer " +
+                            "completed, starting delivery ...");
+
+                    cancelTimeouts();
+
+                    callbacks.onRequestAccepted();
+                }
+
+                @Override
+                public boolean removeListenerCondition (DataSnapshot data) {
+
+                    return false;
+                }
+
+                @Override
+                public void onError(RequestModel data) {
+                    Log.d(TAG, "transferRequestObject: "
+                            + "request object is missing or has been deleted.");
+                    callbacks.onError();
+                }
+            }, DELIVERIES_CHILD, getUid());
+    }
+
+    public void cancelNonAcceptedRequest() {
+
+        Log.d(TAG, "cancelNonAcceptedRequest: request cancelled by user before any biker " +
+                "accepted it.");
+
+        cancelTimeouts();
+
+        mFirebase.delete(
+
+            new FirebaseAccess.OnCompleteVoid() {
+
+                @Override
+                public void onSuccess() {
+
+                    Log.d(TAG, "cancelNonAcceptedRequest: successfully deleted request " +
+                            "object from Requests child.");
+                }
+
+                @Override
+                public void onFailure() {
+
+                    Log.d(TAG, "cancelNonAcceptedRequest: FAILED! Could not delete " +
+                            "request object from Requests child.");
+
+                    Log.i(TAG, "cancelNonAcceptedRequest: FAILED! Could not complete " +
+                            "Request object transfer.");
+                }
+            }, REQUESTS_CHILD, getUid());
     }
 
     //endregion
@@ -729,60 +784,61 @@ public class BRRequestManagerUser {
 
     private static class GetCoordinatesFromAddress extends AsyncTask<String, Void, LatLng> {
 
-            AppCompatActivity context;
-            OnComplete<LatLng> callbacks;
+        AppCompatActivity context;
+        OnComplete<LatLng> callbacks;
 
-            public GetCoordinatesFromAddress (AppCompatActivity context,
-                                              OnComplete<LatLng> callbacks) {
-                this.context = context;
-                this.callbacks = callbacks;
-            }
+        public GetCoordinatesFromAddress (AppCompatActivity context,
+                                          OnComplete<LatLng> callbacks) {
+            this.context = context;
+            this.callbacks = callbacks;
+        }
 
-            @Override
-            protected LatLng doInBackground (String... params) {
+        @Override
+        protected LatLng doInBackground (String... params) {
 
-                Geocoder coder = new Geocoder(context);
-                List<Address> address;
-                LatLng p1 = null;
+            Geocoder coder = new Geocoder(context);
+            List<Address> address;
+            LatLng p1 = null;
 
-                try {
-                    // May throw an IOException
-                    address = coder.getFromLocationName(params[0], 5);
-                    if (address == null) {
-                        return null;
-                    }
-
-                    Address location = address.get(0);
-
-                    p1 = new LatLng(location.getLatitude(), location.getLongitude() );
-
-                    Log.d(TAG, "GetCoordinatesFromAddress: coordinates found! (Latitude: " +
-                            p1.latitude + " / Longitude: " + p1.longitude);
-
-                } catch (IOException ex) {
-
-                    Log.d(TAG, "GetCoordinatesFromAddress: could not locate coordinates for " +
-                            "given address. Check stack trace below. Returning LatLng with null value.");
-
-                    ex.printStackTrace();
-
+            try {
+                // May throw an IOException
+                address = coder.getFromLocationName(params[0], 5);
+                if (address == null) {
                     return null;
                 }
 
-                return p1;
+                Address location = address.get(0);
+
+                p1 = new LatLng(location.getLatitude(), location.getLongitude() );
+
+                Log.d(TAG, "GetCoordinatesFromAddress: coordinates found! (Latitude: " +
+                        p1.latitude + " / Longitude: " + p1.longitude);
+
+            } catch (IOException ex) {
+
+                Log.d(TAG, "GetCoordinatesFromAddress: could not locate coordinates for "
+                        + "given address. Check stack trace below. Returning LatLng with " +
+                        "null value.");
+
+                ex.printStackTrace();
+
+                return null;
             }
 
-            @Override
-            protected void onPostExecute (LatLng result) {
-                super.onPostExecute(result);
+            return p1;
+        }
 
-                if (result == null) {
-                    callbacks.onFailure(result);
-                    return;
-                }
+        @Override
+        protected void onPostExecute (LatLng result) {
+            super.onPostExecute(result);
 
-                callbacks.onSuccess(result);
+            if (result == null) {
+                callbacks.onFailure(result);
+                return;
             }
+
+            callbacks.onSuccess(result);
+        }
     }
 
     private String getAddressFromCoordinates (double lat, double lon) {
@@ -804,11 +860,11 @@ public class BRRequestManagerUser {
         String address = addresses.get(0).getAddressLine(0);
 
         String add = addresses.get(0).getThoroughfare() + ", " +
-                     addresses.get(0).getSubThoroughfare() + " - " +
-                     addresses.get(0).getSubLocality() + " - " +
-                     addresses.get(0).getLocality() + " - State of " +
-                     addresses.get(0).getAdminArea() + ", " +
-                     addresses.get(0).getCountryName();
+                addresses.get(0).getSubThoroughfare() + " - " +
+                addresses.get(0).getSubLocality() + " - " +
+                addresses.get(0).getLocality() + " - State of " +
+                addresses.get(0).getAdminArea() + ", " +
+                addresses.get(0).getCountryName();
 
         return add;
     }
@@ -982,7 +1038,7 @@ public class BRRequestManagerUser {
                 Double.valueOf(mRequest.estimatesDeliveryDistance.replace("km",
                         "").trim());
 
-        double totalFee = 0;
+        double totalFee = 5;
 
         totalFee += pickupDistance * pickupFeePerKM;
         totalFee += deliveryDistance * deliveryFeePerKM;
@@ -996,7 +1052,7 @@ public class BRRequestManagerUser {
     }
 
     public void resetRequestProperties() {
-        BRRequestModel newModel = new BRRequestModel();
+        RequestModel newModel = new RequestModel();
         mRequest = newModel;
     }
 
@@ -1007,6 +1063,19 @@ public class BRRequestManagerUser {
     public void removeLastListener() {
         mFirebase.removeLastValueEventListener();
     }
+
+    private void cancelTimeouts() {
+
+        Log.d(TAG, "cancelTimeouts: cancelling Timeouts ...");
+
+        for (Map.Entry<Handler, Runnable> entry : mTimeouts.entrySet()) {
+            Handler handler = entry.getKey();
+            Runnable runnable = entry.getValue();
+
+            handler.removeCallbacks(runnable);
+        }
+    }
+
 
     //endregion
 
@@ -1019,9 +1088,9 @@ public class BRRequestManagerUser {
 
     public void mockBikerData () {
 
-        ArrayList<BRAvailableBikerModel> array = new ArrayList<>();
+        ArrayList<AvailableBikerModel> array = new ArrayList<>();
 
-        array.add(new BRAvailableBikerModel(
+        array.add(new AvailableBikerModel(
                 "Biker Ipanema",
                 "bikeripanemabikeripanemabikeripanema",
                 -22.983546,
@@ -1030,7 +1099,7 @@ public class BRRequestManagerUser {
                 getCurrentISODateTime()
         )) ;
 
-        array.add(new BRAvailableBikerModel(
+        array.add(new AvailableBikerModel(
                 "Biker Copacabana",
                 "bikercopacabanabikercopacabanabikercopacabana",
                 -22.973599,
@@ -1039,7 +1108,7 @@ public class BRRequestManagerUser {
                 getCurrentISODateTime()
         )) ;
 
-        array.add(new BRAvailableBikerModel(
+        array.add(new AvailableBikerModel(
                 "Biker Flamengo",
                 "bikerflamengobikerflamengobikerflamengo",
                 -22.932376,
@@ -1048,7 +1117,7 @@ public class BRRequestManagerUser {
                 getCurrentISODateTime()
         )) ;
 
-        array.add(new BRAvailableBikerModel(
+        array.add(new AvailableBikerModel(
                 "Biker Catete",
                 "bikercatetebikercatetebikercatete",
                 -22.925806,
@@ -1057,7 +1126,7 @@ public class BRRequestManagerUser {
                 getCurrentISODateTime()
         )) ;
 
-        array.add(new BRAvailableBikerModel(
+        array.add(new AvailableBikerModel(
                 "Biker Centro",
                 "bikercentrobikercentrobikercentro",
                 -22.909491,
@@ -1066,7 +1135,7 @@ public class BRRequestManagerUser {
                 getCurrentISODateTime()
         )) ;
 
-        for (BRAvailableBikerModel biker : array) {
+        for (AvailableBikerModel biker : array) {
             mFirebase.addOrUpdate(biker,
                     new FirebaseAccess.OnCompleteVoid() {
                         @Override
@@ -1084,9 +1153,9 @@ public class BRRequestManagerUser {
 
     public void mockRequestData () {
 
-        ArrayList<BRRequestModel> array = new ArrayList<>();
+        ArrayList<RequestModel> array = new ArrayList<>();
 
-        array.add(new BRRequestModel(
+        array.add(new RequestModel(
                 "Request Barra",
                 "requestBarrarequestBarrarequestBarra",
                 "",
@@ -1111,7 +1180,7 @@ public class BRRequestManagerUser {
                 getCurrentISODateTime()
         )) ;
 
-        array.add(new BRRequestModel(
+        array.add(new RequestModel(
                 "Request Centro",
                 "requestCentrorequestCentrorequestCentro",
                 "",
@@ -1136,7 +1205,7 @@ public class BRRequestManagerUser {
                 getCurrentISODateTime()
         ));
 
-        array.add(new BRRequestModel(
+        array.add(new RequestModel(
                 "Request Tijuca",
                 "requestTijucarequestTijucarequestTijuca",
                 "",
@@ -1161,7 +1230,7 @@ public class BRRequestManagerUser {
                 getCurrentISODateTime()
         ));
 
-        array.add(new BRRequestModel(
+        array.add(new RequestModel(
                 "Request Copacabana",
                 "requestCopacabanarequestCopacabanarequestCopacabana",
                 "",
@@ -1186,7 +1255,7 @@ public class BRRequestManagerUser {
                 getCurrentISODateTime()
         ));
 
-        for (BRRequestModel request : array) {
+        for (RequestModel request : array) {
             mFirebase.addOrUpdate(request,
                     new FirebaseAccess.OnCompleteVoid() {
                         @Override

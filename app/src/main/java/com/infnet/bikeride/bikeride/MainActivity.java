@@ -42,6 +42,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.infnet.bikeride.bikeride.activityrequestuser.RequestUserActivity;
+import com.infnet.bikeride.bikeride.services.ContentViewBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity{
     private static final String TAG = "ErrorRonan";
 
     // ---> Customized setContentView with navigation drawer and toolbar
-    BRContentViewBuilder mContentViewBuilder;
+    ContentViewBuilder mContentViewBuilder;
 
     Intent intent;
 
@@ -90,7 +92,7 @@ public class MainActivity extends AppCompatActivity{
 
         autentication = ConfigurationFirebase.getFirebaseAuth();
 
-        mContentViewBuilder = new BRContentViewBuilder(this, R.layout.activity_main);
+        mContentViewBuilder = new ContentViewBuilder(this, R.layout.activity_main);
 
         setContentView(R.layout.activity_main);
 
@@ -102,7 +104,7 @@ public class MainActivity extends AppCompatActivity{
 //            Toast.makeText(this, "Usuário Logado", Toast.LENGTH_SHORT).show();
 
             // Redireciona tela pra Drlivery Main
-            Redirect(DeliveryMainActivity.class);
+            Redirect(RequestUserActivity.class);
 
             // Func de UserManager para retornar os dados do usuário logado
             mUserManager.getPerfil(new UserManager.OnUserComplete() {
@@ -221,7 +223,7 @@ public class MainActivity extends AppCompatActivity{
 
                     Toast.makeText(MainActivity.this, "Sucesso ao Logar", Toast.LENGTH_SHORT).show();
 
-                    Redirect(DeliveryMainActivity.class);
+                    Redirect(RequestUserActivity.class);
 
                 } else if (!task.isSuccessful()) {
                     Log.w(TAG, "signInWithEmail:failed", task.getException());
@@ -267,7 +269,7 @@ public class MainActivity extends AppCompatActivity{
 
                             CriarUser(users);
 
-                            Redirect(DeliveryMainActivity.class);
+                            Redirect(RequestUserActivity.class);
 
                         } else {
 
@@ -339,7 +341,7 @@ public class MainActivity extends AppCompatActivity{
 
                     Toast.makeText(MainActivity.this, "Sucesso Login Facebook no Firebase", Toast.LENGTH_SHORT).show();
 
-                    Redirect(DeliveryMainActivity.class);
+                    Redirect(RequestUserActivity.class);
                     FirebaseUser userLogad = autentication.getCurrentUser();
 
                     users.setId(userLogad.getUid());
@@ -386,7 +388,7 @@ public class MainActivity extends AppCompatActivity{
 //                startActivity(intent);
 //                break;
 //            case R.id.delivery_main:
-//                intent = new Intent(this, DeliveryMainActivity.class);
+//                intent = new Intent(this, RequestUserActivity.class);
 //                startActivity(intent);
 //                break;
 //            case R.id.delivery_quotation:

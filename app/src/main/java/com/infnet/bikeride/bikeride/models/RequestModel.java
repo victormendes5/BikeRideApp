@@ -1,4 +1,4 @@
-package com.infnet.bikeride.bikeride;
+package com.infnet.bikeride.bikeride.models;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -6,7 +6,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 // https://firebase.google.com/docs/database/android/read-and-write
 
 @IgnoreExtraProperties
-public class BRRequestModel {
+public class RequestModel {
 
     public String userName = "";
     public String userId = "";
@@ -42,32 +42,32 @@ public class BRRequestModel {
     public String createTime = "";
     public String updateTime = "";
 
-    public BRRequestModel() {
+    public RequestModel() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public BRRequestModel(String userName,
-                          String userId,
-                          String bikerName,
-                          String bikerId,
-                          double bikerPositionLatitude,
-                          double bikerPositionLongitude,
-                          String estimatesPickupDistance,
-                          String estimatesPickupDuration,
-                          String estimatesDeliveryDistance,
-                          String estimatesDeliveryDuration,
-                          String estimatesFee,
-                          String packageType,
-                          String packageSize,
-                          String sendersName,
-                          String pickupAddress,
-                          double pickupAddressLatitude,
-                          double pickupAddressLong,
-                          String receiversName,
-                          String deliveryAddress,
-                          double deliveryddressLatitude,
-                          double deliveryAddressLong,
-                          String createTime) {
+    public RequestModel(String userName,
+                        String userId,
+                        String bikerName,
+                        String bikerId,
+                        double bikerPositionLatitude,
+                        double bikerPositionLongitude,
+                        String estimatesPickupDistance,
+                        String estimatesPickupDuration,
+                        String estimatesDeliveryDistance,
+                        String estimatesDeliveryDuration,
+                        String estimatesFee,
+                        String packageType,
+                        String packageSize,
+                        String sendersName,
+                        String pickupAddress,
+                        double pickupAddressLatitude,
+                        double pickupAddressLong,
+                        String receiversName,
+                        String deliveryAddress,
+                        double deliveryddressLatitude,
+                        double deliveryAddressLong,
+                        String createTime) {
         this.userName = userName;
         this.userId = userId;
         this.bikerName = bikerName;

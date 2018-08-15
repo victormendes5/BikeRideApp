@@ -1,8 +1,8 @@
-package com.infnet.bikeride.bikeride;
+package com.infnet.bikeride.bikeride.activityrequestuser;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -10,8 +10,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class DeliveryMainActivity extends AppCompatActivity {
+import com.infnet.bikeride.bikeride.R;
+import com.infnet.bikeride.bikeride.activitydelivery.DeliveryActivity;
+import com.infnet.bikeride.bikeride.services.Abstractions;
+import com.infnet.bikeride.bikeride.services.Animations;
+import com.infnet.bikeride.bikeride.services.ContentViewBuilder;
+import com.infnet.bikeride.bikeride.services.GoogleMapsAPI;
+import com.infnet.bikeride.bikeride.services.GooglePlacesAPI;
+
+public class RequestUserActivity extends AppCompatActivity {
 
     /*=======================================================================================
                                              CONSTANTS
@@ -19,7 +28,7 @@ public class DeliveryMainActivity extends AppCompatActivity {
 
     //region CONSTANTS
 
-    private static final String TAG = "DeliveryMainActivity";
+    private static final String TAG = "RequestUserActivity";
 
     //endregion
 
@@ -67,20 +76,20 @@ public class DeliveryMainActivity extends AppCompatActivity {
     private EditText mSenderNameEditText, mReceiverNameEditText;
 
     // ---> Animations
-    private BRAnimations mAnimate = new BRAnimations(200);
+    private Animations mAnimate = new Animations(200);
 
     // ---> Google APIs
-    BRGoogleMapsAPI mGoogleMaps;
-    BRGooglePlacesAPI mGooglePlaces;
+    GoogleMapsAPI mGoogleMaps;
+    GooglePlacesAPI mGooglePlaces;
 
     // ---> BikeRide Request Manager
-    BRRequestManagerUser mRequestManager;
+    RequestUserManager mRequestManager;
 
     // ---> Customized setContentView with navigation drawer and toolbar
-    BRContentViewBuilder mContentViewBuilder;
+    ContentViewBuilder mContentViewBuilder;
 
     // ---> General abstractions;
-    BRAbstractions mAbst;
+    Abstractions mAbst;
 
     //endregion
 
@@ -93,20 +102,21 @@ public class DeliveryMainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
-        mContentViewBuilder = new BRContentViewBuilder(this,
-                R.layout.activity_main_delivery);
+        mContentViewBuilder = new ContentViewBuilder(this,
+                R.layout.activity_request_user);
 
-        mGoogleMaps = new BRGoogleMapsAPI(this, R.id.map);
+        mGoogleMaps = new GoogleMapsAPI(this, R.id.map);
 
-        mGooglePlaces = new BRGooglePlacesAPI(this);
+        mGooglePlaces = new GooglePlacesAPI(this);
         mGooglePlaces.setAutoComplete(R.id.pickupAddAutoCompTxtView,
                 R.id.deliveryAddAutoCompTxtView);
 
-        mRequestManager = new BRRequestManagerUser(this);
+        mRequestManager = new RequestUserManager(this);
 
-        mAbst = new BRAbstractions(this);
+        mAbst = new Abstractions(this);
 
         //region CONNECT VARIABLES TO VIEW AND ON CLICK METHODS
 
@@ -199,6 +209,7 @@ public class DeliveryMainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
         if (mModalOverlay.getVisibility() == View.VISIBLE) {
             exitModalState();
         } else {
@@ -211,14 +222,16 @@ public class DeliveryMainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
+
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         mGoogleMaps.verifyPermissionRequestResult(requestCode, grantResults);
     }
 
     @Override
-    public void onDestroy() {
+    public void onStop() {
+
         mRequestManager.removeAllListeners();
-        super.onDestroy();
+        super.onStop();
     }
 
     //endregion
@@ -242,42 +255,50 @@ public class DeliveryMainActivity extends AppCompatActivity {
 
         mRequestManager.getEstimates(
 
-                new BRRequestManagerUser.GetEstimatesResponses() {
+            new RequestUserManager.GetEstimatesResponses() {
 
-                    @Override
-                    public void onSuccess() {
+                @Override
+                public void onSuccess() {
 
-                        mEstimatesPickupDistanceTxv.setText(mRequestManager.getPickupDistanceEstimate());
-                        mEstimatesPickupDurationTxv.setText(mRequestManager.getPickupDurationEstimate());
-                        mEstimatesDeliveryDistanceTxv.setText(mRequestManager.getDeliveryDistanceEstimate());
-                        mEstimatesDeliveryDurationTxv.setText(mRequestManager.getDeliveryDurationEstimate());
-                        mEstimatesFeeTxv.setText(mRequestManager.getFeeEstimate());
-                        mDetailsPickupLocation.setText(mRequestManager.getPickupAddressShort());
-                        mDetailsDeliveryLocation.setText(mRequestManager.getDeliveryAddressShort());
+                    mEstimatesPickupDistanceTxv.setText(mRequestManager.getPickupDistanceEstimate());
+                    mEstimatesPickupDurationTxv.setText(mRequestManager.getPickupDurationEstimate());
+                    mEstimatesDeliveryDistanceTxv.setText(mRequestManager.getDeliveryDistanceEstimate());
+                    mEstimatesDeliveryDurationTxv.setText(mRequestManager.getDeliveryDurationEstimate());
+                    mEstimatesFeeTxv.setText(mRequestManager.getFeeEstimate());
+                    mDetailsPickupLocation.setText(mRequestManager.getPickupAddressShort());
+                    mDetailsDeliveryLocation.setText(mRequestManager.getDeliveryAddressShort());
 
-                        mAnimate.swapViewsLeft(mModalAwaitingEstimates,
-                                mModalRequestDetails);
-                    }
+                    mAnimate.swapViewsLeft(mModalAwaitingEstimates,
+                            mModalRequestDetails);
+                }
 
-                    @Override
-                    public void onInvalidAddresses() {
+                @Override
+                public void onInvalidAddresses() {
+                    mAnimate.swapViewsRight(mModalAwaitingEstimates,
+                            mModalAddressInformation);
 
-                        mAnimate.swapViewsRight(mModalAwaitingEstimates,
-                                mModalAddressInformation);
-                    }
+                    Toast.makeText(getApplicationContext(), "Invalid address",
+                            Toast.LENGTH_SHORT).show();
+                }
 
-                    @Override
-                    public void noBikersAvailable() {
-                        mAnimate.swapViewsRight(mModalAwaitingEstimates,
-                                mModalAddressInformation);
-                    }
+                @Override
+                public void noBikersAvailable() {
+                    mAnimate.swapViewsRight(mModalAwaitingEstimates,
+                            mModalAddressInformation);
 
-                    @Override
-                    public void onError() {
-                        mAnimate.swapViewsRight(mModalAwaitingEstimates,
-                                mModalAddressInformation);
-                    }
-                });
+                    Toast.makeText(getApplicationContext(), "No bikers available",
+                            Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onError() {
+                    mAnimate.swapViewsRight(mModalAwaitingEstimates,
+                            mModalAddressInformation);
+
+                    Toast.makeText(getApplicationContext(), "Some error occurred",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
     private void oC_confirmBikerRequestBtn() {
@@ -287,27 +308,35 @@ public class DeliveryMainActivity extends AppCompatActivity {
         mRequestManager.setReceiversName(mReceiverNameEditText.getText().toString());
 
         mRequestManager.postNewDeliveryRequest(
-                new BRRequestManagerUser.RequestStatus() {
-                    @Override
-                    public void onRequestAccepted() {
 
-                    }
+            new RequestUserManager.RequestStatus() {
 
-                    @Override
-                    public void onSearchTimedOut() {
-                        mAnimate.swapViewsRight(mModalSearchingBiker, mModalRequestDetails);
+                @Override
+                public void onRequestAccepted() {
+                    mAbst.navigate(DeliveryActivity.class);
+                }
 
-                    }
+                @Override
+                public void onSearchTimedOut() {
+                    mAnimate.swapViewsRight(mModalSearchingBiker, mModalRequestDetails);
 
-                    @Override
-                    public void onError() {
-                        mAnimate.swapViewsRight(mModalSearchingBiker, mModalRequestDetails);
-                    }
-                });
+                    Toast.makeText(getApplicationContext(), "Search timed out",
+                            Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onError() {
+                    mAnimate.swapViewsRight(mModalSearchingBiker, mModalRequestDetails);
+
+                    Toast.makeText(getApplicationContext(), "Some error occurred",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
     private void oC_bikerSearchCancelBtn () {
-        exitModalState();
+        mAnimate.swapViewsRight(mModalSearchingBiker, mModalRequestDetails);
+        mRequestManager.cancelNonAcceptedRequest();
     }
 
     private void oC_confirmPickupAddrBtn () {
@@ -353,7 +382,7 @@ public class DeliveryMainActivity extends AppCompatActivity {
     }
 
     private void oC_packageSizeSmallSlc() {
-        mRequestManager.setPackageSize("small");
+        mRequestManager.setPackageSize("Small");
         mAnimate.selectionFader(mPackageSizeSmallSlc_bg, mPackageSizeMediumSlc_bg,
                 mPackageSizeLargeSlc_bg);
         oCh_verifyTypeAndSizeSelectors();
@@ -361,14 +390,14 @@ public class DeliveryMainActivity extends AppCompatActivity {
 
     private void oC_packageSizeMediumSlc() {
 
-        mRequestManager.setPackageSize("medium");
+        mRequestManager.setPackageSize("Medium");
         mAnimate.selectionFader(mPackageSizeMediumSlc_bg, mPackageSizeSmallSlc_bg,
                 mPackageSizeLargeSlc_bg);
         oCh_verifyTypeAndSizeSelectors();
     }
 
     private void oC_packageSizeLargeSlc() {
-        mRequestManager.setPackageSize("large");
+        mRequestManager.setPackageSize("Large");
         mAnimate.selectionFader(mPackageSizeLargeSlc_bg, mPackageSizeMediumSlc_bg,
                 mPackageSizeSmallSlc_bg);
         oCh_verifyTypeAndSizeSelectors();
