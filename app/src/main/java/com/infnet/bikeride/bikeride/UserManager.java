@@ -60,7 +60,7 @@ public class UserManager {
                         callback.onErrorUserComplete(data);
                     }
                     //Caminho do nó do Firebase
-                },"Profiles",id.toString());
+                },"Profiles",id);
     }
 
     // Cria o usuário sempre que logar ou atualiza sempre que loga pois está sempre em mudança
