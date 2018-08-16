@@ -1,10 +1,10 @@
-package com.infnet.bikeride.bikeride;
+package com.infnet.bikeride.bikeride.services;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.view.View;
 
-public class BRAnimations {
+public class Animations {
 
     private int mDefaultAnimationSpeed = 200;
     private int mScreenBias = 1500;
@@ -17,9 +17,9 @@ public class BRAnimations {
     //   |                                CONSTRUCTORS                                   |
     //   \===============================================================================/
 
-    public BRAnimations() {}
+    public Animations() {}
 
-    public BRAnimations(int defaultspeed) {
+    public Animations(int defaultspeed) {
         mDefaultAnimationSpeed = defaultspeed;
     }
 

@@ -1,6 +1,7 @@
-package com.infnet.bikeride.bikeride;
+package com.infnet.bikeride.bikeride.services;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,12 +12,12 @@ import android.widget.EditText;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class BRAbstractions {
+public class Abstractions {
 
-    Activity activity;
+    AppCompatActivity mReferredActivity;
 
-    public BRAbstractions(Activity context) {
-        this.activity = context;
+    public Abstractions(Activity context) {
+        mReferredActivity = (AppCompatActivity) context;
     }
 
     public void connectVariableToViewIdAndOnClickMethod(Object... data) {
@@ -34,12 +35,12 @@ public class BRAbstractions {
             String        vName           = (String) data[i];
             int           viewId          = (int) data[i+1];
             final String  methodToInvoke  = (String) data[i+2];
-            View          v               = this.activity.findViewById(viewId);
+            View          v               = this.mReferredActivity.findViewById(viewId);
 
             try {
-                Field field = activity.getClass().getDeclaredField(vName);
+                Field field = mReferredActivity.getClass().getDeclaredField(vName);
                 field.setAccessible(true);
-                field.set(activity, v);
+                field.set(mReferredActivity, v);
             }
 
             catch (NoSuchFieldException e)   {
@@ -58,9 +59,9 @@ public class BRAbstractions {
                     if (methodToInvoke.equals("")) return;
 
                     try {
-                        Method sentMethod = activity.getClass().getDeclaredMethod(methodToInvoke);
+                        Method sentMethod = mReferredActivity.getClass().getDeclaredMethod(methodToInvoke);
                         sentMethod.setAccessible(true);
-                        sentMethod.invoke(activity);
+                        sentMethod.invoke(mReferredActivity);
                     }
 
                     catch (Exception e) {
@@ -86,12 +87,12 @@ public class BRAbstractions {
             String        vName           = (String) data[i];
             int           viewId          = (int) data[i+1];
             final String  methodToInvoke  = (String) data[i+2];
-            View          v               = this.activity.findViewById(viewId);
+            View          v               = this.mReferredActivity.findViewById(viewId);
 
             try {
-                Field field = activity.getClass().getDeclaredField(vName);
+                Field field = mReferredActivity.getClass().getDeclaredField(vName);
                 field.setAccessible(true);
-                field.set(activity, v);
+                field.set(mReferredActivity, v);
             }
 
             catch (NoSuchFieldException e)   {
@@ -115,9 +116,9 @@ public class BRAbstractions {
                     if (methodToInvoke.equals("")) return;
 
                     try {
-                        Method sentMethod = activity.getClass().getDeclaredMethod(methodToInvoke);
+                        Method sentMethod = mReferredActivity.getClass().getDeclaredMethod(methodToInvoke);
                         sentMethod.setAccessible(true);
-                        sentMethod.invoke(activity);
+                        sentMethod.invoke(mReferredActivity);
                     }
 
                     catch (Exception e) {
@@ -164,6 +165,24 @@ public class BRAbstractions {
 
             view.setText("");
         }
+    }
+
+    public void navigate (Class destination) {
+
+        Intent newIntent = new Intent(mReferredActivity, destination);
+        mReferredActivity.startActivity(newIntent);
+    }
+
+    public void navigate (Class destination, String ... keyValue) {
+
+        Intent newIntent = new Intent(mReferredActivity, destination);
+
+        for (int i = 0; i<keyValue.length; i += 2) {
+
+            newIntent.putExtra(keyValue[i], keyValue[i+1]);
+        }
+
+        mReferredActivity.startActivity(newIntent);
     }
 
 }

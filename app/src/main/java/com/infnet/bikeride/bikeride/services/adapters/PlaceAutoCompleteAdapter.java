@@ -1,4 +1,4 @@
-package com.infnet.bikeride.bikeride;
+package com.infnet.bikeride.bikeride.services.adapters;
 
 /*
  * Copyright (C) 2015 Google Inc. All Rights Reserved.

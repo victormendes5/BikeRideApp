@@ -29,8 +29,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- <activity android:name=".DeliveryMainActivity"></activity> -->
-        <!-- <activity android:name=".DeliveryTrackingActivity" /> -->
+        <!-- <activity android:name=".RequestUserActivity"></activity> -->
+        <!-- <activity android:name=".DeliveryActivity" /> -->
         <!-- <activity android:name=".DeliverymanReviewActivity" /> -->
         <!-- <activity android:name=".DeliveryQuotationPrice" /> -->
 
@@ -55,12 +55,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".SingUpActivity" />
-        <activity android:name=".DeliveryMainActivity" />
-        <activity android:name=".DeliveryTrackingActivity" />
+        <activity android:name=".activityrequestuser.RequestUserActivity" />
+        <activity android:name=".activitydelivery.DeliveryActivity" />
         <activity android:name=".DeliverymanReviewActivity" />
         <activity android:name=".DeliveryQuotationPriceActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".BikerActivity"></activity>
+        <activity android:name=".activityrequestbiker.RequestBikerActivity"></activity>
     </application>
 
 </manifest>

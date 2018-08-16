@@ -1,4 +1,4 @@
-package com.infnet.bikeride.bikeride;
+package com.infnet.bikeride.bikeride.activityrequestbiker.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.infnet.bikeride.bikeride.R;
+import com.infnet.bikeride.bikeride.RequestListDataModel;
 
 import java.util.ArrayList;
 import java.util.List;

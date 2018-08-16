@@ -1,4 +1,4 @@
-package com.infnet.bikeride.bikeride;
+package com.infnet.bikeride.bikeride.services;
 
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -13,8 +13,9 @@ import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.infnet.bikeride.bikeride.services.adapters.PlaceAutoCompleteAdapter;
 
-public class BRGooglePlacesAPI {
+public class GooglePlacesAPI {
 
         /*
 
@@ -102,7 +103,7 @@ public class BRGooglePlacesAPI {
             new LatLng(4.438078, -32.812675));
 
 
-    public BRGooglePlacesAPI(AppCompatActivity activity) {
+    public GooglePlacesAPI(AppCompatActivity activity) {
 
         mRefferedActivity = activity;
     }

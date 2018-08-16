@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.infnet.bikeride.bikeride.dao.FirebaseAccess;
 
 /**
  * Created by Imperiali on 21/07/18.

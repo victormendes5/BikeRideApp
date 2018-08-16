@@ -1,7 +1,6 @@
-package com.infnet.bikeride.bikeride;
+package com.infnet.bikeride.bikeride.dao;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;

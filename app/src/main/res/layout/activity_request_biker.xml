@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BikerActivity">
+    tools:context=".activityrequestbiker.RequestBikerActivity">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -26,6 +26,17 @@
     <include
         android:id="@+id/include_modal_requests_list"
         layout="@layout/modal_available_requests"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:visibility="invisible"
+        android:layout_centerInParent="true" />
+
+    <include
+        android:id="@+id/include_modal_awaiting_confirmation"
+        layout="@layout/modal_awaiting_confirmation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
