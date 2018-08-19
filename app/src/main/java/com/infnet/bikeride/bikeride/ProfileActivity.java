@@ -75,6 +75,7 @@ public class ProfileActivity extends AppCompatActivity {
                             "mCardViewNumber", R.id.profile_cardView_edtNumber,"oC_cardViewChangeNumber",
                             "mCardViewEmail", R.id.profile_cardView_edtEmail, "oC_cardViewChangeEmail",
                             "mCardViewPassword", R.id.profile_cardView_edtPassword, "");
+
         mTxtViewUserName = findViewById(R.id.profile_txtView_userName);
         mTxtViewUserLastname = findViewById(R.id.profile_txtView_userLastName);
         mTxtViewUserEmail = findViewById(R.id.profile_txtView_userEmail);
@@ -228,6 +229,7 @@ public class ProfileActivity extends AppCompatActivity {
         editUser(EDIT_NAME, newName);
         exitModalStateName();
     }
+
     private void oC_btnChangeLastName () {
         String newLastName = mEdtProfileLastName.getText().toString();
         editUser(EDIT_LASTNAME, newLastName);
