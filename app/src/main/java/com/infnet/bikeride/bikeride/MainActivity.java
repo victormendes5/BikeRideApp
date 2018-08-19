@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.infnet.bikeride.bikeride.Tabbar.SignIn;
 import com.infnet.bikeride.bikeride.Tabbar.SignUp;
@@ -15,6 +17,7 @@ public class MainActivity extends AppCompatActivity{
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    private Button mQuickSignIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +29,20 @@ public class MainActivity extends AppCompatActivity{
         mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
+        mQuickSignIn = findViewById(R.id.quickSignInButton);
+        mQuickSignIn.setOnClickListener(QuickSignIn);
 
+        TabLayout tabLayout = findViewById(R.id.tabs);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
     }
+
+    private View.OnClickListener QuickSignIn = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+        }
+    };
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 

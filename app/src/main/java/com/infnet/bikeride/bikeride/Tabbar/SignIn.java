@@ -91,7 +91,7 @@ public class SignIn extends Fragment {
     private View.OnClickListener ForgotPassword = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            // Call another fragment
+            Redirect(ForgotPassword.class);
         }
     };
 
@@ -109,7 +109,7 @@ public class SignIn extends Fragment {
         });
     }
 
-    private void Redirect(Class destination){
+    private void Redirect(Class destination) {
         Intent newIntent = new Intent(getActivity(), destination);
         startActivity(newIntent);
     }
