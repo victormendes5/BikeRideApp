@@ -153,5 +153,7 @@
     <string name="modalChangeName_txtView_changeNumber">Change Number</string>
     <string name="modalChangeName_edtText_changeNumberHint">Type here to change your Number</string>
     <string name="modalChangeName_edtText_changeEmailHint">Type here to change your E-mail</string>
+    <string name="modalForgotPassword_txtView_forgotPassword">Forgot Password</string>
+    <string name="forgotPassword_button_sendEmail">Reset Password</string>
 
 </resources>

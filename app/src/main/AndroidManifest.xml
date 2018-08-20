@@ -60,7 +60,8 @@
         <activity android:name=".DeliverymanReviewActivity" />
         <activity android:name=".DeliveryQuotationPriceActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".activityrequestbiker.RequestBikerActivity"></activity>
+        <activity android:name=".activityrequestbiker.RequestBikerActivity" />
+        <activity android:name=".ForgotPasswordActivity"></activity>
     </application>
 
 </manifest>

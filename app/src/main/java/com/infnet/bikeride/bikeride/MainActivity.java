@@ -4,15 +4,20 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.RelativeLayout;
+
 
 
 import com.facebook.AccessToken;
@@ -43,6 +48,8 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.infnet.bikeride.bikeride.activityrequestuser.RequestUserActivity;
+import com.infnet.bikeride.bikeride.services.Abstractions;
+import com.infnet.bikeride.bikeride.services.Animations;
 import com.infnet.bikeride.bikeride.services.ContentViewBuilder;
 
 import org.json.JSONException;
@@ -69,7 +76,7 @@ public class MainActivity extends AppCompatActivity{
     private Button btnLogin;
     private Button btnLoginGoogle;
     private Button btnSignUp;
-    private Button btnLostLoginData;
+    private Button btnForgotPassword;
 
     private FirebaseUser user;
 
@@ -85,6 +92,7 @@ public class MainActivity extends AppCompatActivity{
     private UserManager mUserManager = new UserManager();
     private Users mUserNew = new Users();
     private Users usuarioLogado = new Users();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,8 +143,7 @@ public class MainActivity extends AppCompatActivity{
         btnFacebookLogin = (LoginButton) findViewById(R.id.login_button);
         btnGooglePlus = (SignInButton) findViewById(R.id.sign_in_button);
         btnSignUp = (Button) findViewById(R.id.btnSignUp);
-        btnLostLoginData = (Button) findViewById(R.id.btnLostLoginData);
-
+        btnForgotPassword = (Button) findViewById(R.id.btnLostLoginData);
 
         // Configuração Login Anonimo
         btnLogin.setOnClickListener(Logar);
@@ -155,6 +162,9 @@ public class MainActivity extends AppCompatActivity{
 
         //Configuração Sign Up
         btnSignUp.setOnClickListener(SignUp);
+
+        //Configuração Forgot Password
+        btnForgotPassword.setOnClickListener(oc_forgotPassword);
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -178,16 +188,30 @@ public class MainActivity extends AppCompatActivity{
 //        if (mUserManager.getName() != null) {
 //            mProfileName.setText(mUserManager.getName());
 //        }
+
+
     }
 
-    @Override
-    public void onBackPressed() {
+
+    // Forgot Password
+    public View.OnClickListener oc_forgotPassword = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            Redirect(ForgotPasswordActivity.class);
+
+        }
+    };
+
+
+//    @Override
+//    public void onBackPressed() {
 //        if (drawerLayout.isDrawerOpen(Gravity.START)) {
 //            drawerLayout.closeDrawer(Gravity.START);
 //        } else {
-            super.onBackPressed();
+//            super.onBackPressed();
 //        }
-    }
+//    }
 
 
     //Login Anonimo
