@@ -9,20 +9,34 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.infnet.bikeride.bikeride.Tabbar.SignIn;
+import com.infnet.bikeride.bikeride.Tabbar.SignInSocialMedia;
 import com.infnet.bikeride.bikeride.Tabbar.SignUp;
 
 public class MainActivity extends AppCompatActivity{
 
+    // Modal
+
+    private View mForgotPasswordModal;
+    RelativeLayout mModalOverlay;
+
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private Button mQuickSignIn;
+    private Button mQuickSignInDown;
+
+    // Animation
+    private BRAnimations mAnimate = new BRAnimations(200);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Modal
+        mForgotPasswordModal = findViewById(R.id.include_modal_forgotPassword);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -30,17 +44,29 @@ public class MainActivity extends AppCompatActivity{
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         mQuickSignIn = findViewById(R.id.quickSignInButton);
-        mQuickSignIn.setOnClickListener(QuickSignIn);
+        mQuickSignIn.setOnClickListener(QuickSignInEnter);
+
+        mQuickSignInDown = findViewById(R.id.quickSignInButtonDown);
+        mQuickSignInDown.setOnClickListener(QuickSignInExit);
 
         TabLayout tabLayout = findViewById(R.id.tabs);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
     }
 
-    private View.OnClickListener QuickSignIn = new View.OnClickListener() {
+    private View.OnClickListener QuickSignInEnter = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            mAnimate.crossFadeViews(mQuickSignIn, mQuickSignInDown);
+            mAnimate.translateFromBottomIfInvisible(mForgotPasswordModal);
+        }
+    };
 
+    private View.OnClickListener QuickSignInExit = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            mAnimate.crossFadeViews(mQuickSignInDown, mQuickSignIn);
+            mAnimate.translateToBottomIfVisible(mForgotPasswordModal);
         }
     };
 
