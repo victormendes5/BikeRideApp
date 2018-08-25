@@ -58,6 +58,11 @@ public class FirebaseAccess {
         void onFailure();
     }
 
+    public interface OnCompleteKey {
+        void onSuccess(String key);
+        void onFailure();
+    }
+
     public interface Condition<T> {
         boolean ExecuteIf(T data);
     }
@@ -65,7 +70,6 @@ public class FirebaseAccess {
     public interface ListenToChanges<T> {
         void onChange(T data);
         void onError(T data);
-        boolean removeListenerCondition(DataSnapshot data);
     }
 
     //endregion
@@ -261,6 +265,58 @@ public class FirebaseAccess {
                 });
     }
 
+    public <T> void addUsingKey(
+            final T dataToUpdate,
+            final OnCompleteKey onCompleteCallback,
+            @NonNull String... path
+    ) {
+
+        // ---> Get Firebase reference
+        DatabaseReference databaseRef = mDatabase;
+
+        // ---> Setup log path string
+        String firebasePath = "";
+
+        // ---> Iterate to point reference to appropriate path and build path string
+        if (path.length > 0) {
+            for (String child : path) {
+                databaseRef = databaseRef.child(child);
+                firebasePath += child + " > ";
+            }
+        }
+
+        // ---> Get key for new entry
+        final String key = databaseRef.push().getKey();
+
+        // ---> Add key to to save path
+        databaseRef = databaseRef.child(key);
+
+        // ---> Add key to display path string
+        firebasePath += key;
+
+        // ---> Inform developer of method start and acquired path
+        Log.d(TAG, "addUsingKey: updating value '" + dataToUpdate.toString() +
+                "' on path - " + firebasePath);
+
+        databaseRef
+                .setValue(dataToUpdate)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "addUsingKey: add or update SUCCESSFUL!");
+                        onCompleteCallback.onSuccess(key);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "addUsingKey: add or update FAILED!");
+                        e.printStackTrace();
+                        onCompleteCallback.onFailure();
+                    }
+                });
+    }
+
     public void delete (
             final OnCompleteVoid onCompleteCallback,
             @NonNull String... path
@@ -335,6 +391,7 @@ public class FirebaseAccess {
                 dataToUpdate.toString() + "' on path - " + firebasePath);
 
         databaseRef.runTransaction(new Transaction.Handler() {
+
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
 
@@ -353,7 +410,6 @@ public class FirebaseAccess {
                 else {
                     return Transaction.abort();
                 }
-
             }
 
             @Override
@@ -423,53 +479,46 @@ public class FirebaseAccess {
 
 
         // ---> Set listener on base reference
-        final ValueEventListener listener = baseReference
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        final ValueEventListener listener = baseReference.addValueEventListener(
 
-                        if (onChangesCallback.removeListenerCondition(dataSnapshot)) {
-                            Log.d(TAG, "setListenerToObjectOrProperty: onDataChange: " +
-                                    "removeListenerCondition has been met. Removing listener on path "
-                                    + firebasePath);
+            new ValueEventListener() {
 
-                            baseReference.removeEventListener(this);
-                            return;
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    arrayList.clear();
+
+                    // ---> Iterate on path of specified child and add to ArrayList
+                    for (@NonNull DataSnapshot child : dataSnapshot.getChildren()) {
+
+                        T element;
+
+                        try {
+                            element = child.getValue(typeToBeReturnedOnArrayList);
+
+                        } catch (Exception e) {
+                            Log.d(TAG, "setListenerToChild: an object that can't be converted to "
+                                    + "the provided type has been detected and ignored.");
+                            continue;
                         }
 
-                        arrayList.clear();
+                        Log.d(TAG, "setListenerToChild: found object - " + child.toString());
 
-                        // ---> Iterate on path of specified child and add to ArrayList
-                        for (@NonNull DataSnapshot child : dataSnapshot.getChildren()) {
-
-                            T element;
-
-                            try {
-                                element = child.getValue(typeToBeReturnedOnArrayList);
-
-                            } catch (Exception e) {
-                                Log.d(TAG, "setListenerToChild: an object that can't be converted to "
-                                        + "the provided type has been detected and ignored.");
-                                continue;
-                            }
-
-                            Log.d(TAG, "setListenerToChild: found object - " + child.toString());
-
-                            arrayList.add(element);
-                        }
-
-                        onChangesCallback.onChange(arrayList);
+                        arrayList.add(element);
                     }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.w(TAG, "setListenerToChild: loadPost: onCancelled - error accessing "
-                                + "Firebase or retrieving data - ", databaseError.toException());
+                    onChangesCallback.onChange(arrayList);
+                }
 
-                        onChangesCallback.onError(null);
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.w(TAG, "setListenerToChild: loadPost: onCancelled - error accessing "
+                            + "Firebase or retrieving data - ", databaseError.toException());
 
-                    }
-                });
+                    onChangesCallback.onError(null);
+
+                }
+            });
 
         Log.d(TAG, "setListenerToChild: adding listener to ListenersHashMap on index " +
                 mValueListenersHashMap.size() + ". DatabaseReference '" + baseReference.toString()
@@ -511,55 +560,48 @@ public class FirebaseAccess {
         final DatabaseReference baseReference = database;
 
         // ---> Set listener on base reference
-        final ValueEventListener listener = baseReference
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        final ValueEventListener listener = baseReference.addValueEventListener(
 
-                        if (onChangesCallback.removeListenerCondition(dataSnapshot)) {
-                            Log.d(TAG, "setListenerToObjectOrProperty: onDataChange: " +
-                                    "removeListenerCondition has been met. Removing listener on path "
-                                    + firebasePath);
+            new ValueEventListener() {
 
-                            baseReference.removeEventListener(this);
-                            return;
-                        }
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                        T element;
+                    T element;
 
-                        try {
-                            element = dataSnapshot.getValue(typeToBeReturned);
+                    try {
+                        element = dataSnapshot.getValue(typeToBeReturned);
 
-                        } catch (Exception e) {
-                            Log.d(TAG, "setListenerToObjectOrProperty: onDataChange: object or " +
-                                    "property at path can't be converted to given type.");
-
-                            onChangesCallback.onError(null);
-                            return;
-                        }
-
-                        if (element == null) {
-                            Log.d(TAG, "setListenerToObjectOrProperty: onDataChange: no object " +
-                                    "or property has been found at provided path.");
-
-                            onChangesCallback.onError(null);
-                            return;
-                        }
-
-                        Log.d(TAG, "setListenerToObjectOrProperty: found object or property - "
-                                + element.toString());
-
-                        onChangesCallback.onChange(element);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.w(TAG, "setListenerToObjectOrProperty: loadPost: onCancelled - error " +
-                                "accessing Firebase or retrieving data - ", databaseError.toException());
+                    } catch (Exception e) {
+                        Log.d(TAG, "setListenerToObjectOrProperty: onDataChange: object or " +
+                                "property at path can't be converted to given type.");
 
                         onChangesCallback.onError(null);
+                        return;
                     }
-                });
+
+                    if (element == null) {
+                        Log.d(TAG, "setListenerToObjectOrProperty: onDataChange: no object " +
+                                "or property has been found at provided path.");
+
+                        onChangesCallback.onError(null);
+                        return;
+                    }
+
+                    Log.d(TAG, "setListenerToObjectOrProperty: found object or property - "
+                            + element.toString());
+
+                    onChangesCallback.onChange(element);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.w(TAG, "setListenerToObjectOrProperty: loadPost: onCancelled - error " +
+                            "accessing Firebase or retrieving data - ", databaseError.toException());
+
+                    onChangesCallback.onError(null);
+                }
+            });
 
         Log.d(TAG, "setListenerToChild: adding listener to ListenersHashMap on index " +
                 mValueListenersHashMap.size() + ". DatabaseReference '" + baseReference.toString()
@@ -588,7 +630,7 @@ public class FirebaseAccess {
 
             databaseReference.removeEventListener(valueEventListener);
 
-            Log.d(TAG, "removeLastValueEventListeners: removing value event listener " +
+            Log.d(TAG, "removeAllValueEventListeners: removing value event listener " +
                     "indexed " + entry.getKey() + " from node '" + databaseReference.toString()
                     + "'.");
 

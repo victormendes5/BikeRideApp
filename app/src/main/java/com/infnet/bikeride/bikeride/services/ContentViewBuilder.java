@@ -25,8 +25,11 @@ import com.infnet.bikeride.bikeride.R;
 import com.infnet.bikeride.bikeride.activitydelivery.DeliveryActivity;
 import com.infnet.bikeride.bikeride.activityrequestbiker.RequestBikerActivity;
 import com.infnet.bikeride.bikeride.activityrequestuser.RequestUserActivity;
+import com.infnet.bikeride.bikeride.constants.Constants;
+import com.infnet.bikeride.bikeride.dao.FirebaseAccess;
+import com.infnet.bikeride.bikeride.models.RequestModel;
 
-public class ContentViewBuilder {
+public class ContentViewBuilder extends FirebaseAccess {
 
     private static final int NAVIGATION_DRAWER_LAYOUT_FILE_ID = R.layout.main_drawer_layout;
     private static final int NAVIGATION_DRAWER_GROUPVIEW_ID = R.id.main_drawer_groupview;
@@ -77,43 +80,48 @@ public class ContentViewBuilder {
 
         actionBarDrawerToggle.syncState();
 
+        // actionBarDrawerToggle.getDrawerArrowDrawable().setColor(0xFFFFFFFF);
+
         NavigationView navigationView = mRefferedActivity.findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int itemID = item.getItemId();
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        int itemID = item.getItemId();
 
-                switch (itemID) {
-                    case R.id.deliveryman_review:
-                        navigate(DeliverymanReviewActivity.class);
-                        break;
-                    case R.id.delivery_tracking:
-                        navigate(DeliveryActivity.class);
-                        break;
-                    case R.id.delivery_main:
-                        navigate(RequestUserActivity.class);
-                        break;
-                    case R.id.delivery_quotation:
-                        navigate(DeliveryQuotationPriceActivity.class);
-                        break;
-                    case R.id.profile:
-                        navigate(ProfileActivity.class);
-                        break;
-                    case R.id.biker_activity:
-                        navigate(RequestBikerActivity.class);
-                        break;
-                    case R.id.logout_app:
-                        autentication = ConfigurationFirebase.getFirebaseAuth();
-                        Logout();
-                        navigate(MainActivity.class);
-                        break;
-                    default:
-                        break;
-                }
-                return false;
-            }
-        });
+                        switch (itemID) {
+                            case R.id.deliveryman_review:
+                                navigate(DeliverymanReviewActivity.class);
+                                break;
+//                            case R.id.delivery_tracking:
+//                                navigate(DeliveryActivity.class);
+//                                break;
+                            case R.id.delivery_main:
+                                navigate(RequestUserActivity.class);
+                                break;
+//                            case R.id.delivery_quotation:
+//                                navigate(DeliveryQuotationPriceActivity.class);
+//                                break;
+                            case R.id.profile:
+                                navigate(ProfileActivity.class);
+                                break;
+                            case R.id.biker_activity:
+                                navigate(RequestBikerActivity.class);
+                                break;
+                            case R.id.delivery_activity:
+                                getDummyRequestContractAndNavigateToDeliveryActivity();
+                                break;
+                            case R.id.logout_app:
+                                autentication = ConfigurationFirebase.getFirebaseAuth();
+                                Logout();
+                                navigate(MainActivity.class);
+                                break;
+                            default:
+                                break;
+                        }
+                        return false;
+                    }
+                });
     }
 
     public void navigate (Class destination) {
@@ -142,9 +150,32 @@ public class ContentViewBuilder {
             apiGoogle.revokeAccess();
             apiGoogle.signOut();
         }
+    }
 
+    private void getDummyRequestContractAndNavigateToDeliveryActivity () {
 
+        getObjectOrProperty(RequestModel.class,
 
+                new FirebaseAccess.OnComplete<RequestModel>() {
+
+                    @Override
+                    public void onSuccess(RequestModel data) {
+
+                        Intent newIntent = new Intent(mRefferedActivity, DeliveryActivity.class);
+
+                        newIntent.putExtra("isBiker", "false");
+                        newIntent.putExtra("requestData", data);
+
+                        mRefferedActivity.startActivity(newIntent);
+
+                    }
+
+                    @Override
+                    public void onFailure(RequestModel data) {
+
+                    }
+
+                }, Constants.ChildName.DELIVERIES, Constants.MockedIds.User);
 
     }
 }

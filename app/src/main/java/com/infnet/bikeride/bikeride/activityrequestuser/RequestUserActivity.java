@@ -1,5 +1,6 @@
 package com.infnet.bikeride.bikeride.activityrequestuser;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -14,10 +15,10 @@ import android.widget.Toast;
 
 import com.infnet.bikeride.bikeride.R;
 import com.infnet.bikeride.bikeride.activitydelivery.DeliveryActivity;
+import com.infnet.bikeride.bikeride.models.RequestModel;
 import com.infnet.bikeride.bikeride.services.Abstractions;
 import com.infnet.bikeride.bikeride.services.Animations;
 import com.infnet.bikeride.bikeride.services.ContentViewBuilder;
-import com.infnet.bikeride.bikeride.services.GoogleMapsAPI;
 import com.infnet.bikeride.bikeride.services.GooglePlacesAPI;
 
 public class RequestUserActivity extends AppCompatActivity {
@@ -79,7 +80,6 @@ public class RequestUserActivity extends AppCompatActivity {
     private Animations mAnimate = new Animations(200);
 
     // ---> Google APIs
-    GoogleMapsAPI mGoogleMaps;
     GooglePlacesAPI mGooglePlaces;
 
     // ---> BikeRide Request Manager
@@ -107,8 +107,6 @@ public class RequestUserActivity extends AppCompatActivity {
 
         mContentViewBuilder = new ContentViewBuilder(this,
                 R.layout.activity_request_user);
-
-        mGoogleMaps = new GoogleMapsAPI(this, R.id.map);
 
         mGooglePlaces = new GooglePlacesAPI(this);
         mGooglePlaces.setAutoComplete(R.id.pickupAddAutoCompTxtView,
@@ -224,13 +222,13 @@ public class RequestUserActivity extends AppCompatActivity {
                                            @NonNull int[] grantResults) {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        mGoogleMaps.verifyPermissionRequestResult(requestCode, grantResults);
+        mRequestManager.verifyPermissionsRequestResult(requestCode, grantResults);
     }
 
     @Override
     public void onStop() {
 
-        mRequestManager.removeAllListeners();
+        mRequestManager.removeAllValueEventListeners();
         super.onStop();
     }
 
@@ -312,8 +310,12 @@ public class RequestUserActivity extends AppCompatActivity {
             new RequestUserManager.RequestStatus() {
 
                 @Override
-                public void onRequestAccepted() {
-                    mAbst.navigate(DeliveryActivity.class);
+                public void onRequestAccepted(RequestModel request) {
+
+                    Intent newIntent = new Intent(getApplicationContext(), DeliveryActivity.class);
+                    newIntent.putExtra("isBiker", "false");
+                    newIntent.putExtra("requestData", request);
+                    startActivity(newIntent);
                 }
 
                 @Override

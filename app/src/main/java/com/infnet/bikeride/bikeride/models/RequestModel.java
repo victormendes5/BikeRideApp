@@ -2,11 +2,13 @@ package com.infnet.bikeride.bikeride.models;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.io.Serializable;
+
 // Read and Write Data on Android (Objects specs)
 // https://firebase.google.com/docs/database/android/read-and-write
 
 @IgnoreExtraProperties
-public class RequestModel {
+public class RequestModel implements Serializable {
 
     public String userName = "";
     public String userId = "";
@@ -99,7 +101,7 @@ public class RequestModel {
                 "REQUEST OBJECT CONTENT" + "\n" +
                 "^^^^^^^^^^^^^^^^^^^^^^" + "\n" +
                 "userName                   = " + userName + "\n" +
-                "requesterId                     = " + userId + "\n" +
+                "userId                     = " + userId + "\n" +
                 "estimatesPickupDistance    = " + estimatesPickupDistance + "\n" +
                 "estimatesPickupDuration    = " + estimatesPickupDuration + "\n" +
                 "estimatesDeliveryDistance  = " + estimatesDeliveryDistance + "\n" +
@@ -113,7 +115,7 @@ public class RequestModel {
                 "pickupAddressLatitude      = " + pickupAddressLatitude + "\n" +
                 "pickupAddressLongitude     = " + pickupAddressLongitude + "\n" +
                 "deliveryAddress            = " + deliveryAddress + "\n" +
-                "deliveryAddressLatitude     = " + deliveryAddressLatitude + "\n" +
+                "deliveryAddressLatitude    = " + deliveryAddressLatitude + "\n" +
                 "deliveryAddressLongitude   = " + deliveryAddressLongitude + "\n" +
                 "createTime                 = " + createTime + "\n" +
                 "updateTime                 = " + updateTime + "\n\n";

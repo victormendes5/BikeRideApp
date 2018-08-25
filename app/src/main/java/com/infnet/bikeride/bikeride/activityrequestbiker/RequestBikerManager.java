@@ -5,14 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.infnet.bikeride.bikeride.R;
 import com.infnet.bikeride.bikeride.RequestListDataModel;
 import com.infnet.bikeride.bikeride.activityrequestbiker.adapters.RequestsListAdapter;
+import com.infnet.bikeride.bikeride.constants.Constants;
 import com.infnet.bikeride.bikeride.dao.FirebaseAccess;
 import com.infnet.bikeride.bikeride.models.AvailableBikerModel;
 import com.infnet.bikeride.bikeride.models.RequestModel;
 import com.infnet.bikeride.bikeride.services.BRLocations;
+import com.infnet.bikeride.bikeride.services.GoogleMapsAPI;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -22,21 +22,16 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class RequestBikerManager {
+public class RequestBikerManager extends FirebaseAccess {
 
     /*=======================================================================================
                                              CONSTANTS
      =======================================================================================*/
 
+    private static final String TAG = "RequestBikerManager";
+
     //region CONSTANTS
 
-    private static final String TAG = "RequestBikerManager";
-    private static final String REQUESTS_CHILD = "Requests";
-    private static final String DELIVERIES_CHILD = "Deliveries";
-    private static final String AVAILABLE_BIKERS_CHILD = "AvailableBikers";
-    private static final int REQUESTS_LIST_VIEW_ID = R.id.newRequestsList;
-
-    private static final int REQUEST_TIMEOUT = 20000;
 
     //endregion
 
@@ -49,12 +44,14 @@ public class RequestBikerManager {
 
     private AppCompatActivity mReferredActivity;
     private RequestModel mRequest = new RequestModel();
-    private FirebaseAccess mFirebase = new FirebaseAccess();
 
     private RequestsListAdapter mRequestListAdapter;
     ArrayList<RequestListDataModel> mRequestList = new ArrayList<>();
 
     private BRLocations mLocation;
+
+    // ---> Google APIs
+    private GoogleMapsAPI mGoogleMaps;
 
     private String mThisSessionsCreationTime = getCurrentISODateTime();
 
@@ -80,7 +77,7 @@ public class RequestBikerManager {
     public interface OnRequestSelected {
         void onSelected();
         void onUnavailable();
-        void onSuccess(String requesterId);
+        void onSuccess(RequestModel request);
         void onProcedureTimeout();
     }
 
@@ -103,8 +100,14 @@ public class RequestBikerManager {
             }
         });
 
-        // mockBikerData();
-        // mockRequestData();
+        mGoogleMaps = new GoogleMapsAPI(mReferredActivity, Constants.ViewId.MAP, new GoogleMapsAPI.Maps() {
+
+                @Override
+                public void OnMapReady() {
+
+                    mGoogleMaps.centerMapOnDeviceLocation();
+                }
+        });
     }
 
     //endregion
@@ -141,9 +144,13 @@ public class RequestBikerManager {
                 getCurrentISODateTime()
         );
 
-        mFirebase.addOrUpdate(bikerData,
+        Log.d(TAG, "broadcastBikerLocation: updating biker location on map ...");
 
-            new FirebaseAccess.OnCompleteVoid() {
+        mGoogleMaps.centerMapOnDeviceLocation();
+
+        addOrUpdate(bikerData,
+
+            new OnCompleteVoid() {
 
                 @Override
                 public void onSuccess() {
@@ -161,7 +168,7 @@ public class RequestBikerManager {
                             "Firebase.");
                 }
 
-            }, AVAILABLE_BIKERS_CHILD, getUid());
+            }, Constants.ChildName.AVAILABLE_BIKERS, getUid());
 
     }
 
@@ -178,9 +185,9 @@ public class RequestBikerManager {
 
         Log.d(TAG, "monitorAvailableRequests: starting to monitor requests ...");
 
-        mFirebase.setListenerToChild(RequestModel.class,
+        setListenerToChild(RequestModel.class,
 
-            new FirebaseAccess.ListenToChanges<ArrayList<RequestModel>>() {
+            new ListenToChanges<ArrayList<RequestModel>>() {
 
                 @Override
                 public void onChange(ArrayList<RequestModel> data) {
@@ -261,12 +268,7 @@ public class RequestBikerManager {
 
                 }
 
-                @Override
-                public boolean removeListenerCondition(DataSnapshot data) {
-
-                    return false;
-                }
-            }, REQUESTS_CHILD);
+            }, Constants.ChildName.REQUESTS);
     }
 
     //endregion
@@ -281,7 +283,7 @@ public class RequestBikerManager {
     public void connectDataToRequestsListAndManageSelection(int viewId,
                                                             final OnRequestSelected callbacks) {
 
-        ListView listView = mReferredActivity.findViewById(REQUESTS_LIST_VIEW_ID);
+        ListView listView = mReferredActivity.findViewById(Constants.ViewId.REQUESTS_LIST);
 
         mRequestListAdapter = new RequestsListAdapter(mReferredActivity, mRequestList,
 
@@ -308,10 +310,10 @@ public class RequestBikerManager {
                 "request with this biker's ID (" + getUid() + ") ...");
 
         // ---> Attempt to sign request
-        mFirebase.updateMutableDataOnCondition(String.class, getUid(),
+        updateMutableDataOnCondition(String.class, getUid(),
 
             // --> Only sign if no biker signed it before.
-            new FirebaseAccess.Condition<String>() {
+            new Condition<String>() {
                 @Override
                 public boolean ExecuteIf(String data) {
 
@@ -320,7 +322,7 @@ public class RequestBikerManager {
                 }
             },
 
-            new FirebaseAccess.OnComplete<String>() {
+            new OnComplete<String>() {
 
                 // ---> Biker successfully signed the request
                 @Override
@@ -353,7 +355,7 @@ public class RequestBikerManager {
                     }
                 }
             },
-            REQUESTS_CHILD, requesterId, "bikerId");
+            Constants.ChildName.REQUESTS, requesterId, "bikerId");
     }
 
     private void awaitRequestDeletionOnRequestsNode(final String requesterId,
@@ -363,10 +365,10 @@ public class RequestBikerManager {
 
         deletionOfRequestOnRequestsNodeTimeout(callbacks);
 
-        mFirebase.setListenerToObjectOrProperty(RequestModel.class,
+        setListenerToObjectOrProperty(RequestModel.class,
 
             // ---> Awaiting request deletion on requests node
-            new FirebaseAccess.ListenToChanges<RequestModel>() {
+            new ListenToChanges<RequestModel>() {
                 @Override
                 public void onChange(RequestModel data) {
 
@@ -384,7 +386,7 @@ public class RequestBikerManager {
                     Log.d(TAG, "connectDataToRequestsListAndManageSelection: First step of " +
                             "transfer confirmed (request has been deleted from requests node).");
 
-                    mFirebase.removeLastValueEventListener();
+                    removeLastValueEventListener();
 
                     // ---> Deletion on request node has been detected.
                     // ---> Await creation of request on deliveries node.
@@ -392,14 +394,7 @@ public class RequestBikerManager {
                             callbacks);
                 }
 
-                @Override
-                public boolean removeListenerCondition(DataSnapshot data) {
-
-
-
-                    return false;
-                }
-            }, REQUESTS_CHILD, requesterId);
+            }, Constants.ChildName.REQUESTS, requesterId);
 
     }
 
@@ -422,12 +417,12 @@ public class RequestBikerManager {
 
                     callbacks.onProcedureTimeout();
 
-                    mFirebase.removeLastValueEventListener();
+                    removeLastValueEventListener();
 
                     // update biker data on available bikers node ONCE
 
                 }
-            }, REQUEST_TIMEOUT);
+            }, Constants.Timeouts.REQUEST_LONG);
     }
 
     private void awaitCreationOfRequestOnDeliveriesNode (final String requesterId,
@@ -437,9 +432,9 @@ public class RequestBikerManager {
 
         creationOfRequestOnDeliveriesNodeTimeout(callbacks);
 
-        mFirebase.setListenerToObjectOrProperty (RequestModel.class,
+        setListenerToObjectOrProperty (RequestModel.class,
 
-            new FirebaseAccess.ListenToChanges<RequestModel>() {
+            new ListenToChanges<RequestModel>() {
 
                 @Override
                 public void onChange(RequestModel data) {
@@ -454,7 +449,7 @@ public class RequestBikerManager {
                                 "step of transfer confirmed (request has been copied to " +
                                 "deliveries node).");
 
-                        mFirebase.removeLastValueEventListener();
+                        removeLastValueEventListener();
 
                         Log.d(TAG, "connectDataToRequestsListAndManageSelection: Full " +
                                 "transference of request to deliveries node confirmed.");
@@ -472,12 +467,7 @@ public class RequestBikerManager {
 
                 }
 
-                @Override
-                public boolean removeListenerCondition (DataSnapshot data) {
-
-                    return false;
-                }
-            }, DELIVERIES_CHILD, requesterId);
+            }, Constants.ChildName.DELIVERIES, requesterId);
     }
 
     private void creationOfRequestOnDeliveriesNodeTimeout (final OnRequestSelected callbacks) {
@@ -499,12 +489,12 @@ public class RequestBikerManager {
 
                     callbacks.onProcedureTimeout();
 
-                    mFirebase.removeLastValueEventListener();
+                    removeLastValueEventListener();
 
                     // update biker data on available bikers node ONCE
 
                 }
-            }, REQUEST_TIMEOUT);
+            }, Constants.Timeouts.REQUEST_LONG);
     }
 
     private void fulfillBikerDataOnRequest(final String requesterId,
@@ -515,12 +505,14 @@ public class RequestBikerManager {
         data.bikerPositionLatitude = mLocation.getLatitude();
         data.bikerPositionLongitude = mLocation.getLongitude();
 
+        final RequestModel request = data;
+
         Log.d(TAG, "connectDataToRequestsListAndManageSelection: attempting to fulfill " +
                 "this bikers data on confirmed request ...");
 
-        mFirebase.addOrUpdate(data,
+        addOrUpdate(data,
 
-            new FirebaseAccess.OnCompleteVoid() {
+            new OnCompleteVoid() {
 
                 @Override
                 public void onSuccess() {
@@ -530,7 +522,7 @@ public class RequestBikerManager {
                             "object on deliveries node.");
 
                     mIsRequestSelected = true;
-                    deleteThisBikersObjectFromAvailableBikersNode(requesterId, callbacks);
+                    deleteThisBikersObjectFromAvailableBikersNode(request, callbacks);
                 }
 
                 @Override
@@ -540,17 +532,17 @@ public class RequestBikerManager {
                             "not update this biker's data on confirmed request ...");
 
                 }
-            }, DELIVERIES_CHILD, requesterId);
+            }, Constants.ChildName.DELIVERIES, requesterId);
     }
 
     private void deleteThisBikersObjectFromAvailableBikersNode(
-            final String requesterId,
+            final RequestModel request,
             final OnRequestSelected callbacks) {
 
         Log.d(TAG, "connectDataToRequestsListAndManageSelection: attempting to remove " +
                 "available biker object from available bikers node ...");
 
-        mFirebase.delete(new FirebaseAccess.OnCompleteVoid() {
+        delete(new OnCompleteVoid() {
 
             @Override
             public void onSuccess() {
@@ -562,7 +554,7 @@ public class RequestBikerManager {
                         "successfully completed. Redirecting to delivery tracking " +
                         "mReferredActivity ...");
 
-                callbacks.onSuccess(requesterId);
+                callbacks.onSuccess(request);
             }
 
             @Override
@@ -572,7 +564,7 @@ public class RequestBikerManager {
                         "not remove available biker object from available bikers node.");
 
             }
-        }, AVAILABLE_BIKERS_CHILD, getUid());
+        }, Constants.ChildName.AVAILABLE_BIKERS, getUid());
 
     }
 
@@ -581,7 +573,7 @@ public class RequestBikerManager {
         Log.d(TAG, "deleteThisBikersObjectFromAvailableBikersNode: deleting this biker's " +
                 "object from available bikers node ...");
 
-        mFirebase.delete(new FirebaseAccess.OnCompleteVoid() {
+        delete(new OnCompleteVoid() {
 
             @Override
             public void onSuccess() {
@@ -592,7 +584,7 @@ public class RequestBikerManager {
             public void onFailure() {
 
             }
-        }, AVAILABLE_BIKERS_CHILD, getUid());
+        }, Constants.ChildName.AVAILABLE_BIKERS, getUid());
     }
 
     //endregion
@@ -665,26 +657,11 @@ public class RequestBikerManager {
     }
 
     private String getUid() {
-        return "ThisBikersId";
+        return Constants.MockedIds.Biker;
     }
 
     private String getBikerName() {
         return "ThisBikersName";
-    }
-
-    public void removeAllListeners() {
-
-        Log.d(TAG, "removeAllListeners: removing all Firebase listeners ...");
-
-        mFirebase.removeAllValueEventListeners();
-    }
-
-    public void removeLastListener() {
-
-        Log.d(TAG, "removeAllListeners: last Firebase listener ...");
-
-
-        mFirebase.removeLastValueEventListener();
     }
 
     public void removeLocationListener() {
@@ -696,205 +673,14 @@ public class RequestBikerManager {
 
     public boolean noRequestsAvailable () {
 
-        if (mRequestList.size() == 0) {
-            return true;
-        }
+        if (mRequestList.size() == 0) return true;
 
         return false;
     }
 
-    //endregion
+    public void verifyPermissionsRequestResult (int requestCode, int[] grantResults) {
 
-
-    /*=======================================================================================
-                                              MOCKERS
-     =======================================================================================*/
-
-    //region DATA MOCKERS
-
-    public void mockBikerData () {
-
-        ArrayList<AvailableBikerModel> array = new ArrayList<>();
-
-        array.add(new AvailableBikerModel(
-                "Biker Ipanema",
-                "bikeripanemabikeripanemabikeripanema",
-                -22.983546,
-                -43.197581,
-                getCurrentISODateTime(),
-                getCurrentISODateTime()
-        )) ;
-
-        array.add(new AvailableBikerModel(
-                "Biker Copacabana",
-                "bikercopacabanabikercopacabanabikercopacabana",
-                -22.973599,
-                -43.189674,
-                getCurrentISODateTime(),
-                getCurrentISODateTime()
-        )) ;
-
-        array.add(new AvailableBikerModel(
-                "Biker Flamengo",
-                "bikerflamengobikerflamengobikerflamengo",
-                -22.932376,
-                -43.177529,
-                getCurrentISODateTime(),
-                getCurrentISODateTime()
-        )) ;
-
-        array.add(new AvailableBikerModel(
-                "Biker Catete",
-                "bikercatetebikercatetebikercatete",
-                -22.925806,
-                -43.176970,
-                getCurrentISODateTime(),
-                getCurrentISODateTime()
-        )) ;
-
-        array.add(new AvailableBikerModel(
-                "Biker Centro",
-                "bikercentrobikercentrobikercentro",
-                -22.909491,
-                -43.183332,
-                getCurrentISODateTime(),
-                getCurrentISODateTime()
-        )) ;
-
-        for (AvailableBikerModel biker : array) {
-            mFirebase.addOrUpdate(biker,
-                    new FirebaseAccess.OnCompleteVoid() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onFailure() {
-
-                        }
-                    }, AVAILABLE_BIKERS_CHILD, biker.bikerId);
-        }
-    }
-
-    public void mockRequestData () {
-
-        ArrayList<RequestModel> array = new ArrayList<>();
-
-        array.add(new RequestModel(
-                "Request Barra",
-                "requestBarrarequestBarrarequestBarra",
-                "",
-                "",
-                0d,
-                0d,
-                "37.2 km",
-                "2 hours 5 mins",
-                "2.5 km",
-                "9 mins",
-                "R$40,95",
-                "mail",
-                "Small",
-                "Sender name 1",
-                "Av das Américas, 3900 - Barra da Tijuca",
-                -22.999705,
-                -43.351809,
-                "Receiver name 1",
-                "Av. Ayrton Senna, 3000 - Barra da Tijuca",
-                -22.983517,
-                -43.365343,
-                getCurrentISODateTime()
-        )) ;
-
-        array.add(new RequestModel(
-                "Request Centro",
-                "requestCentrorequestCentrorequestCentro",
-                "",
-                "",
-                0d,
-                0d,
-                "4.7 km",
-                "19 mins",
-                "1.7 km",
-                "6 mins",
-                "R$7,25",
-                "box",
-                "Large",
-                "Sender name 2",
-                "Av. Rio Branco, 88 - Centro",
-                -22.902803,
-                -43.178441,
-                "Receiver name 2",
-                "Rua Frei Caneca, 57 - Centro",
-                -22.909069,
-                -43.189191,
-                getCurrentISODateTime()
-        ));
-
-        array.add(new RequestModel(
-                "Request Tijuca",
-                "requestTijucarequestTijucarequestTijuca",
-                "",
-                "",
-                0d,
-                0d,
-                "8.0 km",
-                "31 mins",
-                "4.9 km",
-                "18 mins",
-                "R$15,35",
-                "unusual",
-                "Medium",
-                "Sender name 3",
-                "Rua Conde de Bonfim, 460 - Tijuca",
-                -22.926135,
-                -43.235256,
-                "Receiver name 3",
-                "Rua Canavieiras, 700 - Grajau",
-                -22.920759,
-                -43.267421,
-                getCurrentISODateTime()
-        ));
-
-        array.add(new RequestModel(
-                "Request Copacabana",
-                "requestCopacabanarequestCopacabanarequestCopacabana",
-                "",
-                "",
-                0d,
-                0d,
-                "7.8 km",
-                "34 mins",
-                "8.8 km",
-                "33 mins",
-                "R$15,35",
-                "mail",
-                "Medium",
-                "Sender name 4",
-                "Rua Barata Ribeiro, 111 - Copacabana",
-                -22.963776,
-                -43.178535,
-                "Receiver name 4",
-                "Rua Jardim Botânico, 1003 - Jardim Botânico",
-                -22.971757,
-                -43.223972,
-                getCurrentISODateTime()
-        ));
-
-        for (RequestModel request : array) {
-            mFirebase.addOrUpdate(request,
-                    new FirebaseAccess.OnCompleteVoid() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onFailure() {
-
-                        }
-                    }, REQUESTS_CHILD, request.userId);
-        }
+        mGoogleMaps.verifyPermissionRequestResult(requestCode, grantResults);
     }
 
     //endregion

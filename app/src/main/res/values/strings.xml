@@ -15,7 +15,7 @@
     <!-- Tracking Delivery -->
     <string name="acompEntrega_textView_deliverName">Luana Fortes</string>
     <string name="acompEntrega_textView_deliverCount">112 delivers</string>
-    <string name="acompEntrega_button_cancelDelivery">Cancel Delivery</string>
+    <string name="acompEntrega_button_cancelDelivery">Cancel\nDelivery</string>
 
     <!-- Principal -->
     <string name="principal_EditText_endereco">Type your address</string>

@@ -6,39 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".activitydelivery.DeliveryActivity">
 
-    <!--<include layout="@layout/tool_bar"/>-->
-
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--android:id="@+id/minha_toolbar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="?attr/colorPrimary"-->
-        <!--android:minHeight="?attr/actionBarSize"-->
-        <!--android:theme="@style/MinhaToolbarTheme"-->
-        <!--app:popupTheme="@style/LightPopUpTheme"/>-->
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/fab"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:clickable="true"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_marginBottom="16dp"-->
-        <!--android:layout_marginRight="16dp"-->
-        <!--app:srcCompat="@android:drawable/ic_menu_edit" />-->
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/mapfake"/>
 
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/map"
+        tools:context=".MapsActivity"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
+
     <RelativeLayout
+        android:id="@+id/bikerDeliveryData"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/transparentBlack50"
-        android:padding="8dp">
+        android:background="@color/transparentBlack60"
+        android:padding="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="8dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -106,13 +95,18 @@
     </RelativeLayout>
 
     <Button
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:background="@color/colorAccent"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/round_shape"
         android:text="@string/acompEntrega_button_cancelDelivery"
         android:textColor="@color/colorTextIcons"
-        android:layout_centerInParent="true"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="104dp"
+        android:layout_marginRight="8dp"
+        android:translationZ="0dp"
+        android:stateListAnimator="@null"
+        android:elevation="10dp"
+        />
 
 </RelativeLayout>
