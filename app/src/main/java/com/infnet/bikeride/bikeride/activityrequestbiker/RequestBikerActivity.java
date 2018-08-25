@@ -1,6 +1,8 @@
 package com.infnet.bikeride.bikeride.activityrequestbiker;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -8,10 +10,10 @@ import android.widget.Toast;
 
 import com.infnet.bikeride.bikeride.R;
 import com.infnet.bikeride.bikeride.activitydelivery.DeliveryActivity;
+import com.infnet.bikeride.bikeride.models.RequestModel;
 import com.infnet.bikeride.bikeride.services.Abstractions;
 import com.infnet.bikeride.bikeride.services.Animations;
 import com.infnet.bikeride.bikeride.services.ContentViewBuilder;
-import com.infnet.bikeride.bikeride.services.GoogleMapsAPI;
 
 public class RequestBikerActivity extends AppCompatActivity {
 
@@ -34,9 +36,6 @@ public class RequestBikerActivity extends AppCompatActivity {
 
     // ---> Animations
     private Animations mAnimate = new Animations(200);
-
-    // ---> Google APIs
-    private GoogleMapsAPI mGoogleMaps;
 
     // ---> BikeRide Request Manager
     private RequestBikerManager mRequestManager;
@@ -73,8 +72,6 @@ public class RequestBikerActivity extends AppCompatActivity {
         mContentViewBuilder = new ContentViewBuilder(this,
                 R.layout.activity_request_biker);
 
-        mGoogleMaps = new GoogleMapsAPI(this, R.id.map);
-
         mAbst = new Abstractions(this);
 
         mRequestManager = new RequestBikerManager(this);
@@ -91,10 +88,18 @@ public class RequestBikerActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        mRequestManager.verifyPermissionsRequestResult(requestCode, grantResults);
+    }
+
+    @Override
     protected void onStop() {
 
         mRequestManager.removeLocationListener();
-        mRequestManager.removeAllListeners();
+        mRequestManager.removeAllValueEventListeners();
         mRequestManager.deleteThisBikersObjectFromAvailableBikersNode();
 
         super.onStop();
@@ -138,10 +143,11 @@ public class RequestBikerActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onSuccess(final String requesterId) {
+                public void onSuccess(final RequestModel request) {
 
-                    mAbst.navigate(DeliveryActivity.class,
-                            "requesterId", requesterId);
+                    Intent newIntent = new Intent(getApplicationContext(), DeliveryActivity.class);
+                    newIntent.putExtra("isBiker", "true");
+                    startActivity(newIntent);
                 }
 
                 @Override

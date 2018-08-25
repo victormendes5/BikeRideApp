@@ -51,6 +51,7 @@ import com.infnet.bikeride.bikeride.activityrequestuser.RequestUserActivity;
 import com.infnet.bikeride.bikeride.services.Abstractions;
 import com.infnet.bikeride.bikeride.services.Animations;
 import com.infnet.bikeride.bikeride.services.ContentViewBuilder;
+import com.infnet.bikeride.bikeride.services.CurrentUserData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -111,25 +112,41 @@ public class MainActivity extends AppCompatActivity{
 
 //            Toast.makeText(this, "Usuário Logado", Toast.LENGTH_SHORT).show();
 
-            // Redireciona tela pra Drlivery Main
-            Redirect(RequestUserActivity.class);
-
             // Func de UserManager para retornar os dados do usuário logado
             mUserManager.getPerfil(new UserManager.OnUserComplete() {
+
                 @Override
                 public void onUserComplete(Users data) {
+
                     usuarioLogado = data;
                     Log.v("MainRonanError", usuarioLogado.getEmail());//Para pegar email
                     Log.v("MainRonanError", usuarioLogado.getName());//Para pegar nome
 
+                    try {
+
+                        CurrentUserData.setId(user.getUid());
+                        CurrentUserData.setFirstName(usuarioLogado.getName());
+                        CurrentUserData.setLastName(usuarioLogado.getLastName());
+                        CurrentUserData.setEmail(usuarioLogado.getEmail());
+                        CurrentUserData.setUrlPhoto(usuarioLogado.getUrlPhoto());
+
+                    } catch (Exception e) {
+                        Log.d(TAG, "onUserComplete: erro ao atualizar dados na " +
+                                "classe CurrentUserData.");
+
+                        e.printStackTrace();
+                    }
+
+                    // Redireciona tela pra Drlivery Main
+                    Redirect(RequestUserActivity.class);
+
                 }
+
                 @Override
                 public void onErrorUserComplete(Users data) {
                     Log.v("MainRonanError", data.toString());
                 }
             },user.getUid().toString());
-
-
         }
 
 
@@ -243,21 +260,57 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
-                if (task.isSuccessful()) {
+            if (task.isSuccessful()) {
 
-                    Toast.makeText(MainActivity.this, "Sucesso ao Logar", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Sucesso ao Logar", Toast.LENGTH_SHORT).show();
 
-                    Redirect(RequestUserActivity.class);
+                FirebaseUser userLogad = autentication.getCurrentUser();
 
-                } else if (!task.isSuccessful()) {
-                    Log.w(TAG, "signInWithEmail:failed", task.getException());
+                // Func de UserManager para retornar os dados do usuário logado
+                mUserManager.getPerfil(new UserManager.OnUserComplete() {
 
-                    Toast.makeText(MainActivity.this, "Erroe", Toast.LENGTH_SHORT).show();
-                }
+                    @Override
+                    public void onUserComplete(Users data) {
+
+                        usuarioLogado = data;
+                        Log.v("MainRonanError", usuarioLogado.getEmail());//Para pegar email
+                        Log.v("MainRonanError", usuarioLogado.getName());//Para pegar nome
+
+                        try {
+
+                            CurrentUserData.setId(user.getUid());
+                            CurrentUserData.setFirstName(usuarioLogado.getName());
+                            CurrentUserData.setLastName(usuarioLogado.getLastName());
+                            CurrentUserData.setEmail(usuarioLogado.getEmail());
+                            CurrentUserData.setUrlPhoto(usuarioLogado.getUrlPhoto());
+
+                        } catch (Exception e) {
+
+                            Log.d(TAG, "onUserComplete: erro ao atualizar dados na " +
+                                    "classe CurrentUserData.");
+                            e.printStackTrace();
+                        }
+
+                        // Redireciona tela pra Drlivery Main
+                        Redirect(RequestUserActivity.class);
+                    }
+
+                    @Override
+                    public void onErrorUserComplete(Users data) {
+                        Log.v("MainRonanError", data.toString());
+                    }
+
+                }, userLogad.getUid());
+
+            } else if (!task.isSuccessful()) {
+                Log.w(TAG, "signInWithEmail:failed", task.getException());
+
+                Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+            }
             }
         });
-
     }
+
 
     //Login Google
     public View.OnClickListener LogarGoogle = new View.OnClickListener() {
@@ -290,6 +343,8 @@ public class MainActivity extends AppCompatActivity{
                             FirebaseUser userLogad = autentication.getCurrentUser();
 
                             users.setId(userLogad.getUid());
+
+                            CurrentUserData.setId(userLogad.getUid());
 
                             CriarUser(users);
 
@@ -370,6 +425,8 @@ public class MainActivity extends AppCompatActivity{
 
                     users.setId(userLogad.getUid());
 
+                    CurrentUserData.setId(userLogad.getUid());
+
                     CriarUser(users);
 
                 } else {
@@ -389,6 +446,10 @@ public class MainActivity extends AppCompatActivity{
             users.setName(jsonObject.getString("first_name").toString());
             users.setUrlPhoto(jsonObject.getString("picture").toString());
 
+            CurrentUserData.setFirstName(jsonObject.getString("first_name"));
+            CurrentUserData.setLastName(jsonObject.getString("last_name"));
+            CurrentUserData.setEmail(jsonObject.getString("email"));
+            CurrentUserData.setUrlPhoto(jsonObject.getString("picture"));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -445,6 +506,11 @@ public class MainActivity extends AppCompatActivity{
                 users.setUrlPhoto(account.getPhotoUrl().toString());
                 users.setName(account.getGivenName().toString());
                 users.setLastName(account.getFamilyName());
+
+                CurrentUserData.setFirstName(account.getGivenName().toString());
+                CurrentUserData.setLastName(account.getFamilyName());
+                CurrentUserData.setEmail(account.getEmail().toString());
+                CurrentUserData.setUrlPhoto(account.getPhotoUrl().toString());
 
                 firebaseAuthWithGoogle(account);
 

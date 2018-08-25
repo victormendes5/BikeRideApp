@@ -116,7 +116,8 @@ public class GooglePlacesAPI {
                     null);
 
             PlaceAutoCompleteAdapter placeAutoCompleteAdapter = new PlaceAutoCompleteAdapter(
-                    mRefferedActivity, geoDataClient, LAT_LONG_BOUNDS_BRAZIL, null);
+                    mRefferedActivity, geoDataClient, LAT_LONG_BOUNDS_BRAZIL,
+                    null);
 
             final AutoCompleteTextView autoCompleteTextView =
                     (AutoCompleteTextView) mRefferedActivity.findViewById(viewId);

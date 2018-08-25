@@ -2,6 +2,7 @@ package com.infnet.bikeride.bikeride.services;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,6 +14,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 public class Abstractions {
+
+    private static final String TAG = "Abstractions";
 
     AppCompatActivity mReferredActivity;
 
@@ -185,4 +188,18 @@ public class Abstractions {
         mReferredActivity.startActivity(newIntent);
     }
 
+    public void navigate (Class destination, Object ... keyValueObjects) {
+
+        Intent newIntent = new Intent(mReferredActivity, destination);
+
+        for (int i = 0; i<keyValueObjects.length; i += 2) {
+
+            String key = (String) keyValueObjects[i];
+            Bundle bundle = (Bundle) keyValueObjects[i+1];
+
+            newIntent.putExtra(key, bundle);
+        }
+
+        mReferredActivity.startActivity(newIntent);
+    }
 }

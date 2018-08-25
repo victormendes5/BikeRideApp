@@ -112,6 +112,7 @@ public class BRLocations {
                 Context.LOCATION_SERVICE);
 
         mLocationListener = new LocationListener() {
+
             @Override
             public void onLocationChanged(Location location) {
 
