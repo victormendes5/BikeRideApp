@@ -274,25 +274,17 @@ public class Animations {
         translateToLeft(oldview);
     }
 
-    public void swapViewsLeft (final View oldview, final View newview,
-                               final AnimationCallback callback) {
-        translateFromRight(newview);
-        translateToLeft(oldview);
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-
-                        callback.OnComplete();
-
-                    }
-                },
-                mDefaultAnimationSpeed*2);
-    }
-
     public void swapViewsRight (final View oldview, final View newview) {
         translateToRight(oldview);
         translateFromLeft(newview);
+    }
+
+    public void swapViewsAimingRigthSequentiallyIfVisible (final View oldview, final View newview) {
+
+        if (oldview.getVisibility() == View.VISIBLE) {
+            translateToRight(oldview);
+            translateFromRight(newview, mDefaultAnimationSpeed);
+        }
     }
 
     public void crossFadeViews (View viewtofadeout, View viewtofadein) {
@@ -325,6 +317,48 @@ public class Animations {
             }
         }
     }
+
+    public void translateToRightIfVisible (View ... views) {
+        for (View v : views) {
+            if (v.getVisibility() == View.VISIBLE) {
+                translateToRight(v);
+            }
+        }
+    }
+
+    public void translateFromRightIfInvisible (View ... views) {
+        for (View v : views) {
+            if (v.getVisibility() == View.GONE) {
+                translateFromRight(v);
+            }
+        }
+    }
+
+    public void translateFromRightIfInvisible (int delay, View ... views) {
+        for (View v : views) {
+            if (v.getVisibility() == View.GONE) {
+                translateFromRight(v, delay);
+            }
+        }
+    }
+
+    public void translateToLeftIfVisible (View ... views) {
+        for (View v : views) {
+            if (v.getVisibility() == View.VISIBLE) {
+                translateToLeft(v);
+            }
+        }
+    }
+
+    public void translateFromLeftIfInvisible (View ... views) {
+        for (View v : views) {
+            if (v.getVisibility() == View.GONE) {
+                translateFromLeft(v);
+            }
+        }
+    }
+
+
 
     public void fadeOutIfVisible (View ... views) {
         for (View v : views) {

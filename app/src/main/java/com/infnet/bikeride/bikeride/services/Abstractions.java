@@ -202,4 +202,19 @@ public class Abstractions {
 
         mReferredActivity.startActivity(newIntent);
     }
+
+    public double decodeDistance (String distance) {
+
+        if (distance.contains("km")) {
+
+            return Double.valueOf(distance
+                    .replace("km", "")
+                    .trim());
+
+        }
+
+        return Double.valueOf(distance
+                .replace("m", "")
+                .trim());
+    }
 }

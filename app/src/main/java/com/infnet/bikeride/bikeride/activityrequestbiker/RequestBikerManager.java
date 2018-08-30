@@ -12,6 +12,7 @@ import com.infnet.bikeride.bikeride.dao.FirebaseAccess;
 import com.infnet.bikeride.bikeride.models.AvailableBikerModel;
 import com.infnet.bikeride.bikeride.models.RequestModel;
 import com.infnet.bikeride.bikeride.services.BRLocations;
+import com.infnet.bikeride.bikeride.services.CurrentUserData;
 import com.infnet.bikeride.bikeride.services.GoogleMapsAPI;
 
 import java.text.DateFormat;
@@ -224,13 +225,9 @@ public class RequestBikerManager extends FirebaseAccess {
                         String typeAndSize = model.packageSize + " sized " +
                                 model.packageType;
 
-                        double pickupDistance =
-                                Double.valueOf(model.estimatesPickupDistance
-                                        .replace("km", "").trim());
+                        double pickupDistance = decodeDistance(model.estimatesPickupDistance);
 
-                        double deliveryDistance =
-                                Double.valueOf(model.estimatesDeliveryDistance
-                                        .replace("km", "").trim());
+                        double deliveryDistance = decodeDistance(model.estimatesDeliveryDistance);
 
                         double distanceDbl = pickupDistance + deliveryDistance;
 
@@ -501,7 +498,7 @@ public class RequestBikerManager extends FirebaseAccess {
                                            RequestModel data,
                                            final OnRequestSelected callbacks) {
 
-        data.bikerName = getBikerName();
+        data.bikerName = CurrentUserData.getFirstName() + " " + CurrentUserData.getLastName();
         data.bikerPositionLatitude = mLocation.getLatitude();
         data.bikerPositionLongitude = mLocation.getLongitude();
 
@@ -657,7 +654,7 @@ public class RequestBikerManager extends FirebaseAccess {
     }
 
     private String getUid() {
-        return Constants.MockedIds.Biker;
+        return CurrentUserData.getId();
     }
 
     private String getBikerName() {
@@ -681,6 +678,21 @@ public class RequestBikerManager extends FirebaseAccess {
     public void verifyPermissionsRequestResult (int requestCode, int[] grantResults) {
 
         mGoogleMaps.verifyPermissionRequestResult(requestCode, grantResults);
+    }
+
+    public double decodeDistance (String distance) {
+
+        if (distance.contains("km")) {
+
+            return Double.valueOf(distance
+                    .replace("km", "")
+                    .trim());
+
+        }
+
+        return Double.valueOf(distance
+                .replace("m", "")
+                .trim())/1000;
     }
 
     //endregion

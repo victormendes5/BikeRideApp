@@ -147,6 +147,7 @@ public class RequestBikerActivity extends AppCompatActivity {
 
                     Intent newIntent = new Intent(getApplicationContext(), DeliveryActivity.class);
                     newIntent.putExtra("isBiker", "true");
+                    newIntent.putExtra("requestData", request);
                     startActivity(newIntent);
                 }
 

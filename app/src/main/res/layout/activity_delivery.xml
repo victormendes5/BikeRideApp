@@ -20,14 +20,128 @@
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 
     <RelativeLayout
-        android:id="@+id/bikerDeliveryData"
+        android:id="@+id/modalOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparentBlack60"
+        android:visibility="gone"
+        android:alpha="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/include_modal_awaiting_delivery"
+        layout="@layout/modal_awaiting_delivery"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
+
+    <include
+        android:id="@+id/include_modal_awaiting_wrapping"
+        layout="@layout/modal_awaiting_wrapping"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
+
+    <include
+        android:id="@+id/include_modal_awaiting_cancelled"
+        layout="@layout/modal_awaiting_delivery_cancelled"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
+
+
+    <RelativeLayout
+        android:id="@+id/bikerDeliveryData"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
         android:orientation="horizontal"
         android:background="@color/transparentBlack60"
         android:padding="8dp"
         android:layout_alignParentBottom="true"
-        android:layout_margin="8dp">
+        android:layout_margin="8dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:layout_alignParentLeft="true">
+
+            <TextView
+                android:id="@+id/requestername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Requester Name"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorTextIcons"/>
+
+            <TextView
+                android:id="@+id/headingAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Av. Rio Branco, 147"
+                android:textColor="@color/colorTextIcons"/>
+
+
+            <TextView
+                android:id="@+id/packageInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Small package, odd shape."
+                android:textColor="@color/colorTextIcons"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/callicon2"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_call_black_24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:layout_toStartOf="@id/messageicon2"/>
+
+        <ImageView
+            android:id="@+id/messageicon2"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_message_black_24dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:id="@+id/requesterDeliveryData"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        android:background="@color/transparentBlack60"
+        android:padding="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="8dp"
+        android:visibility="gone">
 
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -81,20 +195,21 @@
             android:layout_height="32dp"
             android:src="@drawable/ic_call_black_24dp"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="16dp"
             android:layout_toStartOf="@id/messageicon"/>
 
         <ImageView
             android:id="@+id/messageicon"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:src="@drawable/ic_message_black_24dp"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 
     <Button
+        android:id="@+id/cancelDeliveryBtn"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:background="@drawable/round_shape"
@@ -104,6 +219,40 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="104dp"
         android:layout_marginRight="8dp"
+        android:translationZ="0dp"
+        android:stateListAnimator="@null"
+        android:elevation="10dp"
+        />
+
+    <Button
+        android:id="@+id/confirmPickupBtn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/round_shape"
+        android:text="Confirm\nPickup"
+        android:textColor="@color/colorTextIcons"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="104dp"
+        android:layout_marginRight="8dp"
+        android:visibility="gone"
+        android:translationZ="0dp"
+        android:stateListAnimator="@null"
+        android:elevation="10dp"
+        />
+
+    <Button
+        android:id="@+id/confirmDeliveryBtn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/round_shape"
+        android:text="Confirm\nDelivery"
+        android:textColor="@color/colorTextIcons"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="104dp"
+        android:layout_marginRight="8dp"
+        android:visibility="gone"
         android:translationZ="0dp"
         android:stateListAnimator="@null"
         android:elevation="10dp"

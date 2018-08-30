@@ -17,7 +17,6 @@ import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.infnet.bikeride.bikeride.ConfigurationFirebase;
-import com.infnet.bikeride.bikeride.DeliveryQuotationPriceActivity;
 import com.infnet.bikeride.bikeride.DeliverymanReviewActivity;
 import com.infnet.bikeride.bikeride.MainActivity;
 import com.infnet.bikeride.bikeride.ProfileActivity;
@@ -57,6 +56,7 @@ public class ContentViewBuilder extends FirebaseAccess {
     }
 
     private void setActivityContent () {
+
         ViewGroup view = (ViewGroup) View.inflate(mRefferedActivity, mActivityLayoutId,null);
 
         // ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(0, 0);
@@ -108,9 +108,9 @@ public class ContentViewBuilder extends FirebaseAccess {
                             case R.id.biker_activity:
                                 navigate(RequestBikerActivity.class);
                                 break;
-                            case R.id.delivery_activity:
-                                getDummyRequestContractAndNavigateToDeliveryActivity();
-                                break;
+//                            case R.id.delivery_activity:
+//                                getDummyRequestContractAndNavigateToDeliveryActivity();
+//                                break;
                             case R.id.logout_app:
                                 autentication = ConfigurationFirebase.getFirebaseAuth();
                                 Logout();

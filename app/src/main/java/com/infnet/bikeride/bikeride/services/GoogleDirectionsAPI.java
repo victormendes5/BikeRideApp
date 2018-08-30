@@ -68,14 +68,14 @@ public abstract class GoogleDirectionsAPI {
        |                                                                                  |
        \=================================================================================*/
 
-    public static void getGoogleDirectionsData(final OnDirectionsComplete callbacks,
-                                        Double... data) {
+    public static void getData(Double[] data,
+                               final OnDirectionsComplete callbacks) {
 
         // https://developers.google.com/maps/documentation/directions/intro
 
         if (data.length%2 != 0 || data.length<4) {
 
-            Log.d(TAG, "getGoogleDirectionsData: ERROR! Number of arguments passed on " +
+            Log.d(TAG, "getData: ERROR! Number of arguments passed on " +
                     "varargs parameter is incorrect. (Total of " + data.length +
                     " arguments passed. Total must be multiple of 2, at least 4 doubles)");
 
@@ -84,8 +84,8 @@ public abstract class GoogleDirectionsAPI {
             return;
         }
 
-        Log.d(TAG, "getGoogleDirectionsData: getting Google Directions API data ...");
-        Log.d(TAG, "getGoogleDirectionsData: building directions API request string ...");
+        Log.d(TAG, "getData: getting Google Directions API data ...");
+        Log.d(TAG, "getData: building directions API request string ...");
 
         Double startLatitude = data[0];
         Double startLongitude = data[1];
@@ -118,10 +118,10 @@ public abstract class GoogleDirectionsAPI {
                 + "mode=" + TRAVEL_MODE + "&"
                 + "key=" + API_KEY;
 
-        Log.d(TAG, "getGoogleDirectionsData: built directions API request string is - " +
+        Log.d(TAG, "getData: built directions API request string is - " +
                 executeString);
 
-        Log.d(TAG, "getGoogleDirectionsData: executing Http request ...");
+        Log.d(TAG, "getData: executing Http request ...");
 
         final long startTime = System.currentTimeMillis();
 
@@ -134,32 +134,32 @@ public abstract class GoogleDirectionsAPI {
 
                 double elapsedTime = (stopTime - startTime) / 1000;
 
-                Log.d(TAG, "getGoogleDirectionsData: directions API data successfully " +
-                        "retrieved (" + String.format("%.2f", elapsedTime) + " s).");
+                Log.d(TAG, "getData: directions API data successfully " +
+                        "retrieved (" + elapsedTime + " s).");
 
                 decodeGoogleDirectionsData(data,
 
-                        new OnDirectionsDecodeComplete() {
+                    new OnDirectionsDecodeComplete() {
 
-                            @Override
-                            public void onSuccess() {
+                        @Override
+                        public void onSuccess() {
 
-                                Log.d(TAG, "getGoogleDirectionsData: successfully decoded " +
-                                        "directions API data.");
+                            Log.d(TAG, "getData: successfully decoded " +
+                                    "directions API data.");
 
-                                callbacks.onSuccess(mBoundaries, mWayPoints);
+                            callbacks.onSuccess(mBoundaries, mWayPoints);
 
-                            }
+                        }
 
-                            @Override
-                            public void onFailure(String errorMessage) {
+                        @Override
+                        public void onFailure(String errorMessage) {
 
-                                Log.d(TAG, "getGoogleDirectionsData: could not decode " +
-                                        "directions API data - " + errorMessage);
+                            Log.d(TAG, "getData: could not decode " +
+                                    "directions API data - " + errorMessage);
 
-                                callbacks.onFailure();
-                            }
-                        });
+                            callbacks.onFailure();
+                        }
+                    });
 
 
                 return null;
@@ -168,7 +168,7 @@ public abstract class GoogleDirectionsAPI {
             @Override
             public String OnFailure(Exception e) {
 
-                Log.d(TAG, "getGoogleDirectionsData: failed to execute Http request to " +
+                Log.d(TAG, "getData: failed to execute Http request to " +
                         "retrieve directions API data.");
 
                 callbacks.onFailure();

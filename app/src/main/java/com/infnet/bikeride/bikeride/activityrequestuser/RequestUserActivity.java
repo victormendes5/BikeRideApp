@@ -327,6 +327,15 @@ public class RequestUserActivity extends AppCompatActivity {
                 }
 
                 @Override
+                public void onRequestCancel() {
+
+                    mAnimate.swapViewsRight(mModalSearchingBiker, mModalRequestDetails);
+
+                    Toast.makeText(getApplicationContext(), "Request cancelled",
+                            Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
                 public void onError() {
                     mAnimate.swapViewsRight(mModalSearchingBiker, mModalRequestDetails);
 
