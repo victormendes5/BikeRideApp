@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseAuth;
+import com.infnet.bikeride.bikeride.CardsActivity;
 import com.infnet.bikeride.bikeride.ConfigurationFirebase;
 import com.infnet.bikeride.bikeride.DeliveryQuotationPriceActivity;
 import com.infnet.bikeride.bikeride.DeliverymanReviewActivity;
@@ -110,6 +111,9 @@ public class ContentViewBuilder extends FirebaseAccess {
                                 break;
                             case R.id.delivery_activity:
                                 getDummyRequestContractAndNavigateToDeliveryActivity();
+                                break;
+                            case R.id.payment_methods:
+                                navigate(CardsActivity.class);
                                 break;
                             case R.id.logout_app:
                                 autentication = ConfigurationFirebase.getFirebaseAuth();

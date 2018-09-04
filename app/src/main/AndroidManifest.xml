@@ -61,7 +61,9 @@
         <activity android:name=".DeliveryQuotationPriceActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".activityrequestbiker.RequestBikerActivity" />
-        <activity android:name=".ForgotPasswordActivity"></activity>
+        <activity android:name=".ForgotPasswordActivity" />
+        <activity android:name=".AddCreditCardActivity"/>
+        <activity android:name=".CardsActivity"/>
     </application>
 
 </manifest>
