@@ -305,8 +305,7 @@ public class GoogleMapsAPI {
         mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundaries, 0));
     }
 
-    public void drawPolylines(LatLngBounds boundaries,
-                              ArrayList<LatLng> data) {
+    public void drawPolylines(ArrayList<LatLng> data) {
 
         Log.d(TAG, "drawPolylines: drawing ...");
 
@@ -401,7 +400,6 @@ public class GoogleMapsAPI {
        |                  API AVAILABILITY, PERMISSIONS, INITIALIZATION                   |
        |                                                                                  |
        \=================================================================================*/
-
 
     //region API AVAILABILITY, PERMISSIONS, INITIALIZATION
 

@@ -203,6 +203,23 @@ public class BRLocations {
        |                                                                                  |
        \=================================================================================*/
 
+   public float getDistanceBetweenCordinates(Double lat1, Double lng1,
+                                              Double lat2, Double lng2) {
+
+       Location origin = new Location ("");
+       Location destination = new Location ("");
+
+       origin.setLatitude(lat1);
+       origin.setLongitude(lng1);
+
+       destination.setLatitude(lat2);
+       destination.setLongitude(lng2);
+
+       float distance = origin.distanceTo(destination);
+
+       return distance;
+   }
+
 
     public void verifyPermissionRequestResult (int requestCode, int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

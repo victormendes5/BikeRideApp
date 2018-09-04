@@ -53,7 +53,7 @@
 
     <!-- MODALS: Choose Delivery Address-->
     <string name="modal_choose_delivery_address_title">Choose delivery address</string>
-    <string name="modal_choose_delivery_address_hint">Type here the pickup address</string>
+    <string name="modal_choose_delivery_address_hint">Type here the delivery address</string>
     <string name="modal_choose_delivery_common_addresses_title">COMMON ADDRESSES</string>
     <string name="modal_choose_delivery_suggested_addresses_title">SUGGESTED ADDRESSES</string>
     <string name="sample_address_1">Rua Sen. Fraga 1001 - Manguinhos</string>

@@ -39,7 +39,8 @@ public class RequestModel implements Serializable {
 
     public boolean confirmedPickupByUser = false;
     public boolean confirmedPickupByBiker = false;
-    public boolean confirmedDelivery = false;
+    public boolean confirmedDeliveryByBiker = false;
+    public boolean confirmedDeliveryByUser = false;
 
     public String createTime = "";
     public String updateTime = "";
@@ -94,9 +95,31 @@ public class RequestModel implements Serializable {
         this.createTime = createTime;
     }
 
+    public String getPickupAddressShrt (int charSize) {
+
+        String address = pickupAddress;
+
+        if (address.length() >= charSize+1) {
+            address = address.substring(0, charSize) + " ...";
+        }
+
+        return  address;
+    }
+
+    public String getDeliveryAddressShrt (int charSize) {
+
+        String address = deliveryAddress;
+
+        if (address.length() >= charSize+1) {
+            address = address.substring(0, charSize) + " ...";
+        }
+
+        return  address;
+    }
+
     @Override
     public String toString() {
-//        return super.toString();
+
         return "\n\n" +
                 "REQUEST OBJECT CONTENT" + "\n" +
                 "^^^^^^^^^^^^^^^^^^^^^^" + "\n" +
@@ -117,6 +140,10 @@ public class RequestModel implements Serializable {
                 "deliveryAddress            = " + deliveryAddress + "\n" +
                 "deliveryAddressLatitude    = " + deliveryAddressLatitude + "\n" +
                 "deliveryAddressLongitude   = " + deliveryAddressLongitude + "\n" +
+                "confirmedPickupByUser      = " + confirmedPickupByUser + "\n" +
+                "confirmedPickupByBiker     = " + confirmedPickupByBiker + "\n" +
+                "confirmedDeliveryByBiker   = " + confirmedDeliveryByBiker + "\n" +
+                "confirmedDeliveryByUser    = " + confirmedDeliveryByUser + "\n" +
                 "createTime                 = " + createTime + "\n" +
                 "updateTime                 = " + updateTime + "\n\n";
     }

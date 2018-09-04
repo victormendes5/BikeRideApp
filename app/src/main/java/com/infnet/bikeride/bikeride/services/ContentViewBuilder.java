@@ -83,7 +83,7 @@ public class ContentViewBuilder extends FirebaseAccess {
 
         // actionBarDrawerToggle.getDrawerArrowDrawable().setColor(0xFFFFFFFF);
 
-        NavigationView navigationView = mRefferedActivity.findViewById(R.id.navigation_view);
+        final NavigationView navigationView = mRefferedActivity.findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -109,9 +109,9 @@ public class ContentViewBuilder extends FirebaseAccess {
                             case R.id.biker_activity:
                                 navigate(RequestBikerActivity.class);
                                 break;
-                            case R.id.delivery_activity:
-                                getDummyRequestContractAndNavigateToDeliveryActivity();
-                                break;
+//                            case R.id.delivery_activity:
+//                                getDummyRequestContractAndNavigateToDeliveryActivity();
+//                                break;
                             case R.id.payment_methods:
                                 navigate(CardsActivity.class);
                                 break;

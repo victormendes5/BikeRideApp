@@ -1,6 +1,7 @@
 package com.infnet.bikeride.bikeride.activitydelivery;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -30,6 +31,8 @@ public class DeliveryManager extends FirebaseAccess {
 
     private static final String TAG = "DeliveryManager";
 
+    private static final float PICKUP_AND_DELIVERY_RANGE_IN_METERS = 100f;
+
 
     /*=======================================================================================
                                              VARIABLES
@@ -49,6 +52,29 @@ public class DeliveryManager extends FirebaseAccess {
     // ---> Control variables
     private boolean mIsBiker = true;
     private boolean mIsDirectionsCalculating = false;
+    private OnUiUpdate mCallbacks;
+
+
+    /*=======================================================================================
+                                          GETTERS & SETTERS
+     =======================================================================================*/
+
+    public boolean isBiker () { return mIsBiker; }
+    public RequestModel getRequestContract () { return mRequestContract; }
+
+
+    /*=======================================================================================
+                                             INTERFACES
+     =======================================================================================*/
+
+    public interface OnUiUpdate {
+        void isUnderWay();
+        void onBikerIsAtPickupAddress();
+        void onBikerIsAtDeliveryAddress();
+        void onCancel();
+        void onComplete();
+        void onFinish();
+    }
 
 
     /*=======================================================================================
@@ -57,11 +83,13 @@ public class DeliveryManager extends FirebaseAccess {
 
     //region CONSTRUCTORS
 
-    public DeliveryManager(Context context) {
+    public DeliveryManager(Context context, OnUiUpdate callbacks) {
 
         Log.d(TAG, "DeliveryManager: initializing delivery process ...");
 
         mReferredActivity = (AppCompatActivity) context;
+
+        mCallbacks = callbacks;
 
         getBundledData();
 
@@ -103,6 +131,9 @@ public class DeliveryManager extends FirebaseAccess {
 
             mRequestContract = (RequestModel) mReferredActivity.getIntent()
                     .getSerializableExtra("requestData");
+
+            Log.d(TAG, "getBundledData: " + mRequestContract.toString());
+
         }
     }
 
@@ -144,7 +175,7 @@ public class DeliveryManager extends FirebaseAccess {
         drawPathAndCenterWithinArea(applicableCoordinates);
     }
 
-    private void placeMarkersOnMap() {
+    private void placeMarkersOnMap () {
 
         Log.d(TAG, "placeMarkersOnMap: placing markers on map ...");
 
@@ -183,13 +214,21 @@ public class DeliveryManager extends FirebaseAccess {
                     Log.d(TAG, "setListenerToRequestContract: request contract update " +
                             "detected.");
 
-                    mRequestContract = data;
-
-                    onRequestContractUpdate();
+                    onRequestContractUpdate(data);
                 }
 
                 @Override
                 public void onError(RequestModel data) {
+
+                    if (data == null) {
+
+                        Log.d(TAG, "setListenerToRequestContract: request contract has " +
+                                "been cancelled (deleted).");
+
+                        mCallbacks.onCancel();
+
+                        return;
+                    }
 
                     Log.d(TAG, "setListenerToRequestContract: some error occurred while " +
                             "listening to request contract changes.");
@@ -198,12 +237,14 @@ public class DeliveryManager extends FirebaseAccess {
         }, Constants.ChildName.DELIVERIES, mRequestContract.userId);
     }
 
-    private void onRequestContractUpdate () {
+    private void onRequestContractUpdate (RequestModel data) {
+
+        mRequestContract = data;
 
         moveBikerOnMap();
 
         // ---> Pickup has NOT yet been confirmed.
-        if (!isPickupConfirmed()) {
+        if (!isPickupConfirmed() && !isDeliveryConfirmed()) {
 
             Log.d(TAG, "onRequestContractUpdate: Executing pickup flow ...");
 
@@ -215,10 +256,13 @@ public class DeliveryManager extends FirebaseAccess {
                     mRequestContract.deliveryAddressLatitude,
                     mRequestContract.deliveryAddressLongitude
             );
+
+            if (isBikerWithinPickupRange())  mCallbacks.onBikerIsAtPickupAddress();
+            else                             mCallbacks.isUnderWay();
         }
 
-        // ---> Pickup has been been confirmed.
-        else {
+        // ---> Pickup has been confirmed.
+        else if (isPickupConfirmed() && !isDeliveryConfirmed()) {
 
             Log.d(TAG, "onRequestContractUpdate: Executing delivery flow ...");
 
@@ -228,11 +272,48 @@ public class DeliveryManager extends FirebaseAccess {
                     mRequestContract.deliveryAddressLatitude,
                     mRequestContract.deliveryAddressLongitude
             );
+
+            if (isBikerWithinPickupRange())   mCallbacks.onBikerIsAtPickupAddress();
+            if (isBikerWithinDeliveryRange()) mCallbacks.onBikerIsAtDeliveryAddress();
+            else                              mCallbacks.isUnderWay();
+        }
+
+        // ---> Delivery has been confirmed.
+        else if (isPickupConfirmed() && isDeliveryConfirmed()) {
+
+            Log.d(TAG, "onRequestContractUpdate: Executing delivery completed flow ...");
+
+            mCallbacks.onComplete();
         }
     }
 
-    //endregion
+    public void cancelRequest () {
 
+        Log.d(TAG, "onRequestCancel: cancelling request contract by deleting it from " +
+                "Deliveries node ...");
+
+        delete(
+
+            new OnCompleteVoid() {
+
+                @Override
+                public void onSuccess() {
+
+                    Log.d(TAG, "onRequestCancel: successfully cancelled request contract " +
+                            "by deleting it from deliveries node.");
+                }
+
+                @Override
+                public void onFailure() {
+
+                    Log.d(TAG, "onRequestCancel: could not delete request contract " +
+                            "from Deliveries node.");
+                }
+
+        }, Constants.ChildName.DELIVERIES, mRequestContract.userId);
+    }
+
+    //endregion
 
                /*---------------------------------------------------------------\
                                           HELPER METHODS
@@ -244,10 +325,10 @@ public class DeliveryManager extends FirebaseAccess {
 
         mGoogleMaps.moveBikerMarkerOnMap(
 
-            new LatLng(
+                new LatLng(
 
-                    mRequestContract.bikerPositionLatitude,
-                    mRequestContract.bikerPositionLongitude));
+                        mRequestContract.bikerPositionLatitude,
+                        mRequestContract.bikerPositionLongitude));
     }
 
     private void drawPathAndCenterWithinArea(Double... latLongs) {
@@ -258,30 +339,43 @@ public class DeliveryManager extends FirebaseAccess {
 
         mIsDirectionsCalculating = true;
 
-        GoogleDirectionsAPI.getGoogleDirectionsData (
+        Log.d(TAG, "drawPathAndCenterWithinArea: fetching directions API data ...");
 
-            new GoogleDirectionsAPI.OnDirectionsComplete() {
+        GoogleDirectionsAPI.getData(latLongs,
 
-                @Override
-                public void onSuccess(LatLngBounds boundaries, ArrayList<LatLng> waypoints) {
+                new GoogleDirectionsAPI.OnDirectionsComplete() {
 
-                    mIsDirectionsCalculating = false;
+                    @Override
+                    public void onSuccess(LatLngBounds boundaries, ArrayList<LatLng> waypoints) {
 
-                    mGoogleMaps.drawPolylines(boundaries, waypoints);
-                }
+                        mIsDirectionsCalculating = false;
 
-                @Override
-                public void onFailure() {
+                        Log.d(TAG, "drawPathAndCenterWithinArea: directions API data updated. " +
+                                "Drawing path ...");
 
-                    mIsDirectionsCalculating = false;
-                }
+                        mGoogleMaps.drawPolylines(waypoints);
+                    }
 
-            }, latLongs);
+                    @Override
+                    public void onFailure() {
+
+                        mIsDirectionsCalculating = false;
+                    }
+
+                });
     }
 
-    private boolean isPickupConfirmed () {
+    public boolean isPickupConfirmed () {
 
         if (!mRequestContract.confirmedPickupByBiker || !mRequestContract.confirmedPickupByUser)
+            return false;
+
+        return true;
+    }
+
+    public boolean isDeliveryConfirmed () {
+
+        if (!mRequestContract.confirmedDeliveryByBiker || !mRequestContract.confirmedDeliveryByUser)
             return false;
 
         return true;
@@ -296,11 +390,7 @@ public class DeliveryManager extends FirebaseAccess {
      \                                                                                       /
       \====================================================================================*/
 
-               /*---------------------------------------------------------------\
-                                     BROADCAST BIKER LOCATION
-               \---------------------------------------------------------------*/
-
-    //region BROADCAST BIKER LOCATION
+    //region BIKER LOGIC
 
     private void broadcastLocationIfBiker() {
 
@@ -321,48 +411,168 @@ public class DeliveryManager extends FirebaseAccess {
                     Log.d(TAG, "broadcastLocationIfBiker: location change " +
                             "event triggered on this device with new biker position.");
 
-                    Log.d(TAG, "broadcastLocationIfBiker: updating this " +
-                            "biker's position on request contract (Lat: " +
-                            mLocation.getLatitude() + " / Lng: " +  mLocation.getLongitude()
-                            + ") ...");
-
-                    updateMutableDataOnCondition(RequestModel.class, mRequestContract,
-
-                        new Condition<RequestModel>() {
-
-                            @Override
-                            public boolean ExecuteIf(RequestModel data) {
-
-                                mRequestContract = data;
-
-                                mRequestContract.bikerPositionLatitude = mLocation.getLatitude();
-                                mRequestContract.bikerPositionLongitude = mLocation.getLongitude();
-                                mRequestContract.updateTime = getCurrentISODateTime();
-
-                                return true;
-                            }
-                        },
-
-                        new OnComplete<RequestModel>() {
-
-                            @Override
-                            public void onSuccess(RequestModel data) {
-
-                                Log.d(TAG, "broadcastLocationIfBiker: successfully updated "
-                                        + "this biker's location on request contract.");
-                            }
-
-                            @Override
-                            public void onFailure(RequestModel data) {
-
-                                Log.d(TAG, "broadcastLocationIfBiker: failed to update this "
-                                        + "biker's location on request contract.");
-                            }
-
-                        }, Constants.ChildName.DELIVERIES, mRequestContract.userId);
+                    updateBikerPositionOnRequestContract();
                 }
             });
     }
+
+    private void updateBikerPositionOnRequestContract () {
+
+        Log.d(TAG, "broadcastLocationIfBiker: updating this " +
+                "biker's position on request contract (Lat: " +
+                mLocation.getLatitude() + " / Lng: " +  mLocation.getLongitude()
+                + ") ...");
+
+        mRequestContract.bikerPositionLatitude = mLocation.getLatitude();
+        mRequestContract.bikerPositionLongitude = mLocation.getLongitude();
+        mRequestContract.updateTime = getCurrentISODateTime();
+
+        updateMutableDataOnCondition(RequestModel.class, mRequestContract,
+
+            new Condition<RequestModel>() {
+
+                @Override
+                public boolean ExecuteIf(RequestModel data) {
+                    return true;
+                }
+            },
+
+            new OnComplete<RequestModel>() {
+
+                @Override
+                public void onSuccess(RequestModel data) {
+
+                    Log.d(TAG, "broadcastLocationIfBiker: successfully updated "
+                            + "this biker's location on request contract.");
+                }
+
+                @Override
+                public void onFailure(RequestModel data) {
+
+                    Log.d(TAG, "broadcastLocationIfBiker: failed to update this "
+                            + "biker's location on request contract.");
+                }
+
+            }, Constants.ChildName.DELIVERIES, mRequestContract.userId);
+    }
+
+    public void bikerConfirmsPickup () {
+
+        mRequestContract.confirmedPickupByBiker = true;
+
+        Log.d(TAG, "bikerConfirmsPickup: biker has confirmed pickup. Updating request " +
+                "contract accordingly ...");
+
+        updateMutableDataOnCondition(RequestModel.class, mRequestContract,
+
+                new Condition<RequestModel>() {
+
+                    @Override
+                    public boolean ExecuteIf(RequestModel data) {
+                        return true;
+                    }
+                },
+
+                new OnComplete<RequestModel>() {
+
+                    @Override
+                    public void onSuccess(RequestModel data) {
+
+                        Log.d(TAG, "bikerConfirmsPickup: successfully updated "
+                                + "this biker's pickup confirmation on request contract.");
+                    }
+
+                    @Override
+                    public void onFailure(RequestModel data) {
+
+                        Log.d(TAG, "bikerConfirmsPickup: failed to update this "
+                                + "biker's pickup confirmation on request contract.");
+                    }
+
+                }, Constants.ChildName.DELIVERIES, mRequestContract.userId);
+    }
+
+    public void bikerConfirmsDelivery () {
+
+        mRequestContract.confirmedDeliveryByBiker = true;
+
+        Log.d(TAG, "bikerConfirmsDelivery: biker has confirmed delivery. Updating request " +
+                "contract accordingly ...");
+
+        updateMutableDataOnCondition(RequestModel.class, mRequestContract,
+
+                new Condition<RequestModel>() {
+
+                    @Override
+                    public boolean ExecuteIf(RequestModel data) {
+                        return true;
+                    }
+                },
+
+                new OnComplete<RequestModel>() {
+
+                    @Override
+                    public void onSuccess(RequestModel data) {
+
+                        Log.d(TAG, "bikerConfirmsDelivery: successfully updated "
+                                + "this biker's delivery confirmation on request contract.");
+                    }
+
+                    @Override
+                    public void onFailure(RequestModel data) {
+
+                        Log.d(TAG, "bikerConfirmsDelivery: failed to update this "
+                                + "biker's delivery confirmation on request contract.");
+                    }
+
+                }, Constants.ChildName.DELIVERIES, mRequestContract.userId);
+    }
+
+    public void finishDeliveryBiker () {
+
+        Log.d(TAG, "finishDelivery: wrapping up delivery from biker's perspective ...");
+
+        Log.d(TAG, "finishDeliveryBiker: awaiting deletion of request contract on " +
+                "Deliveries node ...");
+
+        removeAllValueEventListeners();
+
+        setListenerToObjectOrProperty(RequestModel.class,
+
+                new ListenToChanges<RequestModel>() {
+
+                    @Override
+                    public void onChange(RequestModel data) {
+
+
+                    }
+
+                    @Override
+                    public void onError(RequestModel data) {
+
+                        if (data == null) {
+
+                            removeLastValueEventListener();
+
+                            Log.d(TAG, "finishDeliveryBiker: request contract successfully " +
+                                    "deleted on Deliveries node.");
+
+                            Log.d(TAG, "finishDelivery: delivery process completed! " +
+                                    "Returning to request activitiy ...");
+
+                            mCallbacks.onFinish();
+                        }
+                    }
+
+                }, Constants.ChildName.DELIVERIES, mRequestContract.userId);
+    }
+
+    //endregion
+
+
+               /*---------------------------------------------------------------\
+                                          HELPER METHODS
+               \---------------------------------------------------------------*/
 
     private boolean validateLocationChange () {
 
@@ -371,9 +581,9 @@ public class DeliveryManager extends FirebaseAccess {
                 mLocation.getLongitude() == null ||
                 mLocation.getLongitude() == 0) {
 
-            // Log.d(TAG, "broadcastLocationIfBiker: location " +
-            //        "change event triggered on this device, but API returned invalid " +
-            //        "values.");
+             Log.d(TAG, "broadcastLocationIfBiker: location " +
+                    "change event triggered on this device, but API returned invalid " +
+                    "values.");
 
             return false;
         }
@@ -381,9 +591,9 @@ public class DeliveryManager extends FirebaseAccess {
         if (mLocation.getLatitude() == mRequestContract.bikerPositionLatitude &&
                 mLocation.getLongitude() == mRequestContract.bikerPositionLongitude) {
 
-            Log.d(TAG, "broadcastLocationIfBiker: location " +
-                    "change event triggered on this device, but position stayed " +
-                    "the same.");
+//            Log.d(TAG, "broadcastLocationIfBiker: location " +
+//                    "change event triggered on this device, but position stayed " +
+//                    "the same.");
 
             return false;
         }
@@ -391,7 +601,243 @@ public class DeliveryManager extends FirebaseAccess {
         return true;
     }
 
-    //endregion
+    public boolean isBikerWithinPickupRange () {
+
+        float distance = getDistanceBetweenCordinates(
+                mRequestContract.pickupAddressLatitude,
+                mRequestContract.pickupAddressLongitude,
+                mRequestContract.bikerPositionLatitude,
+                mRequestContract.bikerPositionLongitude);
+
+        if (distance < PICKUP_AND_DELIVERY_RANGE_IN_METERS) {
+
+            if (!isPickupConfirmed()) {
+
+                Log.d(TAG, "isBikerWithinPickupRange: biker ranges " + distance + "m " +
+                        "to pickup and IS WITHIN pickup range.");
+            }
+
+            return true;
+        }
+
+        if (!isPickupConfirmed()) {
+
+            Log.d(TAG, "isBikerWithinPickupRange: biker ranges " + distance + "m to " +
+                    "pickup and IS NOT WITHIN pickup range.");
+        }
+
+        return false;
+    }
+
+    public boolean isBikerWithinDeliveryRange () {
+
+        float distance = getDistanceBetweenCordinates(
+                mRequestContract.bikerPositionLatitude,
+                mRequestContract.bikerPositionLongitude,
+                mRequestContract.deliveryAddressLatitude,
+                mRequestContract.deliveryAddressLongitude);
+
+        if (distance < PICKUP_AND_DELIVERY_RANGE_IN_METERS) {
+
+            if (isPickupConfirmed()) {
+
+                Log.d(TAG, "isBikerWithinDeliveryRange: biker ranges " + distance + "m to " +
+                        "delivery and IS WITHIN delivery range.");
+            }
+
+            return true;
+        }
+
+        if (isPickupConfirmed()) {
+
+            Log.d(TAG, "isBikerWithinDeliveryRange: biker ranges " + distance + "m to " +
+                    "delivery and IS NOT WITHIN delivery range.");
+        }
+
+        return false;
+    }
+
+    public boolean bikerConfirmedPickupAndAwaitsRequesterConfirmation() {
+
+        return mRequestContract.confirmedPickupByBiker && !mRequestContract.confirmedPickupByUser;
+    }
+
+    public boolean bikerConfirmedDeliveryAndAwaitsRequesterConfirmation() {
+
+        return mRequestContract.confirmedDeliveryByBiker && !mRequestContract.confirmedDeliveryByUser;
+    }
+
+    public float getDistanceBetweenCordinates(Double lat1, Double lng1,
+                                              Double lat2, Double lng2) {
+
+        Location origin = new Location ("");
+        Location destination = new Location ("");
+
+        origin.setLatitude(lat1);
+        origin.setLongitude(lng1);
+
+        destination.setLatitude(lat2);
+        destination.setLongitude(lng2);
+
+        float distance = origin.distanceTo(destination);
+
+        return distance;
+    }
+
+
+      /*====================================================================================\
+     /                                                                                       \
+    (                                    REQUESTER LOGIC                                      )
+     \                                                                                       /
+      \====================================================================================*/
+
+    public void requesterConfirmsPickup () {
+
+        mRequestContract.confirmedPickupByUser = true;
+
+        Log.d(TAG, "requesterConfirmsPickup: requester has confirmed pickup. Updating " +
+                "request contract accordingly ...");
+
+        updateMutableDataOnCondition(RequestModel.class, mRequestContract,
+
+                new Condition<RequestModel>() {
+
+                    @Override
+                    public boolean ExecuteIf(RequestModel data) {
+                        return true;
+                    }
+                },
+
+                new OnComplete<RequestModel>() {
+
+                    @Override
+                    public void onSuccess(RequestModel data) {
+
+                        Log.d(TAG, "requesterConfirmsPickup: successfully updated "
+                                + "this requester's pickup confirmation on request contract.");
+                    }
+
+                    @Override
+                    public void onFailure(RequestModel data) {
+
+                        Log.d(TAG, "requesterConfirmsPickup: failed to update this "
+                                + "requester's pickup confirmation on request contract.");
+                    }
+
+                }, Constants.ChildName.DELIVERIES, mRequestContract.userId);
+    }
+
+    public void requesterConfirmsDelivery () {
+
+        mRequestContract.confirmedDeliveryByUser = true;
+
+        Log.d(TAG, "bikerConfirmsDelivery: requester has confirmed delivery. Updating " +
+                "request contract accordingly ...");
+
+        updateMutableDataOnCondition(RequestModel.class, mRequestContract,
+
+                new Condition<RequestModel>() {
+
+                    @Override
+                    public boolean ExecuteIf(RequestModel data) {
+                        return true;
+                    }
+                },
+
+                new OnComplete<RequestModel>() {
+
+                    @Override
+                    public void onSuccess(RequestModel data) {
+
+                        Log.d(TAG, "bikerConfirmsDelivery: successfully updated "
+                                + "this requester's delivery confirmation on request contract.");
+                    }
+
+                    @Override
+                    public void onFailure(RequestModel data) {
+
+                        Log.d(TAG, "bikerConfirmsDelivery: failed to update this "
+                                + "requester's delivery confirmation on request contract.");
+                    }
+
+                }, Constants.ChildName.DELIVERIES, mRequestContract.userId);
+    }
+
+    public void finishDeliveryRequester () {
+
+        Log.d(TAG, "finishDelivery: wrapping up delivery from requester's perspective ...");
+
+        removeAllValueEventListeners();
+
+        addUsingKey(mRequestContract, new OnCompleteKey() {
+
+            @Override
+            public void onSuccess(String key) {
+
+                Log.d(TAG, "finishDelivery: successfully copied request contract to " +
+                        "this requester's history.");
+
+                addUsingKey(mRequestContract, new OnCompleteKey() {
+
+                    @Override
+                    public void onSuccess(String key) {
+
+                        Log.d(TAG, "finishDelivery: successfully copied request contract " +
+                                "to this biker's history.");
+
+                        delete(new OnCompleteVoid() {
+
+                            @Override
+                            public void onSuccess() {
+
+                                Log.d(TAG, "finishDelivery: successfully removed request " +
+                                        "contract from Deliveries node.");
+
+                                Log.d(TAG, "finishDelivery: delivery process completed! " +
+                                        "Returning to request activitiy ...");
+
+                                mCallbacks.onFinish();
+
+                            }
+
+                            @Override
+                            public void onFailure() {
+
+                                Log.d(TAG, "finishDelivery: could not remove request " +
+                                        "contract from Deliveries node.");
+
+                                mCallbacks.onFinish();
+                            }
+
+                        }, Constants.ChildName.DELIVERIES, mRequestContract.userId);
+
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                        Log.d(TAG, "finishDelivery: failed to copy this request contract " +
+                                "to requester's and biker's history.");
+
+                        mCallbacks.onFinish();
+                    }
+
+                }, Constants.ChildName.HISTORY, mRequestContract.bikerId);
+
+            }
+
+            @Override
+            public void onFailure() {
+
+                Log.d(TAG, "finishDelivery: failed to copy this request contract to " +
+                        "requester's and biker's history.");
+
+                mCallbacks.onFinish();
+            }
+
+        }, Constants.ChildName.HISTORY, mRequestContract.userId);
+
+    }
 
 
     /*=======================================================================================
@@ -412,6 +858,13 @@ public class DeliveryManager extends FirebaseAccess {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
         df.setTimeZone(tz);
         return df.format(new Date());
+    }
+
+    public void removeLocationListener() {
+
+        Log.d(TAG, "removeLocationListener: removing location listener ...");
+
+        mLocation.removeLocationListener();
     }
 
     //endregion

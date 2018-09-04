@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/deliveryman_review"
-        android:title="Deliveryman review"/>
+
 
     <!--<item-->
         <!--android:id="@+id/delivery_tracking"-->
@@ -11,23 +9,27 @@
 
     <item
         android:id="@+id/delivery_main"
-        android:title="Requester Activity"/>
+        android:title="I am requester"/>
 
     <!--<item-->
         <!--android:id="@+id/delivery_quotation"-->
         <!--android:title="Cotation"/>-->
 
     <item
+        android:id="@+id/biker_activity"
+        android:title="I am biker"/>
+
+    <item
         android:id="@+id/profile"
         android:title="Profile"/>
 
-    <item
-        android:id="@+id/biker_activity"
-        android:title="Biker Activity"/>
+    <!--<item-->
+        <!--android:id="@+id/delivery_activity"-->
+        <!--android:title="Delivery Activity"/>-->
 
     <item
-        android:id="@+id/delivery_activity"
-        android:title="Delivery Activity"/>
+        android:id="@+id/deliveryman_review"
+        android:title="Delivery review"/>
 
     <item
         android:id="@+id/payment_methods"

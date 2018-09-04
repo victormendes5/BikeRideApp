@@ -14,14 +14,30 @@
         tools:context=".MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Biker"
+        android:textColor="@color/colorTextIcons"
+        android:textStyle="bold"
+        android:padding="8dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="8dp"
+        android:background="@color/transparentBlack30">
+
+    </TextView>
+
     <RelativeLayout
         android:id="@+id/modalOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/transparentBlack60"
-        android:visibility="visible">
+        android:visibility="gone">
 
     </RelativeLayout>
+
+
 
     <include
         android:id="@+id/include_modal_requests_list"

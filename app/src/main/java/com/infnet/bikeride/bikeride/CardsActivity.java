@@ -43,7 +43,7 @@ public class CardsActivity extends AppCompatActivity {
 
         btnAddCards.setOnClickListener(AddCardRedirect);
 
-        mlistCards.setAdapter();
+//        mlistCards.setAdapter();
 
     }
 

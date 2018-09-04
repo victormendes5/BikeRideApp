@@ -12,6 +12,7 @@ public final class Constants {
         public static final String REQUESTS = "Requests";
         public static final String DELIVERIES = "Deliveries";
         public static final String AVAILABLE_BIKERS = "AvailableBikers";
+        public static final String HISTORY = "History";
     }
 
     // ---> View Ids

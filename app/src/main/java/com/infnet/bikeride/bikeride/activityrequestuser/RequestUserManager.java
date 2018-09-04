@@ -13,6 +13,7 @@ import com.infnet.bikeride.bikeride.constants.Constants;
 import com.infnet.bikeride.bikeride.dao.FirebaseAccess;
 import com.infnet.bikeride.bikeride.models.AvailableBikerModel;
 import com.infnet.bikeride.bikeride.models.RequestModel;
+import com.infnet.bikeride.bikeride.services.CurrentUserData;
 import com.infnet.bikeride.bikeride.services.GoogleDistanceMatrixAPI;
 import com.infnet.bikeride.bikeride.services.GoogleMapsAPI;
 import com.infnet.bikeride.bikeride.services.Mockers;
@@ -90,6 +91,7 @@ public class RequestUserManager extends FirebaseAccess {
     public interface RequestStatus {
         void onRequestAccepted(RequestModel request);
         void onSearchTimedOut();
+        void onRequestCancel();
         void onError();
     }
 
@@ -499,6 +501,7 @@ public class RequestUserManager extends FirebaseAccess {
         RequestModel request = mRequest;
 
         request.userId = getUid();
+        request.userName = CurrentUserData.getFirstName() + " " + CurrentUserData.getLastName();
         request.createTime = getCurrentISODateTime();
 
         Log.d(TAG, "postNewDeliveryRequest: posting new delivery request " +
@@ -555,7 +558,6 @@ public class RequestUserManager extends FirebaseAccess {
                             " (ID: " + data.bikerId + ") has accepted the request.");
 
                     cancelTimeouts();
-
                     removeLastValueEventListener();
 
                     initiateRequestObjectTransfer(data, callbacks);
@@ -563,9 +565,25 @@ public class RequestUserManager extends FirebaseAccess {
 
                 @Override
                 public void onError(RequestModel data) {
-                    Log.d(TAG, "postNewDeliveryRequest: request object is missing or has " +
-                            "been deleted.");
-                    callbacks.onError();
+
+                    cancelTimeouts();
+                    removeLastValueEventListener();
+
+                    if (data == null) {
+
+                        Log.d(TAG, "postNewDeliveryRequest: request object is missing " +
+                                "or has been deleted.");
+
+                        callbacks.onRequestCancel();
+                    }
+
+                    else {
+
+                        Log.d(TAG, "postNewDeliveryRequest: some error occurred while " +
+                                "listening to request object.");
+
+                        callbacks.onError();
+                    }
                 }
 
             }, Constants.ChildName.REQUESTS, getUid());
@@ -582,6 +600,8 @@ public class RequestUserManager extends FirebaseAccess {
                 Log.d(TAG,
                         "postNewDeliveryRequest: delivery request timed out.");
 
+                removeLastValueEventListener();
+
                 // ---> Cancel request by deleting object
                 delete(new FirebaseAccess.OnCompleteVoid() {
 
@@ -591,8 +611,7 @@ public class RequestUserManager extends FirebaseAccess {
                                 "postNewDeliveryRequest: cancelled request by deleting " +
                                         "request object associated with this user.");
 
-                        callbacks
-                                .onSearchTimedOut();
+                        callbacks.onSearchTimedOut();
                     }
 
                     @Override
@@ -604,6 +623,7 @@ public class RequestUserManager extends FirebaseAccess {
 
                         callbacks.onError();
                     }
+
                 }, Constants.ChildName.REQUESTS, getUid());
             }
         };
@@ -850,7 +870,7 @@ public class RequestUserManager extends FirebaseAccess {
     }
 
     public String getUid() {
-        return Constants.MockedIds.User;
+        return CurrentUserData.getId();
     }
 
     public void setFeeEstimate () {
@@ -862,13 +882,10 @@ public class RequestUserManager extends FirebaseAccess {
         double deliveryFeePerKM = 2;
         double deliveryFeePerMinute = 0.7;
 
-        double pickupDistance =
-                Double.valueOf(mRequest.estimatesPickupDistance.replace("km",
-                        "").trim());
 
-        double deliveryDistance =
-                Double.valueOf(mRequest.estimatesDeliveryDistance.replace("km",
-                        "").trim());
+        double pickupDistance = decodeDistance(mRequest.estimatesPickupDistance);
+
+        double deliveryDistance = decodeDistance(mRequest.estimatesDeliveryDistance);
 
         double totalFee = 5;
 
@@ -903,6 +920,21 @@ public class RequestUserManager extends FirebaseAccess {
     public void verifyPermissionsRequestResult (int requestCode, int[] grantResults) {
 
         mGoogleMaps.verifyPermissionRequestResult(requestCode, grantResults);
+    }
+
+    public double decodeDistance (String distance) {
+
+        if (distance.contains("km")) {
+
+            return Double.valueOf(distance
+                    .replace("km", "")
+                    .trim());
+
+        }
+
+        return Double.valueOf(distance
+                .replace("m", "")
+                .trim())/1000;
     }
 
     //endregion
