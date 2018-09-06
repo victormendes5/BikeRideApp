@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -28,6 +29,8 @@ public class CardsActivity extends AppCompatActivity {
 
     private ArrayList<CreditCardModel>  listCre=  new ArrayList<>();
 
+    private BaseAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,18 +39,27 @@ public class CardsActivity extends AppCompatActivity {
         mContentViewBuilder = new ContentViewBuilder(this,
                 R.layout.activity_cards);
 
-        mlistCards = (ListView) findViewById(R.id.cards_listCards);
-        btnAddCards = (Button) findViewById(R.id.cards_addCardButton);
-
         ListaDeCartões();
 
-        btnAddCards.setOnClickListener(AddCardRedirect);
+        mlistCards = (ListView) findViewById(R.id.cards_listCards);
+        adapter = new CardsAdapter(this, listCre);
+        mCardManager =  new CreditCardManager(adapter, listCre);
+        mlistCards.setAdapter(adapter);
 
-//        mlistCards.setAdapter();
+
+        btnAddCards = (Button) findViewById(R.id.cards_addCardButton);
+        btnAddCards.setOnClickListener(AddCardRedirect);
 
     }
 
-    //Login Google
+
+    @Override
+    public void onBackPressed() {
+        if (mContentViewBuilder.isNavigationDrawerClosed()) {
+            super.onBackPressed();
+        }
+    }
+
     public View.OnClickListener AddCardRedirect = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -58,7 +70,6 @@ public class CardsActivity extends AppCompatActivity {
 
 
     // Redirect Page
-
     private void Redirect(Class destination){
 
 
@@ -74,7 +85,8 @@ public class CardsActivity extends AppCompatActivity {
             @Override
             public void OnCardsComplete(ArrayList<CreditCardModel> data) {
                 listCre = data;
-                Log.e("Array Cards", listCre.toString());
+                adapter = new CardsAdapter(getApplicationContext(), listCre);
+                mlistCards.setAdapter(adapter);
             }
 
             @Override

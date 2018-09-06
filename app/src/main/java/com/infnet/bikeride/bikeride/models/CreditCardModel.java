@@ -1,6 +1,8 @@
 package com.infnet.bikeride.bikeride.models;
 
-public class CreditCardModel {
+import java.io.Serializable;
+
+public class CreditCardModel implements Serializable {
 
     private String userId;
     private String name;
@@ -10,6 +12,13 @@ public class CreditCardModel {
 
     public CreditCardModel(){
 
+    }
+
+    public CreditCardModel(String name, String numberCard, String expiration, String cvc){
+        this.name = name;
+        this.numberCard = numberCard;
+        this.expiration = expiration;
+        this.cvc = cvc;
     }
 
     public String getUserId() {

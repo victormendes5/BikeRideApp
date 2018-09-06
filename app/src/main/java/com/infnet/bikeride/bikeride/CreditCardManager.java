@@ -1,12 +1,14 @@
 package com.infnet.bikeride.bikeride;
 
 import android.util.Log;
+import android.widget.BaseAdapter;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.infnet.bikeride.bikeride.dao.FirebaseAccess;
 import com.infnet.bikeride.bikeride.models.CreditCardModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CreditCardManager {
 
@@ -17,11 +19,19 @@ public class CreditCardManager {
 
     private ArrayList<CreditCardModel> arrayCradit = new ArrayList<>();
 
+    private BaseAdapter adapter;
+    private List<CreditCardModel> acoes;
 
     private static final String Cards_CHILD = "CredtidCards";
 
     public CreditCardManager(){
 
+    }
+
+    public CreditCardManager(BaseAdapter adapter, List<CreditCardModel> acoes){
+        this();
+        this.adapter = adapter;
+        this.acoes = acoes;
     }
 
     //Interface de acesso ao getPerfil
@@ -72,9 +82,10 @@ public class CreditCardManager {
     mFirebase.setListenerToChild(CreditCardModel.class, new FirebaseAccess.ListenToChanges<ArrayList<CreditCardModel>>() {
         @Override
         public void onChange(ArrayList<CreditCardModel> data) {
-            for (int i = 0; i<data.size();i++){
-                callback.OnCardsComplete(data);
-            }
+
+            callback.OnCardsComplete(data);
+//            for (int i = 0; i<data.size();i++){
+//            }
         }
 
         @Override

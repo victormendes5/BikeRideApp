@@ -1,5 +1,6 @@
 package com.infnet.bikeride.bikeride;
 
+import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -55,15 +56,44 @@ public class AddCreditCardActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
 
-            mCard = new CreditCardModel();
+            if (!mCardName.getText().toString().equals("") ){
 
-            mCard.setName(mCardName.getText().toString());
-            mCard.setNumberCard(mCardNumber.getText().toString());
-            mCard.setExpiration(mExpiration.getText().toString());
-            mCard.setCvc(mCVC.getText().toString());
-            mCard.setUserId(CurrentUserData.getId());
+                if (!mCardNumber.getText().toString().equals("") && mCardNumber.getText().toString().length() != 16){
 
-            AddCreditCard();
+                    if (!mExpiration.getText().toString().equals("") && mExpiration.getText().toString().length() != 4){
+
+                        if (!mCVC.getText().toString().equals("") && mCVC.getText().toString().length() != 3){
+
+                            mCard = new CreditCardModel();
+
+                            mCard.setName(mCardName.getText().toString());
+                            mCard.setNumberCard(mCardNumber.getText().toString());
+                            mCard.setExpiration(mExpiration.getText().toString());
+                            mCard.setCvc(mCVC.getText().toString());
+                            mCard.setUserId(CurrentUserData.getId());
+
+                            AddCreditCard();
+
+                        }else {
+                            // Cvc vazio ou diferente de 3 dígitos
+                            Toast.makeText(AddCreditCardActivity.this, "Por favor corrija o campo de cvc", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }else {
+                        // DAta de Espiração vazia ou diferente de 4 digitos
+                        Toast.makeText(AddCreditCardActivity.this, "Por favor corrija o campo de expiração", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    // Numero Vazio / Diferente de 16 dígitos
+                    Toast.makeText(AddCreditCardActivity.this, "Por favor corrija o campo de numeros do cartão.", Toast.LENGTH_SHORT).show();
+                }
+            }else{
+                //Nome vazio
+                Toast.makeText(AddCreditCardActivity.this, "Por favor digite um nome.", Toast.LENGTH_SHORT).show();
+
+            }
+
+
         }
     };
 
@@ -73,6 +103,7 @@ public class AddCreditCardActivity extends AppCompatActivity {
 
         if (mCard != null) {
             mCardManager.adicionarCards(mCard);
+            Redirect(CardsActivity.class);
 
         }else {
                     Log.e("Cards", "Ta Errado");
@@ -80,6 +111,23 @@ public class AddCreditCardActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    // Redirect Page
+    private void Redirect(Class destination){
+
+
+        Intent newIntent = new Intent(AddCreditCardActivity.this, destination);
+        startActivity(newIntent);
+
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (mContentViewBuilder.isNavigationDrawerClosed()) {
+            super.onBackPressed();
+        }
     }
 
 }
