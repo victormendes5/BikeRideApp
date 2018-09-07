@@ -16,7 +16,9 @@ import android.view.ViewGroup;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseAuth;
+import com.infnet.bikeride.bikeride.CardsActivity;
 import com.infnet.bikeride.bikeride.ConfigurationFirebase;
+import com.infnet.bikeride.bikeride.DeliveryQuotationPriceActivity;
 import com.infnet.bikeride.bikeride.DeliverymanReviewActivity;
 import com.infnet.bikeride.bikeride.MainActivity;
 import com.infnet.bikeride.bikeride.ProfileActivity;
@@ -56,7 +58,6 @@ public class ContentViewBuilder extends FirebaseAccess {
     }
 
     private void setActivityContent () {
-
         ViewGroup view = (ViewGroup) View.inflate(mRefferedActivity, mActivityLayoutId,null);
 
         // ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(0, 0);
@@ -82,7 +83,7 @@ public class ContentViewBuilder extends FirebaseAccess {
 
         // actionBarDrawerToggle.getDrawerArrowDrawable().setColor(0xFFFFFFFF);
 
-        NavigationView navigationView = mRefferedActivity.findViewById(R.id.navigation_view);
+        final NavigationView navigationView = mRefferedActivity.findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -111,6 +112,9 @@ public class ContentViewBuilder extends FirebaseAccess {
 //                            case R.id.delivery_activity:
 //                                getDummyRequestContractAndNavigateToDeliveryActivity();
 //                                break;
+                            case R.id.payment_methods:
+                                navigate(CardsActivity.class);
+                                break;
                             case R.id.logout_app:
                                 autentication = ConfigurationFirebase.getFirebaseAuth();
                                 Logout();
