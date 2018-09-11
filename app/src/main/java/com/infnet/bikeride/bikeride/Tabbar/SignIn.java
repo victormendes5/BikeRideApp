@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.infnet.bikeride.bikeride.BRAnimations;
 import com.infnet.bikeride.bikeride.ConfigurationFirebase;
 import com.infnet.bikeride.bikeride.DeliveryMainActivity;
 import com.infnet.bikeride.bikeride.R;
@@ -37,6 +39,10 @@ public class SignIn extends Fragment {
     private UserManager mUserManager = new UserManager();
     private Users usuarioLogado = new Users();
 
+    private View mForgotPasswordModal;
+
+    private BRAnimations mAnimate = new BRAnimations(200);
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_sign_in, container, false);
@@ -50,6 +56,8 @@ public class SignIn extends Fragment {
         mPassword = getView().findViewById(R.id.signInPasswordEditText);
         mForgotPassword = getView().findViewById(R.id.forgotPasswordButton);
         mSignIn = getView().findViewById(R.id.signInButton);
+
+        mForgotPasswordModal = getActivity().findViewById(R.id.include_frag_forgotPassword);
 
         authentication = ConfigurationFirebase.getFirebaseAuth();
         FirebaseUser user = authentication.getCurrentUser();
@@ -91,7 +99,20 @@ public class SignIn extends Fragment {
     private View.OnClickListener ForgotPassword = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Redirect(ForgotPassword.class);
+
+            mAnimate.translateFromBottomIfInvisible(mForgotPasswordModal);
+
+            // Create new fragment and transaction
+//            Fragment newFragment = new ForgotPassword();
+//            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack if needed
+            // transaction.replace(R.id.container, newFragment);
+//            transaction.addToBackStack(null);
+
+            // Commit the transaction
+//            transaction.commit();
         }
     };
 

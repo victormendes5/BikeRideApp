@@ -10,16 +10,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.infnet.bikeride.bikeride.Tabbar.SignIn;
 import com.infnet.bikeride.bikeride.Tabbar.SignInSocialMedia;
 import com.infnet.bikeride.bikeride.Tabbar.SignUp;
+
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 
 public class MainActivity extends AppCompatActivity{
 
     // Modal
 
     private View mForgotPasswordModal;
+    private View mForgotPasswordFrag;
     RelativeLayout mModalOverlay;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -37,6 +42,7 @@ public class MainActivity extends AppCompatActivity{
 
         //Modal
         mForgotPasswordModal = findViewById(R.id.include_modal_forgotPassword);
+        mForgotPasswordFrag = findViewById(R.id.include_frag_forgotPassword);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -57,16 +63,20 @@ public class MainActivity extends AppCompatActivity{
     private View.OnClickListener QuickSignInEnter = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mAnimate.crossFadeViews(mQuickSignIn, mQuickSignInDown);
+//            mAnimate.crossFadeViews(mQuickSignIn, mQuickSignInDown);
             mAnimate.translateFromBottomIfInvisible(mForgotPasswordModal);
+            mQuickSignIn.setVisibility(INVISIBLE);
+            mQuickSignInDown.setVisibility(VISIBLE);
         }
     };
 
     private View.OnClickListener QuickSignInExit = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mAnimate.crossFadeViews(mQuickSignInDown, mQuickSignIn);
+//            mAnimate.crossFadeViews(mQuickSignInDown, mQuickSignIn);
             mAnimate.translateToBottomIfVisible(mForgotPasswordModal);
+            mQuickSignIn.setVisibility(VISIBLE);
+            mQuickSignInDown.setVisibility(INVISIBLE);
         }
     };
 
@@ -93,6 +103,10 @@ public class MainActivity extends AppCompatActivity{
             return 2;
         }
 
+    }
+
+    public void fechaModal(View view){
+        mAnimate.translateToBottomIfVisible(mForgotPasswordFrag);
     }
 
 }
