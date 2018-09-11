@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/white"
+    android:background="@color/background_default"
     android:padding="16dp">
 
     <com.facebook.login.widget.LoginButton xmlns:facebook="http://schemas.android.com/apk/res-auto"
@@ -25,7 +25,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         facebook:com_facebook_login_text="Sign in"
-        facebook:layout_constraintBottom_toTopOf="@+id/googleSignInButton" />
+        facebook:layout_constraintBottom_toTopOf="@+id/googleSignInButton"
+        facebook:layout_constraintVertical_bias="0.0"
+        facebook:layout_constraintVertical_chainStyle="packed" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/googleSignInButton"

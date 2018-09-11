@@ -27,6 +27,7 @@ public class SignUp extends Fragment {
 
     private EditText mEmail;
     private EditText mPassword;
+    private EditText mPasswordConfirm;
     private Button mSignUp;
 
     private Users users;
@@ -46,6 +47,7 @@ public class SignUp extends Fragment {
 
         mEmail = getView().findViewById(R.id.signUpEmailEditText);
         mPassword = getView().findViewById(R.id.signUpPasswordEditText);
+        mPasswordConfirm = getView().findViewById(R.id.signUpConfirmPasswordEditText);
         mSignUp = getView().findViewById(R.id.signUpButton);
 
         mSignUp.setOnClickListener(SignUp);
@@ -55,6 +57,10 @@ public class SignUp extends Fragment {
         @Override
         public void onClick(View view) {
             if (!mEmail.getText().toString().equals("") && !mPassword.getText().toString().equals("")) {
+                if(!mPassword.getText().toString().equals(mPasswordConfirm.getText().toString())){
+                    Toast.makeText(getContext(), "Senhas não conferem!" , Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 users = new Users();
                 users.setEmail(mEmail.getText().toString());
                 users.setPassword(mPassword.getText().toString());
