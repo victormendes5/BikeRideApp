@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CardsActivity">
+
+    <TextView
+        android:id="@+id/cards_Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:textSize="@dimen/principal_editText_altura"
+        android:text="Payments"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/cards_FormasDePagamentos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Formas de pagamento"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="@dimen/margin12"
+        app:layout_constraintTop_toBottomOf="@id/cards_Title"/>
+
+    <ListView
+        android:id="@+id/cards_listCards"
+        android:layout_width="wrap_content"
+        android:layout_height="400px"
+        app:layout_constraintTop_toBottomOf="@id/cards_FormasDePagamentos"/>
+
+
+    <Button
+        android:id="@+id/cards_addCardButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Adicionar Cartão"
+        app:layout_constraintTop_toBottomOf="@id/cards_listCards"/>
+
+
+
+</android.support.constraint.ConstraintLayout>

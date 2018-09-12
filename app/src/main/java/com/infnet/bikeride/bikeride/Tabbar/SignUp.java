@@ -18,10 +18,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.infnet.bikeride.bikeride.ConfigurationFirebase;
-import com.infnet.bikeride.bikeride.DeliveryMainActivity;
 import com.infnet.bikeride.bikeride.R;
 import com.infnet.bikeride.bikeride.UserManager;
 import com.infnet.bikeride.bikeride.Users;
+import com.infnet.bikeride.bikeride.activityrequestbiker.RequestBikerActivity;
 
 public class SignUp extends Fragment {
 
@@ -89,7 +89,7 @@ public class SignUp extends Fragment {
 
                     Toast.makeText(getActivity(),"Sucesso ao Cadastrar", Toast.LENGTH_SHORT).show();
 
-                    Intent intent = new Intent(getActivity(), DeliveryMainActivity.class);
+                    Intent intent = new Intent(getActivity(), RequestBikerActivity.class);
                     startActivity(intent);
 
                 } else {

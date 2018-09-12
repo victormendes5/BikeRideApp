@@ -36,10 +36,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.infnet.bikeride.bikeride.DeliveryMainActivity;
 import com.infnet.bikeride.bikeride.R;
 import com.infnet.bikeride.bikeride.UserManager;
 import com.infnet.bikeride.bikeride.Users;
+import com.infnet.bikeride.bikeride.activityrequestbiker.RequestBikerActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -146,7 +146,7 @@ public class SignInSocialMedia extends Fragment {
                     FirebaseUser userLogad = autentication.getCurrentUser();
                     users.setId(userLogad.getUid());
                     mUserManager.adicionarOuAtualizarPerfil(users);
-                    Redirect(DeliveryMainActivity.class);
+                    Redirect(RequestBikerActivity.class);
                 } else {
                     Toast.makeText(getActivity(), FirebaseAuthException.class.toString(), Toast.LENGTH_SHORT).show();
                 }
@@ -189,7 +189,7 @@ public class SignInSocialMedia extends Fragment {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(getActivity(), "Sucesso Login Facebook no Firebase", Toast.LENGTH_SHORT).show();
-                    Redirect(DeliveryMainActivity.class);
+                    Redirect(RequestBikerActivity.class);
                     FirebaseUser userLogad = autentication.getCurrentUser();
                     users.setId(userLogad.getUid());
                     mUserManager.adicionarOuAtualizarPerfil(users);

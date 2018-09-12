@@ -12,8 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.infnet.bikeride.bikeride.BRAnimations;
 import com.infnet.bikeride.bikeride.R;
+import com.infnet.bikeride.bikeride.services.Animations;
 
 public class ForgotPassword extends Fragment {
 
@@ -23,7 +23,7 @@ public class ForgotPassword extends Fragment {
 
     private View mForgotPasswordFrag;
 
-    private BRAnimations mAnimate = new BRAnimations(200);
+    private Animations mAnimate = new Animations(200);
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

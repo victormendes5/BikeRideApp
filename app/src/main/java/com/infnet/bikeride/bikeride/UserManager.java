@@ -1,11 +1,16 @@
 package com.infnet.bikeride.bikeride;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.infnet.bikeride.bikeride.dao.FirebaseAccess;
 
 /**
  * Created by Imperiali on 21/07/18.
@@ -23,6 +28,7 @@ public class UserManager {
     private FirebaseUser userFirebase;
     private FirebaseAuth autentication;
 
+    
     public UserManager() {
     }
 
@@ -60,7 +66,7 @@ public class UserManager {
                         callback.onErrorUserComplete(data);
                     }
                     //Caminho do nó do Firebase
-                },"Profiles",id.toString());
+                },"Profiles",id);
     }
 
     // Cria o usuário sempre que logar ou atualiza sempre que loga pois está sempre em mudança

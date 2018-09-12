@@ -15,7 +15,7 @@
     <!-- Tracking Delivery -->
     <string name="acompEntrega_textView_deliverName">Luana Fortes</string>
     <string name="acompEntrega_textView_deliverCount">112 delivers</string>
-    <string name="acompEntrega_button_cancelDelivery">Cancel Delivery</string>
+    <string name="acompEntrega_button_cancelDelivery">Cancel\nDelivery</string>
 
     <!-- Principal -->
     <string name="principal_EditText_endereco">Type your address</string>
@@ -53,7 +53,7 @@
 
     <!-- MODALS: Choose Delivery Address-->
     <string name="modal_choose_delivery_address_title">Choose delivery address</string>
-    <string name="modal_choose_delivery_address_hint">Type here the pickup address</string>
+    <string name="modal_choose_delivery_address_hint">Type here the delivery address</string>
     <string name="modal_choose_delivery_common_addresses_title">COMMON ADDRESSES</string>
     <string name="modal_choose_delivery_suggested_addresses_title">SUGGESTED ADDRESSES</string>
     <string name="sample_address_1">Rua Sen. Fraga 1001 - Manguinhos</string>
@@ -153,5 +153,7 @@
     <string name="modalChangeName_txtView_changeNumber">Change Number</string>
     <string name="modalChangeName_edtText_changeNumberHint">Type here to change your Number</string>
     <string name="modalChangeName_edtText_changeEmailHint">Type here to change your E-mail</string>
+    <string name="modalForgotPassword_txtView_forgotPassword">Forgot Password</string>
+    <string name="forgotPassword_button_sendEmail">Reset Password</string>
 
 </resources>

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.infnet.bikeride.bikeride.Tabbar.SignIn;
 import com.infnet.bikeride.bikeride.Tabbar.SignInSocialMedia;
 import com.infnet.bikeride.bikeride.Tabbar.SignUp;
+import com.infnet.bikeride.bikeride.services.Animations;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity{
     private Button mQuickSignInDown;
 
     // Animation
-    private BRAnimations mAnimate = new BRAnimations(200);
+    private Animations mAnimate = new Animations(200);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

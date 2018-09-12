@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +19,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.infnet.bikeride.bikeride.BRAnimations;
+import com.infnet.bikeride.bikeride.activityrequestbiker.RequestBikerActivity;
+import com.infnet.bikeride.bikeride.activityrequestuser.RequestUserActivity;
+import com.infnet.bikeride.bikeride.services.Animations;
 import com.infnet.bikeride.bikeride.ConfigurationFirebase;
-import com.infnet.bikeride.bikeride.DeliveryMainActivity;
 import com.infnet.bikeride.bikeride.R;
 import com.infnet.bikeride.bikeride.UserManager;
 import com.infnet.bikeride.bikeride.Users;
+import com.infnet.bikeride.bikeride.services.CurrentUserData;
 
 public class SignIn extends Fragment {
+
+    private static final String TAG = "É isso ai";
 
     private EditText mEmail;
     private EditText mPassword;
@@ -41,7 +46,9 @@ public class SignIn extends Fragment {
 
     private View mForgotPasswordModal;
 
-    private BRAnimations mAnimate = new BRAnimations(200);
+    private Animations mAnimate = new Animations(200);
+
+    private FirebaseUser user;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,24 +67,50 @@ public class SignIn extends Fragment {
         mForgotPasswordModal = getActivity().findViewById(R.id.include_frag_forgotPassword);
 
         authentication = ConfigurationFirebase.getFirebaseAuth();
-        FirebaseUser user = authentication.getCurrentUser();
+        user = authentication.getCurrentUser();
 
         mSignIn.setOnClickListener(SignIn);
         mForgotPassword.setOnClickListener(ForgotPassword);
 
         if (user != null) {
-            Redirect(DeliveryMainActivity.class);
+
+//            Toast.makeText(this, "Usuário Logado", Toast.LENGTH_SHORT).show();
+
+            // Func de UserManager para retornar os dados do usuário logado
             mUserManager.getPerfil(new UserManager.OnUserComplete() {
+
                 @Override
                 public void onUserComplete(Users data) {
+
                     usuarioLogado = data;
-                }
-                @Override
-                public void onErrorUserComplete(Users data) {
-                    // Handler error
+                    Log.v("MainRonanError", usuarioLogado.getEmail());//Para pegar email
+                    Log.v("MainRonanError", usuarioLogado.getName());//Para pegar nome
+
+                    try {
+
+                        CurrentUserData.setId(user.getUid());
+                        CurrentUserData.setFirstName(usuarioLogado.getName());
+                        CurrentUserData.setLastName(usuarioLogado.getLastName());
+                        CurrentUserData.setEmail(usuarioLogado.getEmail());
+                        CurrentUserData.setUrlPhoto(usuarioLogado.getUrlPhoto());
+
+                    } catch (Exception e) {
+                        Log.d(TAG, "onUserComplete: erro ao atualizar dados na " +
+                                "classe CurrentUserData.");
+
+                        e.printStackTrace();
+                    }
+
+                    // Redireciona tela pra Drlivery Main
+                    Redirect(RequestUserActivity.class);
 
                 }
-            }, user.getUid());
+
+                @Override
+                public void onErrorUserComplete(Users data) {
+                    Log.v("MainRonanError", data.toString());
+                }
+            },user.getUid().toString());
         }
     }
 
@@ -122,7 +155,7 @@ public class SignIn extends Fragment {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(getActivity(), "Sucesso ao Logar", Toast.LENGTH_SHORT).show();
-                    Redirect(DeliveryMainActivity.class);
+                    Redirect(RequestBikerActivity.class);
                 } else if (!task.isSuccessful()) {
                     Toast.makeText(getActivity(), "Erroe", Toast.LENGTH_SHORT).show();
                 }
