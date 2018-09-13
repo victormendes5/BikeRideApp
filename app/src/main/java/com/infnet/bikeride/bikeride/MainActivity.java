@@ -1,77 +1,114 @@
 package com.infnet.bikeride.bikeride;
 
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import com.infnet.bikeride.bikeride.Tabbar.SignIn;
+import com.infnet.bikeride.bikeride.Tabbar.SignInSocialMedia;
+import com.infnet.bikeride.bikeride.Tabbar.SignUp;
+import com.infnet.bikeride.bikeride.services.Animations;
 
-    private DrawerLayout drawerLayout;
-    private Intent intent;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+
+public class MainActivity extends AppCompatActivity{
+
+    // Modal
+
+    private View mForgotPasswordModal;
+    private View mForgotPasswordFrag;
+    RelativeLayout mModalOverlay;
+
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
+    private Button mQuickSignIn;
+    private Button mQuickSignInDown;
+
+    // Animation
+    private Animations mAnimate = new Animations(200);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_drawer_layout);
+        setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.customToolbar);
-        setSupportActionBar(toolbar);
-        drawerLayout =  findViewById(R.id.main_drawer_layout);
+        //Modal
+        mForgotPasswordModal = findViewById(R.id.include_modal_forgotPassword);
+        mForgotPasswordFrag = findViewById(R.id.include_frag_forgotPassword);
 
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,
-                drawerLayout,
-                toolbar,
-                R.string.drawer_open,
-                R.string.drawer_close);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        actionBarDrawerToggle.syncState();
+        mViewPager = findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        NavigationView navigationView = findViewById(R.id.navigation_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        mQuickSignIn = findViewById(R.id.quickSignInButton);
+        mQuickSignIn.setOnClickListener(QuickSignInEnter);
+
+        mQuickSignInDown = findViewById(R.id.quickSignInButtonDown);
+        mQuickSignInDown.setOnClickListener(QuickSignInExit);
+
+        TabLayout tabLayout = findViewById(R.id.tabs);
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
     }
 
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(Gravity.START)) {
-            drawerLayout.closeDrawer(Gravity.START);
-        } else {
-            super.onBackPressed();
+    private View.OnClickListener QuickSignInEnter = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+//            mAnimate.crossFadeViews(mQuickSignIn, mQuickSignInDown);
+            mAnimate.translateFromBottomIfInvisible(mForgotPasswordModal);
+            mQuickSignIn.setVisibility(INVISIBLE);
+            mQuickSignInDown.setVisibility(VISIBLE);
         }
+    };
+
+    private View.OnClickListener QuickSignInExit = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+//            mAnimate.crossFadeViews(mQuickSignInDown, mQuickSignIn);
+            mAnimate.translateToBottomIfVisible(mForgotPasswordModal);
+            mQuickSignIn.setVisibility(VISIBLE);
+            mQuickSignInDown.setVisibility(INVISIBLE);
+        }
+    };
+
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        private SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new SignIn();
+                case 1:
+                    return new SignUp();
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int itemID = item.getItemId();
-
-        switch (itemID) {
-            case R.id.deliveryman_review:
-                intent = new Intent(this, DeliverymanReviewActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.delivery_tracking:
-                intent = new Intent(this, DeliveryTrackingActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.delivery_main:
-                intent = new Intent(this, DeliveryMainActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.delivery_quotation:
-                intent = new Intent(this, DeliveryQuotationPrice.class);
-                startActivity(intent);
-                break;
-            default:
-                break;
-        }
-
-        return false;
+    public void fechaModal(View view){
+        mAnimate.translateToBottomIfVisible(mForgotPasswordFrag);
     }
 
 }
+
