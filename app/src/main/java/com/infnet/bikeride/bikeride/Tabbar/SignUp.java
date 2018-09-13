@@ -82,8 +82,8 @@ public class SignUp extends Fragment {
 
                     mUsersNew.setId(user.getUid());
                     mUsersNew.setEmail(user.getEmail());
-                    mUsersNew.setName(users.getName());
-                    mUsersNew.setLastName(users.getLastName());
+                    mUsersNew.setName("");
+                    mUsersNew.setLastName("");
 
                     mUserManager.adicionarOuAtualizarPerfil(mUsersNew);
 

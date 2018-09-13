@@ -132,6 +132,11 @@ public class ProfileActivity extends AppCompatActivity {
                     Log.e("MainRonanError", currentUser.getEmail());//Para pegar email
                     Log.e("MainRonanError", currentUser.getName());//Para pegar nome
 
+                    mTxtViewUserName.setText(currentUser.getName());
+                    mTxtViewUserLastname.setText(currentUser.getLastName());
+                    mTxtViewUserEmail.setText(currentUser.getEmail());
+                    mTxtViewUserNumber.setText(currentUser.getPhoneNumber());
+
                 }
                 @Override
                 public void onErrorUserComplete(Users data) {
