@@ -54,7 +54,6 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".SingUpActivity" />
         <activity android:name=".activityrequestuser.RequestUserActivity" />
         <activity android:name=".activitydelivery.DeliveryActivity" />
         <activity android:name=".DeliverymanReviewActivity" />

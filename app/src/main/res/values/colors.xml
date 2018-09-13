@@ -3,14 +3,16 @@
     <color name="colorPrimary">#00BCD4</color>
     <color name="colorPrimaryDark">#0097A7</color>
     <color name="colorPrimaryLight">#B2EBF2</color>
-    <color name="colorAccent">#7C4DFF</color>
+    <color name="colorAccent">#00BCD4</color>
     <color name="colorTextIcons">#FFFFFF</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
     <color name="colorDivider">#BDBDBD</color>
 
     <color name="lightGray1">#EEEEEE</color>
-    <color name="lightGray2">#F0F0F0</color>
+    <color name="lightGray2">#f0f0f0</color>
+
+    <color name="background_default">#fafafa</color>
 
 
     <color name="transparentPrimaryDark30">#4D0097A7</color>
