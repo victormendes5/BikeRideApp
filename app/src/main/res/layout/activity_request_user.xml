@@ -22,25 +22,23 @@
 
     <Button
         android:id="@+id/requestBikerBtn"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/round_shape"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:background="@color/colorAccent"
+        android:elevation="10dp"
         android:gravity="center"
-        android:text="REQUEST\nDELIVERY"
-        android:translationZ="0dp"
         android:stateListAnimator="@null"
+        android:text="REQUEST"
         android:textColor="@color/colorTextIcons"
         android:textSize="16sp"
-        android:elevation="10dp"
-
+        android:translationZ="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.897"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/image_Map"
-        app:layout_constraintVertical_bias="0.953" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"

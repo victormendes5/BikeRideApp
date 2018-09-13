@@ -84,10 +84,10 @@
             android:id="@+id/choosePickupAddrBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            android:text="@string/modal_delivery_addresses_choose_pickup_address_button"
             android:layout_below="@id/senderNameEditText"
-            android:textColor="@color/colorTextIcons"/>
+            android:background="@color/colorAccent"
+            android:text="@string/modal_delivery_addresses_choose_pickup_address_button"
+            android:textColor="@color/colorTextIcons" />
 
     </RelativeLayout>
 
@@ -129,10 +129,10 @@
             android:id="@+id/chooseDeliveryAddrBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            android:text="@string/modal_delivery_addresses_choose_delivery_address_buttons"
             android:layout_below="@id/receiverNameEditText"
-            android:textColor="@color/colorTextIcons"/>
+            android:background="@color/colorAccent"
+            android:text="@string/modal_delivery_addresses_choose_delivery_address_buttons"
+            android:textColor="@color/colorTextIcons" />
 
 
 
