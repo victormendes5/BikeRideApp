@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.infnet.bikeride.bikeride.activitydelivery.DeliveryActivity;
 import com.infnet.bikeride.bikeride.activityrequestbiker.RequestBikerActivity;
 import com.infnet.bikeride.bikeride.activityrequestuser.RequestUserActivity;
 import com.infnet.bikeride.bikeride.services.Animations;
@@ -83,8 +84,8 @@ public class SignIn extends Fragment {
                 public void onUserComplete(Users data) {
 
                     usuarioLogado = data;
-                    Log.v("MainRonanError", usuarioLogado.getEmail());//Para pegar email
-                    Log.v("MainRonanError", usuarioLogado.getName());//Para pegar nome
+                    Log.e("MainRonanError", usuarioLogado.getEmail());//Para pegar email
+                    Log.e("MainRonanError", usuarioLogado.getName());//Para pegar nome
 
                     try {
 
@@ -155,7 +156,7 @@ public class SignIn extends Fragment {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(getActivity(), "Sucesso ao Logar", Toast.LENGTH_SHORT).show();
-                    Redirect(RequestBikerActivity.class);
+                    Redirect(RequestUserActivity.class);
                 } else if (!task.isSuccessful()) {
                     Toast.makeText(getActivity(), "Erroe", Toast.LENGTH_SHORT).show();
                 }

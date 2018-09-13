@@ -129,8 +129,8 @@ public class ProfileActivity extends AppCompatActivity {
                 @Override
                 public void onUserComplete(Users data) {
                     currentUser = data;
-                    Log.v("MainRonanError", currentUser.getEmail());//Para pegar email
-                    Log.v("MainRonanError", currentUser.getName());//Para pegar nome
+                    Log.e("MainRonanError", currentUser.getEmail());//Para pegar email
+                    Log.e("MainRonanError", currentUser.getName());//Para pegar nome
 
                 }
                 @Override
