@@ -56,6 +56,8 @@ public class SignInSocialMedia extends Fragment {
     private Users users = new Users();
     private UserManager mUserManager = new UserManager();
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_sign_in_social_media, container, false);
@@ -69,7 +71,6 @@ public class SignInSocialMedia extends Fragment {
         SignInButton mGoogleButton = getView().findViewById(R.id.googleSignInButton);
 
         mFacebookButton.setOnClickListener(FacebookSignIn);
-        mGoogleButton.setOnClickListener(GoogleSignIn);
 
         FacebookSdk.sdkInitialize(getContext());
         AppEventsLogger.activateApp(getContext());
@@ -94,6 +95,10 @@ public class SignInSocialMedia extends Fragment {
             startActivityForResult(signInIntent, 1);
         }
     };
+
+//    public void GoogleSignIn(View view){
+//
+//    }
 
     private View.OnClickListener FacebookSignIn = new View.OnClickListener() {
         @Override
