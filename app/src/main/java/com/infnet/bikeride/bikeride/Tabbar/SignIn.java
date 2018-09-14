@@ -53,8 +53,8 @@ public class SignIn extends Fragment {
 
     private FirebaseUser user;
 
-    private DrawerLayout mDrawerLayout;
-    private TextView mDrawerUserName;
+//    private DrawerLayout mDrawerLayout;
+//    private TextView mDrawerUserName;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -97,7 +97,7 @@ public class SignIn extends Fragment {
 
                     try {
 
-                        mDrawerUserName.setText(usuarioLogado.getName());
+//                        mDrawerUserName.setText(usuarioLogado.getName());
                         CurrentUserData.setId(user.getUid());
                         CurrentUserData.setFirstName(usuarioLogado.getName());
                         CurrentUserData.setLastName(usuarioLogado.getLastName());
