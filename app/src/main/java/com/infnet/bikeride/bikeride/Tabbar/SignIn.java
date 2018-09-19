@@ -33,7 +33,7 @@ import com.infnet.bikeride.bikeride.services.CurrentUserData;
 
 public class SignIn extends Fragment {
 
-    private static final String TAG = "É isso ai";
+    private static final String TAG = "SignInActivity";
 
     private EditText mEmail;
     private EditText mPassword;
@@ -92,13 +92,16 @@ public class SignIn extends Fragment {
                 public void onUserComplete(Users data) {
 
                     usuarioLogado = data;
-                    Log.e("MainRonanError", usuarioLogado.getEmail());//Para pegar email
-                    Log.e("MainRonanError", usuarioLogado.getName());//Para pegar nome
+//                    Log.d("MainRonanError", usuarioLogado.getEmail());//Para pegar email
+//                    Log.d("MainRonanError", usuarioLogado.getName());//Para pegar nome
+                    Log.d("Defeito", data.toString());
+                    Log.d("Defeito", data.getId());
+                    Log.d("Defeito", user.getUid());
 
                     try {
 
 //                        mDrawerUserName.setText(usuarioLogado.getName());
-                        CurrentUserData.setId(user.getUid());
+                        CurrentUserData.setId(usuarioLogado.getId());
                         CurrentUserData.setFirstName(usuarioLogado.getName());
                         CurrentUserData.setLastName(usuarioLogado.getLastName());
                         CurrentUserData.setEmail(usuarioLogado.getEmail());
