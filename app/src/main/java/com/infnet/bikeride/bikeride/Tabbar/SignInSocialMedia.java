@@ -36,6 +36,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.infnet.bikeride.bikeride.MainActivity;
 import com.infnet.bikeride.bikeride.R;
 import com.infnet.bikeride.bikeride.UserManager;
 import com.infnet.bikeride.bikeride.Users;
@@ -56,6 +57,8 @@ public class SignInSocialMedia extends Fragment {
     private Users users = new Users();
     private UserManager mUserManager = new UserManager();
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_sign_in_social_media, container, false);
@@ -69,7 +72,6 @@ public class SignInSocialMedia extends Fragment {
         SignInButton mGoogleButton = getView().findViewById(R.id.googleSignInButton);
 
         mFacebookButton.setOnClickListener(FacebookSignIn);
-        mGoogleButton.setOnClickListener(GoogleSignIn);
 
         FacebookSdk.sdkInitialize(getContext());
         AppEventsLogger.activateApp(getContext());
@@ -78,7 +80,7 @@ public class SignInSocialMedia extends Fragment {
         mFacebookButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday"));
 
 
-        mGoogleButton.setOnClickListener(GoogleSignIn);
+//        mGoogleButton.setOnClickListener(GoogleSignIn);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -87,13 +89,18 @@ public class SignInSocialMedia extends Fragment {
 
     }
 
-    private View.OnClickListener GoogleSignIn = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, 1);
-        }
-    };
+//    private View.OnClickListener GoogleSignIn = new View.OnClickListener() {
+//        @Override
+//        public void onClick(View view) {
+//            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+//            startActivityForResult(signInIntent, 1);
+//        }
+//    };
+
+    public void GoogleSignIn(View view){
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, 1);
+    }
 
     private View.OnClickListener FacebookSignIn = new View.OnClickListener() {
         @Override

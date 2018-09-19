@@ -6,12 +6,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,7 +33,7 @@ import com.infnet.bikeride.bikeride.services.CurrentUserData;
 
 public class SignIn extends Fragment {
 
-    private static final String TAG = "É isso ai";
+    private static final String TAG = "SignInActivity";
 
     private EditText mEmail;
     private EditText mPassword;
@@ -51,6 +53,9 @@ public class SignIn extends Fragment {
 
     private FirebaseUser user;
 
+//    private DrawerLayout mDrawerLayout;
+//    private TextView mDrawerUserName;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_sign_in, container, false);
@@ -64,6 +69,9 @@ public class SignIn extends Fragment {
         mPassword = getView().findViewById(R.id.signInPasswordEditText);
         mForgotPassword = getView().findViewById(R.id.forgotPasswordButton);
         mSignIn = getView().findViewById(R.id.signInButton);
+
+//        mDrawerLayout = getActivity().findViewById(R.id.drawer_header);
+//        mDrawerUserName = mDrawerLayout.findViewById(R.id.drawer_header_profileName);
 
         mForgotPasswordModal = getActivity().findViewById(R.id.include_frag_forgotPassword);
 
@@ -84,12 +92,16 @@ public class SignIn extends Fragment {
                 public void onUserComplete(Users data) {
 
                     usuarioLogado = data;
-                    Log.e("MainRonanError", usuarioLogado.getEmail());//Para pegar email
-                    Log.e("MainRonanError", usuarioLogado.getName());//Para pegar nome
+//                    Log.d("MainRonanError", usuarioLogado.getEmail());//Para pegar email
+//                    Log.d("MainRonanError", usuarioLogado.getName());//Para pegar nome
+                    Log.d("Defeito", data.toString());
+                    Log.d("Defeito", data.getId());
+                    Log.d("Defeito", user.getUid());
 
                     try {
 
-                        CurrentUserData.setId(user.getUid());
+//                        mDrawerUserName.setText(usuarioLogado.getName());
+                        CurrentUserData.setId(usuarioLogado.getId());
                         CurrentUserData.setFirstName(usuarioLogado.getName());
                         CurrentUserData.setLastName(usuarioLogado.getLastName());
                         CurrentUserData.setEmail(usuarioLogado.getEmail());
