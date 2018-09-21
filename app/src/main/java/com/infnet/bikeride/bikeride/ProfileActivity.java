@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.infnet.bikeride.bikeride.services.Abstractions;
 import com.infnet.bikeride.bikeride.services.Animations;
 import com.infnet.bikeride.bikeride.services.ContentViewBuilder;
+import com.infnet.bikeride.bikeride.services.CurrentUserData;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -264,6 +265,8 @@ public class ProfileActivity extends AppCompatActivity {
                 mUsersNew.setEmail(currentUser.getEmail());
                 mUsersNew.setPhoneNumber(currentUser.getPhoneNumber());
 
+                CurrentUserData.setFirstName(value);
+
                 break;
             }
             case EDIT_LASTNAME:{
@@ -272,6 +275,8 @@ public class ProfileActivity extends AppCompatActivity {
                 mUsersNew.setLastName(value);
                 mUsersNew.setEmail(currentUser.getEmail());
                 mUsersNew.setPhoneNumber(currentUser.getPhoneNumber());
+
+                CurrentUserData.setLastName(value);
 
                 break;
             }
@@ -282,6 +287,8 @@ public class ProfileActivity extends AppCompatActivity {
                 mUsersNew.setEmail(value);
                 mUsersNew.setPhoneNumber(currentUser.getPhoneNumber());
 
+                CurrentUserData.setEmail(value);
+
                 break;
             }
             case EDIT_NUMBER:{
@@ -290,6 +297,8 @@ public class ProfileActivity extends AppCompatActivity {
                 mUsersNew.setLastName(currentUser.getLastName());
                 mUsersNew.setEmail(currentUser.getEmail());
                 mUsersNew.setPhoneNumber(value);
+
+                CurrentUserData.setPhoneNumber(value);
 
                 break;
             }

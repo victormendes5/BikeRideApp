@@ -1,5 +1,6 @@
 package com.infnet.bikeride.bikeride.activitydelivery;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.infnet.bikeride.bikeride.DeliverymanReviewActivity;
 import com.infnet.bikeride.bikeride.R;
 import com.infnet.bikeride.bikeride.activityrequestbiker.RequestBikerActivity;
 import com.infnet.bikeride.bikeride.activityrequestuser.RequestUserActivity;
@@ -265,8 +267,9 @@ public class DeliveryActivity extends AppCompatActivity {
         // ---> Biker flow
         if (mManager.isBiker()) {
 
-            if (mManager.isDeliveryConfirmed()) exitModalState();
-
+            if (mManager.isDeliveryConfirmed()) {
+                exitModalState();
+            }
             else if (mManager.bikerConfirmedDeliveryAndAwaitsRequesterConfirmation()) {
 
             }
@@ -356,7 +359,6 @@ public class DeliveryActivity extends AppCompatActivity {
             mAwaitingTitle.setText("Delivery completed!");
             mAwaitingMessage.setText("Wrapping up ...");
             enterModalState("");
-
             mManager.finishDeliveryRequester();
         }
     }

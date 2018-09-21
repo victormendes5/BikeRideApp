@@ -658,7 +658,7 @@ public class RequestBikerManager extends FirebaseAccess {
     }
 
     private String getBikerName() {
-        return "ThisBikersName";
+        return CurrentUserData.getFirstName() + " " + CurrentUserData.getLastName();
     }
 
     public void removeLocationListener() {
