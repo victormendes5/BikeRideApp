@@ -157,8 +157,10 @@ public class DeliveryActivity extends AppCompatActivity {
                 @Override
                 public void onFinish() {
 
-                    if (mManager.isBiker()) mAbst.navigate(RequestBikerActivity.class);
-                    else mAbst.navigate(RequestUserActivity.class);
+//                    if (mManager.isBiker()) mAbst.navigate(RequestBikerActivity.class);  //TODO ANTIGO!
+//                    else mAbst.navigate(RequestUserActivity.class);
+                    if (mManager.isBiker()) mAbst.navigate(DeliverymanReviewActivity.class);  // TODO NOVO PARA DEBUG
+                    else mAbst.navigate(DeliverymanReviewActivity.class);
                 }
             });
 
