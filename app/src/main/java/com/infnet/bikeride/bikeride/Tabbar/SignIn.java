@@ -167,7 +167,47 @@ public class SignIn extends Fragment {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+                    user = authentication.getCurrentUser();
                     Toast.makeText(getActivity(), "Sucesso ao Logar", Toast.LENGTH_SHORT).show();
+                    mUserManager.getPerfil(new UserManager.OnUserComplete() {
+
+                        @Override
+                        public void onUserComplete(Users data) {
+
+                            usuarioLogado = data;
+//                    Log.d("MainRonanError", usuarioLogado.getEmail());//Para pegar email
+//                    Log.d("MainRonanError", usuarioLogado.getName());//Para pegar nome
+                            Log.d("Defeito", "Login" + data.toString());
+                            Log.d("Defeito", data.getId());
+                            Log.d("Defeito", user.getUid());
+
+                            try {
+
+//                        mDrawerUserName.setText(usuarioLogado.getName());
+                                CurrentUserData.setId(usuarioLogado.getId());
+                                CurrentUserData.setFirstName(usuarioLogado.getName());
+                                CurrentUserData.setLastName(usuarioLogado.getLastName());
+                                CurrentUserData.setEmail(usuarioLogado.getEmail());
+                                CurrentUserData.setUrlPhoto(usuarioLogado.getUrlPhoto());
+
+                            } catch (Exception e) {
+                                Log.d(TAG, "onUserComplete: erro ao atualizar dados na " +
+                                        "classe CurrentUserData.");
+
+                                e.printStackTrace();
+                            }
+
+                            // Redireciona tela pra Drlivery Main
+                            Redirect(RequestUserActivity.class);
+
+                        }
+
+                        @Override
+                        public void onErrorUserComplete(Users data) {
+                            Log.v("MainRonanError", data.toString());
+                        }
+                    },user.getUid().toString());
+
                     Redirect(RequestUserActivity.class);
                 } else if (!task.isSuccessful()) {
                     Toast.makeText(getActivity(), "Erroe", Toast.LENGTH_SHORT).show();
