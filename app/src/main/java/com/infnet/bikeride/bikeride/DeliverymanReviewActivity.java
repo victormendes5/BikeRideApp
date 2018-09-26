@@ -2,13 +2,19 @@ package com.infnet.bikeride.bikeride;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
+import com.google.firebase.database.FirebaseDatabase;
+import com.infnet.bikeride.bikeride.dao.FirebaseAccess;
+import com.infnet.bikeride.bikeride.models.RequestModel;
+import com.infnet.bikeride.bikeride.models.ReviewDeliveryModel;
 import com.infnet.bikeride.bikeride.services.ContentViewBuilder;
+import com.infnet.bikeride.bikeride.services.CurrentUserData;
 
 public class DeliverymanReviewActivity extends AppCompatActivity {
 
@@ -18,6 +24,18 @@ public class DeliverymanReviewActivity extends AppCompatActivity {
 
     private float starsResult;
     private String commentResult;
+
+    // Firebase
+    private FirebaseAccess mFirebase = new FirebaseAccess();
+    // Modelo
+    private ReviewDeliveryModel mreviewDeliveryModel = new ReviewDeliveryModel();
+
+    // String com a key
+    private String mkeyHistory  = "";
+
+    // Constant com nome da child
+    private static final String Cards_CHILD = "History";
+
 
     // ---> Customized setContentView with navigation drawer and toolbar
     ContentViewBuilder mContentViewBuilder;
@@ -36,6 +54,8 @@ public class DeliverymanReviewActivity extends AppCompatActivity {
         mReviewStars.setOnRatingBarChangeListener(starsAvaliation);
         mSubmitReview.setOnClickListener(submitReview);
 
+        getBundledData ();
+
     }
 
     private RatingBar.OnRatingBarChangeListener starsAvaliation = new RatingBar.OnRatingBarChangeListener() {
@@ -51,13 +71,20 @@ public class DeliverymanReviewActivity extends AppCompatActivity {
             commentResult = mReviewComment.getText().toString();
             Toast.makeText(DeliverymanReviewActivity.this, "Avaliado em: " + starsResult, Toast.LENGTH_SHORT).show();
 
+            mreviewDeliveryModel.setComment(commentResult);
+            mreviewDeliveryModel.setNota(starsResult);
 
-            // TODO: Receber o usuário, passar {
-            // TODO: commentResult como bikerReviewComment
-            // TODO: starsResult como bikerReviewRating
-            // TODO: }
-            // TODO: para =>
-            // TODO: history
+            if (!mreviewDeliveryModel.getComment().toString().equals("") && mreviewDeliveryModel.getNota() != 0.00f){
+
+                AddReview();
+
+            } else {
+                Toast.makeText(DeliverymanReviewActivity.this, "Faça a avaliação corretamente ", Toast.LENGTH_SHORT).show();
+
+            }
+
+
+
         }
     };
 
@@ -66,5 +93,50 @@ public class DeliverymanReviewActivity extends AppCompatActivity {
         if (mContentViewBuilder.isNavigationDrawerClosed()) {
             super.onBackPressed();
         }
+    }
+
+    private void getBundledData () {
+
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null) {
+
+            String isBiker = extras.getString("isBiker");
+
+            if (isBiker.equals("true")) {
+
+                mkeyHistory = extras.getString("bikerContractKey");
+
+                Log.v("KeyHash",mkeyHistory);
+            }
+
+            else if (isBiker.equals("false")) {
+
+                mkeyHistory = extras.getString("requesterContractKey");
+
+                Log.v("KeyHash",mkeyHistory);
+
+            }
+
+        }
+    }
+
+
+    public void AddReview(){
+
+                mFirebase.addOrUpdate(mreviewDeliveryModel,
+
+                new FirebaseAccess.OnCompleteVoid() {
+                    @Override
+                    public void onSuccess() {
+                        ReviewDeliveryModel currentProfile = mreviewDeliveryModel;
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        Log.e("ERRO", "Deu ruim");
+                    }
+
+                }, Cards_CHILD, CurrentUserData.getId(),mkeyHistory);
     }
 }

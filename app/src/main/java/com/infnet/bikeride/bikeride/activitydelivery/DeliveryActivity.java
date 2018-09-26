@@ -155,12 +155,35 @@ public class DeliveryActivity extends AppCompatActivity {
                 public void onComplete() { deliveryCompleted(); }
 
                 @Override
-                public void onFinish() {
+                public void onFinish(String requesterContractKey, String bikerContractKey) {
 
 //                    if (mManager.isBiker()) mAbst.navigate(RequestBikerActivity.class);  //TODO ANTIGO!
 //                    else mAbst.navigate(RequestUserActivity.class);
-                    if (mManager.isBiker()) mAbst.navigate(DeliverymanReviewActivity.class);  // TODO NOVO PARA DEBUG
-                    else mAbst.navigate(DeliverymanReviewActivity.class);
+
+//                    if (mManager.isBiker()) mAbst.navigate(DeliverymanReviewActivity.class);  // TODO NOVO PARA DEBUG
+//                    else mAbst.navigate(DeliverymanReviewActivity.class);
+
+                    // Passando a key por meio da intent
+
+                    if (mManager.isBiker()) {
+
+                        Intent newIntent = new Intent(getApplicationContext(),
+                                DeliverymanReviewActivity.class);
+                        newIntent.putExtra("requesterContractKey", requesterContractKey);
+                        newIntent.putExtra("bikerContractKey", bikerContractKey);
+                        startActivity(newIntent);
+                    }
+                    else {
+
+                        Intent newIntent = new Intent(getApplicationContext(),
+                                DeliverymanReviewActivity.class);
+                        newIntent.putExtra("requesterContractKey", requesterContractKey);
+                        newIntent.putExtra("bikerContractKey", bikerContractKey);
+                        startActivity(newIntent);
+                    }
+
+
+
                 }
             });
 

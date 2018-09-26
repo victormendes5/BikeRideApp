@@ -54,6 +54,9 @@ public class DeliveryManager extends FirebaseAccess {
     private boolean mIsDirectionsCalculating = false;
     private OnUiUpdate mCallbacks;
 
+    // ---> Request Keys
+    private String mUserFinalRequestKey = "", mBikerFinalRequestKey = "";
+
 
     /*=======================================================================================
                                           GETTERS & SETTERS
@@ -73,7 +76,7 @@ public class DeliveryManager extends FirebaseAccess {
         void onBikerIsAtDeliveryAddress();
         void onCancel();
         void onComplete();
-        void onFinish();
+        void onFinish(String requesterKey, String bikerKey);
     }
 
 
@@ -560,7 +563,7 @@ public class DeliveryManager extends FirebaseAccess {
                             Log.d(TAG, "finishDelivery: delivery process completed! " +
                                     "Returning to request activitiy ...");
 
-                            mCallbacks.onFinish();
+                            mCallbacks.onFinish(mUserFinalRequestKey, mBikerFinalRequestKey);
                         }
                     }
 
@@ -777,6 +780,9 @@ public class DeliveryManager extends FirebaseAccess {
                 Log.d(TAG, "finishDelivery: successfully copied request contract to " +
                         "this requester's history.");
 
+                // Colocando a key na variavel
+                mUserFinalRequestKey = key;
+
                 addUsingKey(mRequestContract, new OnCompleteKey() {
 
                     @Override
@@ -784,6 +790,9 @@ public class DeliveryManager extends FirebaseAccess {
 
                         Log.d(TAG, "finishDelivery: successfully copied request contract " +
                                 "to this biker's history.");
+
+                        // Colocando a key na variavel
+                        mBikerFinalRequestKey = key;
 
                         delete(new OnCompleteVoid() {
 
@@ -796,7 +805,7 @@ public class DeliveryManager extends FirebaseAccess {
                                 Log.d(TAG, "finishDelivery: delivery process completed! " +
                                         "Returning to request activitiy ...");
 
-                                mCallbacks.onFinish();
+                                mCallbacks.onFinish(mUserFinalRequestKey, mBikerFinalRequestKey);
 
                             }
 
@@ -806,7 +815,7 @@ public class DeliveryManager extends FirebaseAccess {
                                 Log.d(TAG, "finishDelivery: could not remove request " +
                                         "contract from Deliveries node.");
 
-                                mCallbacks.onFinish();
+                                mCallbacks.onFinish(mUserFinalRequestKey, mBikerFinalRequestKey);
                             }
 
                         }, Constants.ChildName.DELIVERIES, mRequestContract.userId);
@@ -819,7 +828,7 @@ public class DeliveryManager extends FirebaseAccess {
                         Log.d(TAG, "finishDelivery: failed to copy this request contract " +
                                 "to requester's and biker's history.");
 
-                        mCallbacks.onFinish();
+                        mCallbacks.onFinish(mUserFinalRequestKey, mBikerFinalRequestKey);
                     }
 
                 }, Constants.ChildName.HISTORY, mRequestContract.bikerId);
@@ -832,7 +841,7 @@ public class DeliveryManager extends FirebaseAccess {
                 Log.d(TAG, "finishDelivery: failed to copy this request contract to " +
                         "requester's and biker's history.");
 
-                mCallbacks.onFinish();
+                mCallbacks.onFinish(mUserFinalRequestKey, mBikerFinalRequestKey);
             }
 
         }, Constants.ChildName.HISTORY, mRequestContract.userId);
